@@ -1,171 +1,99 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // biome-ignore lint/suspicious/noRedundantUseStrict: <explanation>
+﻿document.addEventListener('DOMContentLoaded', () => {
     'use strict';
 
     // Initialize EmailJS
     (() => {
-        // Replace with your EmailJS public key
         emailjs.init("TDvO0361pl2j9X9bX");
     })();
 
-    // Dark mode toggle
+    // ========================
+    // Dark Mode
+    // ========================
     const darkModeToggle = document.querySelector('.dark-mode-toggle');
     const body = document.body;
-    
-    // Check if user previously enabled dark mode
+
     if (localStorage.getItem('darkMode') === 'enabled') {
         body.classList.add('dark-mode');
     }
-    
-    // Toggle dark mode
+
     darkModeToggle.addEventListener('click', () => {
         body.classList.toggle('dark-mode');
-        
-        // Save user preference to localStorage
-        if (body.classList.contains('dark-mode')) {
-            localStorage.setItem('darkMode', 'enabled');
-        } else {
-            localStorage.setItem('darkMode', null);
-        }
+        localStorage.setItem('darkMode', body.classList.contains('dark-mode') ? 'enabled' : null);
     });
 
-    // Navbar scroll effect
+    // ========================
+    // Navbar Scroll Effect
+    // ========================
     const navbar = document.querySelector('.navbar');
     const scrollTopBtn = document.querySelector('.scroll-top');
 
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            navbar.classList.add('scrolled');
-            scrollTopBtn.classList.add('active');
-        } else {
-            navbar.classList.remove('scrolled');
-            scrollTopBtn.classList.remove('active');
-        }
+        const scrolled = window.scrollY > 50;
+        navbar.classList.toggle('scrolled', scrolled);
+        scrollTopBtn.classList.toggle('active', scrolled);
     });
 
-    // Update text rotation in hero section
+    // ========================
+    // Typing Animation
+    // ========================
     const textRotate = document.querySelector('.text-rotate');
     if (textRotate) {
         const words = [
-            'AI Agents', 
-            'Intelligent Systems', 
-            'LLM Applications',
-            'ML Models'
+            'AI Engineer',
+            'Backend Developer',
+            'LLM & Agent Builder',
+            'ML Pipeline Engineer'
         ];
-        textRotate.textContent = ''; // Clear the text
-        
-        let currentWordIndex = 0;
-        let currentLetterIndex = 0;
+        textRotate.textContent = '';
+
+        let wordIndex = 0;
+        let charIndex = 0;
         let isDeleting = false;
-        let typingSpeed = 150;
+        let speed = 120;
 
         function type() {
-            const currentWord = words[currentWordIndex];
-            
+            const current = words[wordIndex];
+
             if (isDeleting) {
-                textRotate.textContent = currentWord.substring(0, currentLetterIndex - 1);
-                currentLetterIndex--;
-                typingSpeed = 100;
+                textRotate.textContent = current.substring(0, charIndex - 1);
+                charIndex--;
+                speed = 60;
             } else {
-                textRotate.textContent = currentWord.substring(0, currentLetterIndex + 1);
-                currentLetterIndex++;
-                typingSpeed = 150;
+                textRotate.textContent = current.substring(0, charIndex + 1);
+                charIndex++;
+                speed = 120;
             }
 
-            if (!isDeleting && currentLetterIndex === currentWord.length) {
+            if (!isDeleting && charIndex === current.length) {
                 isDeleting = true;
-                typingSpeed = 1000; // Pause at end of word
-            } else if (isDeleting && currentLetterIndex === 0) {
+                speed = 2000; // pause at end
+            } else if (isDeleting && charIndex === 0) {
                 isDeleting = false;
-                currentWordIndex = (currentWordIndex + 1) % words.length;
-                typingSpeed = 500; // Pause before starting new word
+                wordIndex = (wordIndex + 1) % words.length;
+                speed = 400; // pause before next word
             }
 
-            setTimeout(type, typingSpeed);
+            setTimeout(type, speed);
         }
 
-        // Start the typing animation
-        setTimeout(type, 1000);
+        setTimeout(type, 800);
     }
 
-    // Skill tabs
-    const skillTabs = document.querySelectorAll('.skill-tab');
-    const skillContents = document.querySelectorAll('.skill-content');
-
-    // biome-ignore lint/complexity/noForEach: <explanation>
-    skillTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Remove active class from all tabs
-            // biome-ignore lint/complexity/noForEach: <explanation>
-                        skillTabs.forEach(t => t.classList.remove('active'));
-            // Add active class to clicked tab
-            tab.classList.add('active');
-            
-            // Hide all contents
-            // biome-ignore lint/complexity/noForEach: <explanation>
-                                    skillContents.forEach(content => content.classList.remove('active'));
-            
-            // Show the selected content
-            const targetContent = document.getElementById(tab.getAttribute('data-target'));
-            targetContent.classList.add('active');
-        });
-    });
-
-    // Project filtering
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const projectCards = document.querySelectorAll('.project-card');
-
-    // biome-ignore lint/complexity/noForEach: <explanation>
-    filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Remove active class from all buttons
-            // biome-ignore lint/complexity/noForEach: <explanation>
-                        filterButtons.forEach(btn => btn.classList.remove('active'));
-            // Add active class to clicked button
-            button.classList.add('active');
-            
-            const filterValue = button.getAttribute('data-filter');
-            
-            // biome-ignore lint/complexity/noForEach: <explanation>
-                        projectCards.forEach(card => {
-                if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
-                    card.style.display = 'block';
-                    setTimeout(() => {
-                        card.style.opacity = '1';
-                        card.style.transform = 'scale(1)';
-                    }, 10);
-                } else {
-                    card.style.opacity = '0';
-                    card.style.transform = 'scale(0.8)';
-                    setTimeout(() => {
-                        card.style.display = 'none';
-                    }, 300);
-                }
-            });
-        });
-    });
-
-    // Mobile menu toggle
+    // ========================
+    // Mobile Menu
+    // ========================
     const menuBtn = document.querySelector('.menu-btn');
     const navLinks = document.querySelector('.nav-links');
     let menuOpen = false;
 
     menuBtn.addEventListener('click', () => {
-        if (!menuOpen) {
-            menuBtn.classList.add('open');
-            navLinks.classList.add('active');
-            menuOpen = true;
-        } else {
-            menuBtn.classList.remove('open');
-            navLinks.classList.remove('active');
-            menuOpen = false;
-        }
+        menuOpen = !menuOpen;
+        menuBtn.classList.toggle('open', menuOpen);
+        navLinks.classList.toggle('active', menuOpen);
     });
 
-    // Close menu when clicking on a nav link (mobile)
-    const navItems = document.querySelectorAll('.nav-links li a');
-    // biome-ignore lint/complexity/noForEach: <explanation>
-    navItems.forEach(item => {
+    // Close menu on nav link click
+    document.querySelectorAll('.nav-links li a').forEach(item => {
         item.addEventListener('click', () => {
             navLinks.classList.remove('active');
             menuBtn.classList.remove('open');
@@ -173,32 +101,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Active navigation link based on scroll
+    // ========================
+    // Active Nav Link on Scroll
+    // ========================
     const sections = document.querySelectorAll('section');
-    
+    const navItems = document.querySelectorAll('.nav-links li a');
+
     function setActiveNavLink() {
-        const scrollPosition = window.scrollY + 100;
-        
-        // biome-ignore lint/complexity/noForEach: <explanation>
-                sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
-            
-            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
-                // biome-ignore lint/complexity/noForEach: <explanation>
+        const scrollPos = window.scrollY + 120;
+
+        sections.forEach(section => {
+            const top = section.offsetTop;
+            const height = section.offsetHeight;
+            const id = section.getAttribute('id');
+
+            if (scrollPos >= top && scrollPos < top + height) {
                 navItems.forEach(item => {
                     item.classList.remove('active');
-                    if (item.getAttribute('href') === `#${sectionId}`) {
+                    if (item.getAttribute('href') === `#${id}`) {
                         item.classList.add('active');
                     }
                 });
             }
         });
 
-        // Check for hero section (home)
-        if (scrollPosition < sections[0].offsetTop) {
-            // biome-ignore lint/complexity/noForEach: <explanation>
+        // Hero section (home)
+        if (sections.length && scrollPos < sections[0].offsetTop) {
             navItems.forEach(item => {
                 item.classList.remove('active');
                 if (item.getAttribute('href') === '#home') {
@@ -210,92 +138,92 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.addEventListener('scroll', setActiveNavLink);
 
-    // Scroll to top button
+    // ========================
+    // Scroll to Top
+    // ========================
     scrollTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Enhanced form submission with EmailJS
+    // ========================
+    // Education Toggle
+    // ========================
+    const toggleBtn = document.querySelector('.toggle-btn');
+    const educationDetails = document.querySelector('.education-details');
+
+    if (toggleBtn && educationDetails) {
+        toggleBtn.addEventListener('click', () => {
+            toggleBtn.classList.toggle('active');
+            educationDetails.classList.toggle('active');
+        });
+    }
+
+    // ========================
+    // Contact Form (EmailJS)
+    // ========================
     const contactForm = document.getElementById('contactForm');
     const formStatus = document.getElementById('form-status');
-    
+
     if (contactForm) {
         contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            
-            // Change button text to loading state
+
             const submitBtn = contactForm.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
             submitBtn.disabled = true;
-            
-            // Collect form data
+
             const templateParams = {
                 from_name: document.getElementById('name').value,
                 from_email: document.getElementById('email').value,
                 subject: document.getElementById('subject').value,
                 message: document.getElementById('message').value,
-                to_email: 'vip.m.osama@gmail.com'
+                to_email: 'mahmoud@osama.engineer'
             };
-            
-            // Send the email using EmailJS
+
             emailjs.send('service_b559ynh', 'template_4heoeht', templateParams)
                 .then(() => {
-                    // Show success message
-                    formStatus.innerHTML = '<div class="alert alert-success">Thank you! Your message has been sent.</div>';
+                    formStatus.innerHTML = '<div class="alert alert-success">Message sent successfully. I will get back to you soon.</div>';
                     contactForm.reset();
-                    
-                    // Reset button
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
-                    
-                    // Clear success message after 5 seconds
-                    setTimeout(() => {
-                        formStatus.innerHTML = '';
-                    }, 5000);
+                    setTimeout(() => { formStatus.innerHTML = ''; }, 5000);
                 })
                 .catch((error) => {
-                    // Show error message
                     console.error('Email error:', error);
-                    formStatus.innerHTML = '<div class="alert alert-error">Sorry, there was a problem sending your message. Please try again or email me directly.</div>';
-                    
-                    // Reset button
+                    formStatus.innerHTML = '<div class="alert alert-error">Something went wrong. Please try emailing me directly at mahmoud@osama.engineer</div>';
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
                 });
         });
     }
 
-    // Add animations when elements are in view
-    const animateOnScroll = () => {
-        const elements = document.querySelectorAll('.animate-on-scroll');
-        
-        // biome-ignore lint/complexity/noForEach: <explanation>
-                elements.forEach(element => {
-            const elementPosition = element.getBoundingClientRect().top;
-            const windowHeight = window.innerHeight;
-            
-            if (elementPosition < windowHeight - 100) {
-                element.classList.add('animated');
-            }
-        });
+    // ========================
+    // Scroll Reveal Animation
+    // ========================
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -60px 0px'
     };
 
-    window.addEventListener('scroll', animateOnScroll);
-    
-    // Education toggle functionality
-    const toggleBtn = document.querySelector('.toggle-btn');
-    const educationDetails = document.querySelector('.education-details');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
 
-    toggleBtn.addEventListener('click', () => {
-        toggleBtn.classList.toggle('active');
-        educationDetails.classList.toggle('active');
+    // Observe section elements for reveal animation
+    document.querySelectorAll('.section-header, .about-content, .timeline-item, .skill-group, .project-card, .contact-content, .education-content').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(24px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
     });
 
-    // Initial call to set proper states
+    // Initial calls
     setActiveNavLink();
-    animateOnScroll();
 });
