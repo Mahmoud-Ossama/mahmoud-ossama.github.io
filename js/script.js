@@ -4,6 +4,51 @@ document.addEventListener('DOMContentLoaded', () => {
     // EmailJS initialization
     emailjs.init("TDvO0361pl2j9X9bX");
 
+    // ===== Language Switching =====
+    let currentLanguage = localStorage.getItem('language') || 'en';
+    const langBtn = document.getElementById('langBtn');
+    const html = document.documentElement;
+
+    function setLanguage(lang) {
+        currentLanguage = lang;
+        localStorage.setItem('language', lang);
+        html.setAttribute('lang', lang);
+        html.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
+        html.classList.toggle('rtl', lang === 'ar');
+
+        // Update button
+        langBtn.textContent = lang === 'en' ? 'العربية' : 'English';
+
+        // Update all elements with data attributes
+        updatePageText();
+    }
+
+    function updatePageText() {
+        const elements = document.querySelectorAll('[data-key]');
+        elements.forEach(el => {
+            const key = el.getAttribute('data-key');
+            if (translations[currentLanguage] && translations[currentLanguage][key]) {
+                el.textContent = translations[currentLanguage][key];
+            }
+        });
+
+        // Update form placeholders
+        const formInputs = document.querySelectorAll('input, textarea');
+        formInputs.forEach(input => {
+            const placeholder = input.getAttribute('data-placeholder');
+            if (placeholder && translations[currentLanguage][placeholder]) {
+                input.placeholder = translations[currentLanguage][placeholder];
+            }
+        });
+    }
+
+    langBtn.addEventListener('click', () => {
+        setLanguage(currentLanguage === 'en' ? 'ar' : 'en');
+    });
+
+    // Initialize language
+    setLanguage(currentLanguage);
+
     // ===== Navigation =====
     const navbar = document.querySelector('.navbar');
     const navLinks = document.querySelector('.nav-links');
