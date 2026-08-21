@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahmoud Osama | AI Automation & Agent Solutions</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">MO<span>.</span></a>
+            <ul class="nav-links">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#systems">Systems</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="nav-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">AI Systems That Automate the Work Slowing Your Business Down.</h1>
+                <p class="hero-subtitle">Building intelligent agents and automation workflows that solve real problems. From conversational AI to autonomous systems, I engineer solutions that scale.</p>
+                <div class="hero-cta">
+                    <a href="#contact" class="btn btn-primary">Start a Project</a>
+                    <a href="#systems" class="btn btn-outline">See the Work</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <svg class="orchestration-diagram" viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background grid -->
+                    <defs>
+                        <linearGradient id="nodeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#6c63ff;stop-opacity:0.8" />
+                            <stop offset="100%" style="stop-color:#8c83ff;stop-opacity:0.3" />
+                        </linearGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                            <feMerge>
+                                <feMergeNode in="coloredBlur"/>
+                                <feMergeNode in="SourceGraphic"/>
+                            </feMerge>
+                        </filter>
+                    </defs>
+
+                    <!-- Input nodes -->
+                    <g class="input-layer">
+                        <circle cx="50" cy="100" r="20" fill="url(#nodeGradient)" filter="url(#glow)"/>
+                        <circle cx="50" cy="250" r="20" fill="url(#nodeGradient)" filter="url(#glow)"/>
+                        <circle cx="50" cy="400" r="20" fill="url(#nodeGradient)" filter="url(#glow)"/>
+                    </g>
+
+                    <!-- Processing layer -->
+                    <g class="process-layer">
+                        <circle cx="200" cy="80" r="25" fill="none" stroke="#6c63ff" stroke-width="2" opacity="0.6"/>
+                        <circle cx="200" cy="175" r="25" fill="none" stroke="#6c63ff" stroke-width="2" opacity="0.6"/>
+                        <circle cx="200" cy="270" r="25" fill="none" stroke="#6c63ff" stroke-width="2" opacity="0.6"/>
+                        <circle cx="200" cy="365" r="25" fill="none" stroke="#6c63ff" stroke-width="2" opacity="0.6"/>
+                    </g>
+
+                    <!-- Output nodes -->
+                    <g class="output-layer">
+                        <circle cx="350" cy="130" r="20" fill="url(#nodeGradient)" filter="url(#glow)"/>
+                        <circle cx="350" cy="250" r="20" fill="url(#nodeGradient)" filter="url(#glow)"/>
+                        <circle cx="350" cy="370" r="20" fill="url(#nodeGradient)" filter="url(#glow)"/>
+                    </g>
+
+                    <!-- Result node -->
+                    <g class="result-layer">
+                        <circle cx="500" cy="250" r="30" fill="url(#nodeGradient)" filter="url(#glow)"/>
+                        <text x="500" y="255" text-anchor="middle" font-size="16" fill="white" font-weight="bold" opacity="0.8">✓</text>
+                    </g>
+
+                    <!-- Connecting lines with animation -->
+                    <g class="connections" stroke="#6c63ff" stroke-width="2" opacity="0.4" fill="none">
+                        <path d="M 70 100 L 175 80" class="connection-line"/>
+                        <path d="M 70 250 L 175 175" class="connection-line"/>
+                        <path d="M 70 250 L 175 270" class="connection-line"/>
+                        <path d="M 70 400 L 175 365" class="connection-line"/>
+
+                        <path d="M 225 80 L 330 130" class="connection-line"/>
+                        <path d="M 225 175 L 330 130" class="connection-line"/>
+                        <path d="M 225 175 L 330 250" class="connection-line"/>
+                        <path d="M 225 270 L 330 250" class="connection-line"/>
+                        <path d="M 225 270 L 330 370" class="connection-line"/>
+                        <path d="M 225 365 L 330 370" class="connection-line"/>
+
+                        <path d="M 370 130 L 470 240" class="connection-line"/>
+                        <path d="M 370 250 L 470 250" class="connection-line"/>
+                        <path d="M 370 370 L 470 260" class="connection-line"/>
+                    </g>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>What I Build</h2>
+                <p>Intelligent systems designed for real business impact</p>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card" data-service="agents">
+                    <div class="service-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI Agents</h3>
+                    <p>Autonomous agents that think, decide, and act. LLM-powered systems with memory, tool use, and multi-step reasoning.</p>
+                    <div class="service-details">
+                        <ul>
+                            <li>LangChain & Claude integration</li>
+                            <li>Autonomous decision-making</li>
+                            <li>Long-term memory systems</li>
+                            <li>Tool use and API orchestration</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card" data-service="automation">
+                    <div class="service-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <h3>Workflow Automation</h3>
+                    <p>End-to-end workflows that eliminate manual work. From data pipelines to customer journeys, fully automated and logged.</p>
+                    <div class="service-details">
+                        <ul>
+                            <li>Business process automation</li>
+                            <li>Data pipeline orchestration</li>
+                            <li>Scheduling & triggers</li>
+                            <li>Error handling & monitoring</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card" data-service="customer">
+                    <div class="service-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Customer & Lead Systems</h3>
+                    <p>Intelligent systems for customer interaction. AI-powered qualification, engagement, and relationship management at scale.</p>
+                    <div class="service-details">
+                        <ul>
+                            <li>Conversational qualification</li>
+                            <li>Lead scoring & routing</li>
+                            <li>Customer support automation</li>
+                            <li>Multi-channel integration</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card" data-service="document">
+                    <div class="service-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3>Document Intelligence</h3>
+                    <p>Extract meaning from documents at scale. OCR, classification, extraction, and analysis powered by vision models and LLMs.</p>
+                    <div class="service-details">
+                        <ul>
+                            <li>Intelligent document extraction</li>
+                            <li>Classification & routing</li>
+                            <li>Multi-format processing</li>
+                            <li>Compliance & validation</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card" data-service="knowledge">
+                    <div class="service-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>Knowledge Systems</h3>
+                    <p>RAG systems that make your data useful. Connect your documents, databases, and APIs into searchable, queryable intelligence.</p>
+                    <div class="service-details">
+                        <ul>
+                            <li>Retrieval Augmented Generation</li>
+                            <li>Vector embeddings & search</li>
+                            <li>Multi-source knowledge bases</li>
+                            <li>Semantic understanding</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="service-card" data-service="custom">
+                    <div class="service-icon">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <h3>Custom AI Systems</h3>
+                    <p>Purpose-built solutions for your unique problem. From prototypes to production, designed and engineered specifically for you.</p>
+                    <div class="service-details">
+                        <ul>
+                            <li>Rapid prototyping</li>
+                            <li>Production deployment</li>
+                            <li>Performance optimization</li>
+                            <li>Ongoing support & improvement</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Systems Section (Featured Work) -->
+    <section id="systems" class="systems">
+        <div class="container">
+            <div class="section-header">
+                <h2>Systems I've Built</h2>
+                <p>Real solutions to real problems</p>
+            </div>
+
+            <div class="systems-list">
+                <!-- System 1 -->
+                <div class="system-card">
+                    <div class="system-label">AI Agent</div>
+                    <h3>AI Financial Advisor</h3>
+                    <div class="system-problem">
+                        <strong>Challenge:</strong> Financial institutions needed personalized, context-aware advice at scale without requiring dedicated advisors.
+                    </div>
+                    <div class="system-solution">
+                        <strong>Solution:</strong> Built an LLM-powered agent with RAG capabilities that retrieves client history, performs complex calculations, and maintains multi-turn conversations while explaining reasoning.
+                    </div>
+                    <div class="system-stack">
+                        <span>LangChain</span>
+                        <span>Claude API</span>
+                        <span>RAG</span>
+                        <span>Python</span>
+                    </div>
+                    <div class="system-outcome">
+                        <strong>Outcome:</strong> Accurate financial recommendations with explainable AI, maintaining context across extended conversations.
+                    </div>
+                </div>
+
+                <!-- System 2 -->
+                <div class="system-card">
+                    <div class="system-label">Automation Workflow</div>
+                    <h3>WhatsApp Clinic Agent</h3>
+                    <div class="system-problem">
+                        <strong>Challenge:</strong> Healthcare providers needed a scalable way to handle initial patient consultations and symptom assessment without overwhelming their staff.
+                    </div>
+                    <div class="system-solution">
+                        <strong>Solution:</strong> Developed an intelligent NLP agent integrated with WhatsApp that understands patient symptoms, retrieves relevant medical history, and provides comprehensive reports to doctors for faster diagnosis.
+                    </div>
+                    <div class="system-stack">
+                        <span>NLP</span>
+                        <span>WhatsApp API</span>
+                        <span>Agent Framework</span>
+                        <span>Real-time Processing</span>
+                    </div>
+                    <div class="system-outcome">
+                        <strong>Outcome:</strong> Doctors receive detailed patient profiles enabling faster, more informed consultations.
+                    </div>
+                </div>
+
+                <!-- System 3 -->
+                <div class="system-card">
+                    <div class="system-label">Security System</div>
+                    <h3>Phishing Detection ML Model</h3>
+                    <div class="system-problem">
+                        <strong>Challenge:</strong> Email-based phishing attacks continue to bypass traditional rule-based filters, requiring pattern recognition at scale.
+                    </div>
+                    <div class="system-solution">
+                        <strong>Solution:</strong> Trained ML models analyzing URL characteristics, domain patterns, and structural anomalies to identify phishing attempts with high accuracy and low false positives.
+                    </div>
+                    <div class="system-stack">
+                        <span>Machine Learning</span>
+                        <span>Feature Engineering</span>
+                        <span>Classification</span>
+                        <span>Cybersecurity</span>
+                    </div>
+                    <div class="system-outcome">
+                        <strong>Outcome:</strong> Detects sophisticated phishing with 94%+ accuracy, protecting organizations from social engineering.
+                    </div>
+                </div>
+
+                <!-- System 4 -->
+                <div class="system-card">
+                    <div class="system-label">Medical AI</div>
+                    <h3>X-Ray Cardiomegaly Classifier</h3>
+                    <div class="system-problem">
+                        <strong>Challenge:</strong> Radiologists face increasing case volumes; computer vision support for cardiac enlargement detection could improve throughput and consistency.
+                    </div>
+                    <div class="system-solution">
+                        <strong>Solution:</strong> Built deep learning model deployed as Flask web app analyzing chest X-rays for cardiomegaly with confidence scores and visual explanations for clinical review.
+                    </div>
+                    <div class="system-stack">
+                        <span>Computer Vision</span>
+                        <span>Deep Learning</span>
+                        <span>Flask</span>
+                        <span>Medical Imaging</span>
+                    </div>
+                    <div class="system-outcome">
+                        <strong>Outcome:</strong> Assists radiologists with second-opinion analysis, improving diagnostic accuracy and speed.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How We Work Section -->
+    <section class="how-we-work">
+        <div class="container">
+            <div class="section-header">
+                <h2>How We Work</h2>
+                <p>A structured approach to building intelligent systems</p>
+            </div>
+
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">01</div>
+                    <h3>Discover</h3>
+                    <p>Understand your business challenge deeply. Map the problem, identify constraints, and define what success looks like.</p>
+                </div>
+
+                <div class="step-divider"></div>
+
+                <div class="step">
+                    <div class="step-number">02</div>
+                    <h3>Design</h3>
+                    <p>Architect the solution. Choose the right AI techniques, design system workflows, and plan the integration points.</p>
+                </div>
+
+                <div class="step-divider"></div>
+
+                <div class="step">
+                    <div class="step-number">03</div>
+                    <h3>Build</h3>
+                    <p>Engineer and develop. Write production-grade code with proper testing, error handling, and performance optimization.</p>
+                </div>
+
+                <div class="step-divider"></div>
+
+                <div class="step">
+                    <div class="step-number">04</div>
+                    <h3>Integrate</h3>
+                    <p>Connect to your systems. APIs, databases, third-party services—everything works together seamlessly.</p>
+                </div>
+
+                <div class="step-divider"></div>
+
+                <div class="step">
+                    <div class="step-number">05</div>
+                    <h3>Deploy & Improve</h3>
+                    <p>Launch to production. Monitor performance, collect feedback, and continuously improve the system over time.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content">
+                    <h2>About</h2>
+                    <p>I'm Mahmoud Osama, an AI engineer and software developer specializing in intelligent systems and automation workflows.</p>
+                    <p>I build AI agents that reason and decide. Systems that learn from data. Workflows that eliminate manual work. My focus is solving real business problems with production-grade AI—not hype, not prototypes.</p>
+                    <p>With a background in AI, machine learning, and cybersecurity, I understand both the technical depth required for complex systems and the business impact that matters.</p>
+                    <p>I work independently, giving clients direct access to the engineer building their solution. Every system is custom-designed for the specific problem at hand.</p>
+                    <div class="about-cta">
+                        <a href="#contact" class="btn btn-primary">Let's Talk</a>
+                    </div>
+                </div>
+                <div class="about-stats">
+                    <div class="stat">
+                        <div class="stat-number">10+</div>
+                        <div class="stat-label">Projects Delivered</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">4</div>
+                        <div class="stat-label">Years AI/ML Focus</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Custom Solutions</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h2>Let's Build Something Intelligent</h2>
+                    <p>Have an AI problem that needs solving? Let's talk about your idea and how I can help.</p>
+                    <div class="contact-details">
+                        <a href="mailto:vip.m.osama@gmail.com" class="contact-link">
+                            <i class="fas fa-envelope"></i>
+                            vip.m.osama@gmail.com
+                        </a>
+                        <a href="tel:+201003169833" class="contact-link">
+                            <i class="fas fa-phone"></i>
+                            +20 100 3169833
+                        </a>
+                        <div class="contact-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            Egypt, Mansoura • Available Worldwide
+                        </div>
+                    </div>
+                </div>
+                <form id="contactForm" class="contact-form">
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="subject" name="subject" placeholder="Project Type" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" placeholder="Tell me about your challenge..." rows="6" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                    <div id="form-status" class="form-status"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <a href="#" class="footer-logo">MO<span>.</span></a>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#systems">Systems</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="https://github.com/Mahmoud-Ossama" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/mahmoud-osama-ai/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Mahmoud Osama. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>
