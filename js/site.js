@@ -1,0 +1,468 @@
+/* ===========================================================
+   Osama Engineering — site behaviour
+   - bilingual EN/AR with a full RTL flip
+   - growth-capacity calculator (capacity, never wage savings)
+   - scroll reveal, sticky nav, scrollspy
+   - lazy mounting + offscreen render suspension for every canvas
+   =========================================================== */
+(function(){
+  "use strict";
+
+  var root  = document.documentElement;
+  var body  = document.body;
+  var REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var state = { lang:"en", work:"messages" };
+
+  /* ---- storage ---- */
+  try{
+    var saved = localStorage.getItem("oe-site-lang");
+    if(saved === "ar" || saved === "en"){ state.lang = saved; }
+  }catch(e){}
+  function saveLang(){
+    try{ localStorage.setItem("oe-site-lang", state.lang); }catch(e){}
+  }
+
+  /* ===========================================================
+     LANGUAGE
+     =========================================================== */
+  function renderLang(){
+    var ar = state.lang === "ar";
+    body.setAttribute("dir", ar ? "rtl" : "ltr");
+    root.setAttribute("lang", ar ? "ar" : "en");
+
+    var nodes = document.querySelectorAll("[data-en]");
+    for(var i=0;i<nodes.length;i++){
+      var n = nodes[i];
+      var v = n.getAttribute(ar ? "data-ar" : "data-en");
+      if(v === null) continue;
+      if(v.indexOf("<") !== -1){ n.innerHTML = v; } else { n.textContent = v; }
+    }
+
+    document.getElementById("langBtn")
+      .setAttribute("aria-label", ar ? "Switch to English" : "التبديل إلى العربية");
+
+    syncVizLang();
+  }
+
+  document.getElementById("langBtn").addEventListener("click", function(){
+    state.lang = state.lang === "ar" ? "en" : "ar";
+    saveLang();
+    renderLang();
+    calc();
+  });
+
+  /* ===========================================================
+     MOBILE NAV
+     =========================================================== */
+  var burger = document.getElementById("burger");
+  var links  = document.getElementById("navLinks");
+  burger.addEventListener("click", function(){
+    var open = burger.getAttribute("aria-expanded") === "true";
+    burger.setAttribute("aria-expanded", open ? "false" : "true");
+    links.classList.toggle("is-open", !open);
+  });
+  links.addEventListener("click", function(ev){
+    if(ev.target.closest("a")){
+      burger.setAttribute("aria-expanded","false");
+      links.classList.remove("is-open");
+    }
+  });
+
+  /* ===========================================================
+     STICKY NAV + SCROLLSPY
+     =========================================================== */
+  var navWrap = document.getElementById("navWrap");
+  var sentinel = document.getElementById("topSentinel");
+  if("IntersectionObserver" in window){
+    new IntersectionObserver(function(entries){
+      navWrap.classList.toggle("is-stuck", !entries[0].isIntersecting);
+    }, { threshold: 0 }).observe(sentinel);
+  }
+
+  var spyLinks = Array.prototype.slice.call(links.querySelectorAll("a[href^='#']"));
+  var spyTargets = spyLinks
+    .map(function(a){ return document.getElementById(a.getAttribute("href").slice(1)); })
+    .filter(Boolean);
+
+  if(spyTargets.length && "IntersectionObserver" in window){
+    var visible = {};
+    var spy = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ visible[e.target.id] = e.isIntersecting; });
+      var current = null;
+      for(var i=0;i<spyTargets.length;i++){
+        if(visible[spyTargets[i].id]){ current = spyTargets[i].id; break; }
+      }
+      spyLinks.forEach(function(a){
+        var on = a.getAttribute("href") === "#" + current;
+        a.classList.toggle("is-active", on);
+        if(on){ a.setAttribute("aria-current","true"); }
+        else { a.removeAttribute("aria-current"); }
+      });
+    }, { rootMargin: "-72px 0px -55% 0px", threshold: 0 });
+    spyTargets.forEach(function(t){ spy.observe(t); });
+  }
+
+  /* ===========================================================
+     SCROLL REVEAL
+     =========================================================== */
+  (function stagger(){
+    var groups = document.querySelectorAll("[data-reveal-group]");
+    for(var i=0;i<groups.length;i++){
+      var kids = groups[i].querySelectorAll("[data-reveal]");
+      for(var j=0;j<kids.length;j++){ kids[j].style.setProperty("--i", j); }
+    }
+  })();
+
+  function reveal(){
+    var items = document.querySelectorAll("[data-reveal]");
+    if(REDUCE || !("IntersectionObserver" in window)){
+      for(var i=0;i<items.length;i++){ items[i].classList.add("is-in"); }
+      return;
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add("is-in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+    for(var j=0;j<items.length;j++){ io.observe(items[j]); }
+  }
+
+  function chartReveal(){
+    var chart = document.getElementById("dChart");
+    if(!chart) return;
+    if(REDUCE || !("IntersectionObserver" in window)){ chart.classList.add("is-in"); return; }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ chart.classList.add("is-in"); io.disconnect(); }
+      });
+    }, { threshold: 0.35 });
+    io.observe(chart);
+  }
+
+  /* ===========================================================
+     EMBEDDED DESIGN ASSETS
+     Frames stay empty until they are close to the viewport, the
+     language-paired ones reload when the language changes, and
+     every frame's animation loop is suspended while it is
+     scrolled away.
+     =========================================================== */
+  var vizList = Array.prototype.slice.call(document.querySelectorAll(".viz"));
+
+  function vizSrc(viz){
+    var ar = state.lang === "ar";
+    return viz.getAttribute(ar && viz.hasAttribute("data-src-ar") ? "data-src-ar" : "data-src-en");
+  }
+
+  function mountViz(viz){
+    var frame = viz.querySelector("iframe");
+    var want = vizSrc(viz);
+    if(frame.getAttribute("data-current") === want) return;
+    viz.classList.remove("is-loaded");
+    frame.setAttribute("data-current", want);
+    frame.setAttribute("src", want);
+  }
+
+  function syncVizLang(){
+    vizList.forEach(function(viz){
+      if(!viz.hasAttribute("data-src-ar")) return;
+      if(viz.getAttribute("data-mounted") !== "1") return;
+      mountViz(viz);
+    });
+  }
+
+  /* Each bundle ships as an authoring studio: the artwork sits on a dark
+     #0a0a0a stage, under a drop shadow, above a transport bar, with the
+     editor overlays on top. None of that belongs on the site. The asset
+     files are left untouched — the studio chrome is stripped at runtime
+     with a stylesheet injected into the frame once it has loaded. */
+  var STUDIO_CSS = [
+    "html,body{background:transparent !important;}",
+    "[data-om-starter='animations-v3']{background:transparent !important;}",
+    "[data-omelette-chrome]{display:none !important;}",
+    "[data-om-starter='animations-v3'] svg{box-shadow:none !important;}",
+    "#__bundler_loading,#__bundler_thumbnail{display:none !important;}",
+    "[data-omelette-tweaks],[data-om-tweaks],[data-om-feedback],[data-om-grid]{display:none !important;}"
+  ].join("");
+
+  function stripStudio(frame){
+    var doc;
+    try{ doc = frame.contentDocument; }catch(e){ return; }
+    if(!doc || !doc.head) return;
+    if(doc.getElementById("oe-embed-css")) return;
+    var st = doc.createElement("style");
+    st.id = "oe-embed-css";
+    st.textContent = STUDIO_CSS;
+    doc.head.appendChild(st);
+    /* the player sizes its canvas from the stage box, which just changed */
+    try{ frame.contentWindow.dispatchEvent(new Event("resize")); }catch(e){}
+  }
+
+  /* Suspending an animation the browser cannot see.
+     The players drive themselves off requestAnimationFrame inside their
+     own document. Chrome keeps servicing rAF in a same-origin iframe that
+     has scrolled out of view, so four React scenes would carry on
+     rendering off-screen. Swapping the frame's own rAF for a queue stops
+     the loop dead; restoring it flushes whatever was parked so the loop
+     picks up on the next tick rather than stalling. */
+  function setFramePaused(frame, paused){
+    var win;
+    try{ win = frame.contentWindow; }catch(e){ return; }
+    if(!win || !win.requestAnimationFrame) return;
+
+    if(paused){
+      if(win.__oePaused) return;
+      win.__oeRealRaf = win.__oeRealRaf || win.requestAnimationFrame.bind(win);
+      win.__oeQueue = [];
+      win.__oePaused = true;
+      win.requestAnimationFrame = function(cb){ win.__oeQueue.push(cb); return 0; };
+    }else{
+      if(!win.__oePaused) return;
+      win.__oePaused = false;
+      win.requestAnimationFrame = win.__oeRealRaf;
+      var parked = win.__oeQueue || [];
+      win.__oeQueue = [];
+      var now = (win.performance || performance).now();
+      for(var i=0;i<parked.length;i++){
+        try{ parked[i](now); }catch(e){}
+      }
+    }
+  }
+
+  vizList.forEach(function(viz){
+    var frame = viz.querySelector("iframe");
+    frame.addEventListener("load", function(){
+      if(!frame.getAttribute("src")) return;
+      /* The bundle unpacks React, ReactDOM and Babel and then replaces
+         its own documentElement, which throws away anything injected
+         before that point. How long that takes depends on the machine,
+         so keep re-applying until the style survives a few checks. */
+      var tries = 0, stable = 0;
+      (function settle(){
+        stripStudio(frame);
+        var ok = false;
+        try{ ok = !!(frame.contentDocument && frame.contentDocument.getElementById("oe-embed-css")); }catch(e){}
+        stable = ok ? stable + 1 : 0;
+        if(stable < 4 && ++tries < 80){ setTimeout(settle, 200); }
+        else if(viz.getAttribute("data-onscreen") !== "1"){ setFramePaused(frame, true); }
+      })();
+      viz.classList.add("is-loaded");
+    });
+  });
+
+  if("IntersectionObserver" in window){
+    /* mount early — a frame needs a head start before it is looked at */
+    var vizMount = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        e.target.setAttribute("data-mounted","1");
+        mountViz(e.target);
+        vizMount.unobserve(e.target);
+      });
+    }, { rootMargin: "300px 0px" });
+
+    /* pause late — only once it is genuinely off-screen */
+    var vizPlay = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        var frame = e.target.querySelector("iframe");
+        e.target.setAttribute("data-onscreen", e.isIntersecting ? "1" : "0");
+        if(!frame.getAttribute("src")) return;
+        setFramePaused(frame, !e.isIntersecting);
+      });
+    }, { rootMargin: "120px 0px" });
+
+    vizList.forEach(function(v){ vizMount.observe(v); vizPlay.observe(v); });
+  }else{
+    vizList.forEach(function(v){ v.setAttribute("data-mounted","1"); mountViz(v); });
+  }
+
+  /* ===========================================================
+     3D HERO MODEL
+     model-viewer renders on demand, but auto-rotate keeps asking
+     for frames. Stop the turntable once the hero is off-screen.
+     =========================================================== */
+  (function heroModel(){
+    var hero = document.getElementById("hero");
+    var mv = document.getElementById("heroModel");
+    if(!hero || !mv) return;
+
+    mv.addEventListener("load", function(){ hero.classList.add("is-ready"); });
+    mv.addEventListener("error", function(){ hero.classList.add("is-ready","is-failed"); });
+
+    if(REDUCE){ mv.removeAttribute("auto-rotate"); return; }
+
+    if("IntersectionObserver" in window){
+      new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting){ mv.setAttribute("auto-rotate",""); }
+          else { mv.removeAttribute("auto-rotate"); }
+        });
+      }, { rootMargin: "80px 0px" }).observe(hero);
+    }
+  })();
+
+  /* ===========================================================
+     CALCULATOR — growth capacity, never wage savings
+     =========================================================== */
+  var HOURS_PER_PERSON = 192;   /* 8h x 24 days — deliberately high, so "hires avoided" reads low */
+
+  var WORK = {
+    messages: {
+      minutes:4, repeat:0.55, def:1800, step:50, max:500000,
+      unit:{ en:"messages", ar:"رسالة" },
+      label:{ en:"Customer messages per month", ar:"عدد رسايل العملاء في الشهر" },
+      note:{
+        en:"Assuming 4 minutes of handling per message and that 55% of them follow a predictable pattern.",
+        ar:"بافتراض 4 دقايق للرسالة الواحدة، وإن 55% منها بتمشي على نمط متوقع."
+      }
+    },
+    documents: {
+      minutes:7, repeat:0.80, def:400, step:10, max:200000,
+      unit:{ en:"documents", ar:"مستند" },
+      label:{ en:"Invoices and documents per month", ar:"عدد الفواتير والمستندات في الشهر" },
+      note:{
+        en:"Assuming 7 minutes to read and enter each document and that 80% of them follow a consistent layout.",
+        ar:"بافتراض 7 دقايق لقراءة وإدخال كل مستند، وإن 80% منهم ليهم نفس الشكل."
+      }
+    },
+    reports: {
+      minutes:90, repeat:0.85, def:12, step:1, max:2000,
+      unit:{ en:"reports", ar:"تقرير" },
+      label:{ en:"Reports produced per month", ar:"عدد التقارير اللي بتتعمل في الشهر" },
+      note:{
+        en:"Assuming 90 minutes to pull and check each report and that 85% of that is the same steps every time.",
+        ar:"بافتراض 90 دقيقة لتجميع ومراجعة كل تقرير، وإن 85% من ده نفس الخطوات كل مرة."
+      }
+    }
+  };
+
+  var COPY = {
+    outLab: { en:"Extra capacity at your current team size", ar:"طاقة إضافية بنفس حجم فريقك الحالي" },
+    capSub: { en:"more %U a month, before anyone new is needed",
+              ar:"%U زيادة في الشهر، قبل ما تحتاج حد جديد" },
+    k1: { en:"Your growth plan needs", ar:"خطة النمو بتاعتك محتاجة" },
+    k2: { en:"Staff hours you don't have to add", ar:"ساعات شغل مش هتضطر تضيفها" },
+    k3: { en:"Cost of handling that growth manually", ar:"تكلفة استيعاب النمو ده يدويًا" },
+    fits: { en:"%N — covered", ar:"%N — مغطاة" },
+    over: { en:"%N — beyond this point you'd hire", ar:"%N — بعد كده هتحتاج توظّف" },
+    hrs:  { en:"%N h / month", ar:"%N ساعة / شهر" },
+    hrsP: { en:"%N h / month (≈ %P people)", ar:"%N ساعة / شهر (≈ %P أفراد)" },
+    egp:  { en:"%N EGP / year", ar:"%N جنيه / سنة" },
+    svc:  { en:"On top of that: customers get an answer outside working hours, and a first response in seconds at any volume.",
+            ar:"وكمان: العملاء بياخدوا رد بره مواعيد الشغل، وأول رد في ثواني مهما كان الحجم." },
+    tail: { en:" Both figures sit at the cautious end on purpose, and both are editable on the full calculator.",
+            ar:" الافتراضين دول عند أقل تقدير عن قصد، وتقدر تعدّلهم في الحاسبة الكاملة." }
+  };
+
+  var nf = new Intl.NumberFormat("en-US");
+  var volEl = document.getElementById("calcVol");
+  var growthEl = document.getElementById("calcGrowth");
+  var costEl = document.getElementById("calcCost");
+  var capEl = document.getElementById("calcCap");
+  var lastWork = null;
+
+  function t(key){ return COPY[key][state.lang === "ar" ? "ar" : "en"]; }
+  function setTxt(id, v){ document.getElementById(id).textContent = v; }
+
+  /* count-up for the headline figure; falls back to a plain write */
+  var capAnim = null, capShown = 0;
+  function setCap(target){
+    if(REDUCE || Math.abs(target - capShown) < 2){
+      capShown = target; capEl.textContent = nf.format(Math.round(target)); return;
+    }
+    if(capAnim) cancelAnimationFrame(capAnim);
+    var from = capShown, delta = target - from, t0 = null, dur = 420;
+    function step(ts){
+      if(t0 === null) t0 = ts;
+      var k = Math.min(1, (ts - t0) / dur);
+      var e = 1 - Math.pow(1 - k, 3);
+      capShown = from + delta * e;
+      capEl.textContent = nf.format(Math.round(capShown));
+      if(k < 1){ capAnim = requestAnimationFrame(step); }
+      else { capShown = target; capAnim = null; }
+    }
+    capAnim = requestAnimationFrame(step);
+  }
+
+  function calc(){
+    var w = WORK[state.work] || WORK.messages;
+    var lang = state.lang === "ar" ? "ar" : "en";
+    var vol = Math.max(0, parseFloat(volEl.value) || 0);
+    var growth = Math.max(0, parseFloat(growthEl.value) || 0);
+    var cost = Math.max(0, parseFloat(costEl.value) || 0);
+
+    /* Same team hours, but each item now costs (1-repeat) of the manual time. */
+    var extraCapacity = vol * w.repeat / (1 - w.repeat);
+    var targetExtra = vol * growth / 100;
+    var futureVolume = vol * (1 + growth / 100);
+    var hoursNotAdded = futureVolume * w.minutes * w.repeat / 60;
+    var costManual = (targetExtra * w.minutes / 60) * cost * 12;
+    var people = hoursNotAdded / HOURS_PER_PERSON;
+
+    setTxt("calcOutLab", t("outLab"));
+    setCap(extraCapacity);
+    setTxt("calcCapSub", t("capSub").replace("%U", w.unit[lang]));
+
+    setTxt("calcK1", t("k1"));
+    var v1 = document.getElementById("calcV1");
+    var fits = extraCapacity >= targetExtra;
+    v1.textContent = t(fits ? "fits" : "over").replace("%N", nf.format(Math.round(targetExtra)));
+    v1.className = "v" + (fits ? " fits" : "");
+
+    setTxt("calcK2", t("k2"));
+    setTxt("calcV2", people >= 0.5
+      ? t("hrsP").replace("%N", nf.format(Math.round(hoursNotAdded))).replace("%P", people.toFixed(1))
+      : t("hrs").replace("%N", nf.format(Math.round(hoursNotAdded))));
+
+    setTxt("calcK3", t("k3"));
+    setTxt("calcV3", t("egp").replace("%N", nf.format(Math.round(costManual))));
+
+    setTxt("calcService", t("svc"));
+    setTxt("calcNote", w.note[lang] + t("tail"));
+  }
+
+  function syncWork(){
+    var w = WORK[state.work] || WORK.messages;
+    var btns = document.getElementById("calcWork").querySelectorAll("button[data-w]");
+    for(var i=0;i<btns.length;i++){
+      btns[i].setAttribute("aria-pressed", btns[i].getAttribute("data-w") === state.work ? "true" : "false");
+    }
+    if(lastWork !== state.work){
+      volEl.value = w.def;
+      volEl.step = w.step;
+      volEl.max = w.max;
+      lastWork = state.work;
+    }
+    var lab = document.getElementById("calcVolLabel");
+    lab.setAttribute("data-en", w.label.en);
+    lab.setAttribute("data-ar", w.label.ar);
+    lab.textContent = w.label[state.lang === "ar" ? "ar" : "en"];
+  }
+
+  document.getElementById("calcWork").addEventListener("click", function(ev){
+    var b = ev.target.closest("button[data-w]");
+    if(!b) return;
+    state.work = b.getAttribute("data-w");
+    syncWork();
+    calc();
+  });
+  volEl.addEventListener("input", calc);
+  growthEl.addEventListener("input", calc);
+  costEl.addEventListener("input", calc);
+
+  /* ===========================================================
+     BOOT
+     =========================================================== */
+  renderLang();
+  syncWork();
+  calc();
+  reveal();
+  chartReveal();
+
+  /* rAF alone is not enough: it never fires while the tab is in the
+     background, which would leave the hero permanently invisible for
+     anyone who opens the site in a new tab. Belt and braces. */
+  function showHero(){ document.getElementById("hero").classList.add("is-hero-in"); }
+  requestAnimationFrame(showHero);
+  setTimeout(showHero, 150);
+})();

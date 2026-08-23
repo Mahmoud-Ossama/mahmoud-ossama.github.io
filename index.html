@@ -1,418 +1,441 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mahmoud Osama | AI Automation & Agent Solutions</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script src="js/translations.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Osama Engineering — AI &amp; automation for Egyptian business</title>
+<meta name="description" content="Save time, cut costs, and grow faster with AI built around how your business works. Process audits, conversation, documents, workflow, knowledge and prediction systems. Mansoura, Egypt.">
+<meta name="theme-color" content="#0D5A4E">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Osama Engineering — AI &amp; automation for Egyptian business">
+<meta property="og:description" content="Save time, cut costs, and grow faster with AI built around how your business works.">
+<meta property="og:locale" content="en_EG">
+<meta property="og:locale:alternate" content="ar_EG">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%230D5A4E'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%23BE5410'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/site.css">
+
+<script type="module" src="vendor/model-viewer.min.js"></script>
+<script defer src="js/site.js"></script>
 </head>
-<body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <a href="#" class="logo">MO<span>.</span></a>
-            <ul class="nav-links">
-                <li><a href="#home" class="active" data-key="nav_home">Home</a></li>
-                <li><a href="#services" data-key="nav_services">Services</a></li>
-                <li><a href="#systems" data-key="nav_systems">Systems</a></li>
-                <li><a href="#about" data-key="nav_about">About</a></li>
-                <li><a href="#contact" data-key="nav_contact">Contact</a></li>
-            </ul>
-            <div class="language-toggle">
-                <button id="langBtn" class="lang-btn">العربية</button>
-            </div>
-            <div class="nav-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
+<body dir="ltr">
+
+<a class="skip" href="#main" data-en="Skip to content" data-ar="تخطي إلى المحتوى">Skip to content</a>
+<div id="topSentinel" aria-hidden="true"></div>
+
+<!-- ══════════════ NAV ══════════════ -->
+<div class="d-nav-wrap" id="navWrap">
+  <div class="shell pad">
+    <nav class="d-nav" aria-label="Primary">
+      <a class="d-mark" href="#main">Osama<span>.</span>engineering</a>
+      <div class="d-links" id="navLinks">
+        <a href="#services" data-en="Services" data-ar="الخدمات">Services</a>
+        <a href="#benchmarks" data-en="Benchmarks" data-ar="المؤشرات">Benchmarks</a>
+        <a href="#calculator" data-en="Work it out yourself" data-ar="احسبها بنفسك">Work it out yourself</a>
+        <a href="#about" data-en="About" data-ar="من نحن">About</a>
+      </div>
+      <div class="d-navcta">
+        <button class="d-lang" type="button" id="langBtn" data-en="EN / ع" data-ar="ع / EN">EN / ع</button>
+        <a class="d-btn d-btn-cta d-btn-sm" href="#contact" data-en="Book a discovery call" data-ar="احجز استشارة مجانية">Book a discovery call</a>
+        <button class="d-burger" type="button" id="burger" aria-expanded="false" aria-controls="navLinks" aria-label="Menu"><i></i></button>
+      </div>
     </nav>
+  </div>
+</div>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1 class="hero-title" data-key="hero_title">AI Systems That Automate the Work Slowing Your Business Down.</h1>
-                <p class="hero-subtitle" data-key="hero_subtitle">Building intelligent agents and automation workflows that solve real problems. From conversational AI to autonomous systems, I engineer solutions that scale.</p>
-                <div class="hero-cta">
-                    <a href="#contact" class="btn btn-primary" data-key="hero_cta_1">Start a Project</a>
-                    <a href="#systems" class="btn btn-outline" data-key="hero_cta_2">See the Work</a>
-                </div>
-            </div>
-            <div class="hero-visual">
-                <svg class="orchestration-diagram" viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="nodeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#6c63ff;stop-opacity:0.8" />
-                            <stop offset="100%" style="stop-color:#8c83ff;stop-opacity:0.3" />
-                        </linearGradient>
-                        <filter id="glow">
-                            <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                            <feMerge>
-                                <feMergeNode in="coloredBlur"/>
-                                <feMergeNode in="SourceGraphic"/>
-                            </feMerge>
-                        </filter>
-                    </defs>
+<main id="main">
 
-                    <g class="input-layer">
-                        <circle cx="50" cy="100" r="20" fill="url(#nodeGradient)" filter="url(#glow)"/>
-                        <circle cx="50" cy="250" r="20" fill="url(#nodeGradient)" filter="url(#glow)"/>
-                        <circle cx="50" cy="400" r="20" fill="url(#nodeGradient)" filter="url(#glow)"/>
-                    </g>
+  <!-- ══════════════ HERO — full-bleed automation engine (GLB) ══════════════ -->
+  <section class="hero" id="hero" aria-labelledby="heroTitle">
+    <div class="hero-stage" id="heroStage">
+      <div class="hero-load" data-en="Loading the engine" data-ar="جاري تحميل النموذج">Loading the engine</div>
+      <model-viewer
+        id="heroModel"
+        src="assets/automation-engine.glb"
+        alt="A three-dimensional model of an automation engine. Work enters on the input rails at one end, moves through the processing lanes, and leaves finished on the raised output plateau."
+        camera-controls
+        touch-action="pan-y"
+        auto-rotate
+        auto-rotate-delay="900"
+        rotation-per-second="14deg"
+        interaction-prompt="none"
+        camera-orbit="36deg 67deg 94%"
+        min-camera-orbit="auto 25deg 70%"
+        max-camera-orbit="auto 88deg 160%"
+        shadow-intensity="0.9"
+        shadow-softness="0.85"
+        exposure="1.05"
+        environment-image="neutral"
+        disable-tap
+        loading="eager"></model-viewer>
+    </div>
+    <div class="hero-scrim" aria-hidden="true"></div>
 
-                    <g class="process-layer">
-                        <circle cx="200" cy="80" r="25" fill="none" stroke="#6c63ff" stroke-width="2" opacity="0.6"/>
-                        <circle cx="200" cy="175" r="25" fill="none" stroke="#6c63ff" stroke-width="2" opacity="0.6"/>
-                        <circle cx="200" cy="270" r="25" fill="none" stroke="#6c63ff" stroke-width="2" opacity="0.6"/>
-                        <circle cx="200" cy="365" r="25" fill="none" stroke="#6c63ff" stroke-width="2" opacity="0.6"/>
-                    </g>
-
-                    <g class="output-layer">
-                        <circle cx="350" cy="130" r="20" fill="url(#nodeGradient)" filter="url(#glow)"/>
-                        <circle cx="350" cy="250" r="20" fill="url(#nodeGradient)" filter="url(#glow)"/>
-                        <circle cx="350" cy="370" r="20" fill="url(#nodeGradient)" filter="url(#glow)"/>
-                    </g>
-
-                    <g class="result-layer">
-                        <circle cx="500" cy="250" r="30" fill="url(#nodeGradient)" filter="url(#glow)"/>
-                        <text x="500" y="255" text-anchor="middle" font-size="16" fill="white" font-weight="bold" opacity="0.8">✓</text>
-                    </g>
-
-                    <g class="connections" stroke="#6c63ff" stroke-width="2" opacity="0.4" fill="none">
-                        <path d="M 70 100 L 175 80" class="connection-line"/>
-                        <path d="M 70 250 L 175 175" class="connection-line"/>
-                        <path d="M 70 250 L 175 270" class="connection-line"/>
-                        <path d="M 70 400 L 175 365" class="connection-line"/>
-
-                        <path d="M 225 80 L 330 130" class="connection-line"/>
-                        <path d="M 225 175 L 330 130" class="connection-line"/>
-                        <path d="M 225 175 L 330 250" class="connection-line"/>
-                        <path d="M 225 270 L 330 250" class="connection-line"/>
-                        <path d="M 225 270 L 330 370" class="connection-line"/>
-                        <path d="M 225 365 L 330 370" class="connection-line"/>
-
-                        <path d="M 370 130 L 470 240" class="connection-line"/>
-                        <path d="M 370 250 L 470 250" class="connection-line"/>
-                        <path d="M 370 370 L 470 260" class="connection-line"/>
-                    </g>
-                </svg>
-            </div>
+    <div class="hero-overlay">
+      <div class="shell pad">
+        <div class="hero-copy">
+          <p class="lab" data-reveal data-en="AI &amp; automation for Egyptian business" data-ar="ذكاء اصطناعي وأتمتة للشركات المصرية">AI &amp; automation for Egyptian business</p>
+          <h1 id="heroTitle" data-reveal data-en="Save time, cut costs, and grow faster &mdash; with AI built around how your business works." data-ar="وفّر وقت، قلّل تكاليف، وكبّر أسرع — بذكاء اصطناعي متبني على طريقة شغلك.">Save time, cut costs, and grow faster &mdash; with AI built around how your business works.</h1>
+          <p class="sub" data-reveal data-en="From customer messages and invoices to reporting and forecasting, we build the systems that carry the repeated work &mdash; so your budget and your people go further. One engineer designs it, builds it, and keeps it running." data-ar="من رسايل العملاء والفواتير للتقارير والتوقعات، بنبني الأنظمة اللي تشيل الشغل المتكرر — عشان ميزانيتك ووقت فريقك يوصلوا لأبعد. مهندس واحد بيصممها وبينفذها وبيفضل مسؤول عن تشغيلها.">From customer messages and invoices to reporting and forecasting, we build the systems that carry the repeated work &mdash; so your budget and your people go further. One engineer designs it, builds it, and keeps it running.</p>
+          <div class="acts" data-reveal>
+            <a class="d-btn d-btn-cta" href="#contact" data-en="Book a discovery call" data-ar="احجز استشارة مجانية">Book a discovery call</a>
+            <a class="d-btn d-btn-ghost" href="#services" data-en="Try a live demo" data-ar="جرّب النموذج بنفسك">Try a live demo</a>
+          </div>
         </div>
+      </div>
+    </div>
+
+    <p class="hero-cap" aria-hidden="true"><i></i><span data-en="In &rarr; processed &rarr; out" data-ar="داخل ← معالجة ← خارج">In &rarr; processed &rarr; out</span></p>
+  </section>
+
+  <!-- ══════════════ OVERNIGHT QUEUE + TRUST ══════════════ -->
+  <div class="shell pad d-figband">
+    <div class="d-fig" data-reveal role="img"
+         aria-label="An overnight work queue. Four routine items are marked done — a shipment question at 23:41, a supplier invoice at 01:12, a new lead written to the CRM at 03:07, and the weekly sales report at 05:00. A fifth item, a complaint needing judgement, is still waiting for the team at 06:03.">
+      <div class="d-fig-head">
+        <span class="lab" data-en="What your team walked in to" data-ar="اللي فريقك لقاه مستنيه الصبح">What your team walked in to</span>
+        <span class="d-fig-n">4</span>
+      </div>
+      <div class="d-queue" aria-hidden="true">
+        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="Customer asked where a shipment is" data-ar="عميل بيسأل شحنته وصلت فين">Customer asked where a shipment is</span><span class="tag" data-en="Chat" data-ar="محادثات">Chat</span><span class="t">23:41</span></div>
+        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="Supplier invoice read, 14 lines" data-ar="فاتورة مورد اتسجلت، 14 بند">Supplier invoice read, 14 lines</span><span class="tag" data-en="Documents" data-ar="مستندات">Documents</span><span class="t">01:12</span></div>
+        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="New lead scored and written to the CRM" data-ar="عميل جديد اتقيّم واتسجل في الـ CRM">New lead scored and written to the CRM</span><span class="tag" data-en="Systems" data-ar="أنظمة">Systems</span><span class="t">03:07</span></div>
+        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="Weekly sales report built and sent" data-ar="تقرير المبيعات الأسبوعي اتعمل واتبعت">Weekly sales report built and sent</span><span class="tag" data-en="Reporting" data-ar="تقارير">Reporting</span><span class="t">05:00</span></div>
+        <div class="d-q pending"><span class="tick">·</span><span class="body" data-en="A complaint — this one needs judgement" data-ar="شكوى — دي محتاجة قرار من حد">A complaint — this one needs judgement</span><span class="tag" data-en="For the team" data-ar="للفريق">For the team</span><span class="t">06:03</span></div>
+      </div>
+      <p class="d-src" style="margin-top:13px;">
+        <span class="mk" aria-hidden="true">&rarr;</span>
+        <span data-en="Four routine items already done by 8am. The one that needed a decision was waiting for your team, with the full conversation attached." data-ar="أربع حاجات روتينية خلصت قبل الساعة 8. واللي كانت محتاجة قرار كانت مستنية فريقك ومعاها المحادثة كاملة.">Four routine items already done by 8am. The one that needed a decision was waiting for your team, with the full conversation attached.</span>
+      </p>
+    </div>
+
+    <div class="d-trust">
+      <div class="grp">
+        <span class="lab" data-en="Built on" data-ar="مبني على">Built on</span>
+        <span class="plat">WhatsApp Business API</span>
+        <span class="plat">OpenAI</span>
+        <span class="plat">Anthropic</span>
+        <span class="plat">Supabase</span>
+      </div>
+      <div class="grp">
+        <span data-en="AI engineer · Working code on GitHub · Mansoura, Egypt" data-ar="مهندس ذكاء اصطناعي · الكود متاح على GitHub · المنصورة، مصر">AI engineer · Working code on GitHub · Mansoura, Egypt</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ ZIG 1 — opportunity | automation flow ══════════════ -->
+  <div class="shell pad">
+    <section class="d-sec zig" id="opportunity" aria-labelledby="oppTitle">
+      <div class="zig-text">
+        <p class="lab" data-reveal data-en="Where the gains usually are" data-ar="المكاسب عادة بتيجي منين">Where the gains usually are</p>
+        <h2 id="oppTitle" data-reveal data-en="Four places where AI pays back fastest" data-ar="أربع مواضع الذكاء الاصطناعي بيرد تكلفته فيها أسرع">Four places where AI pays back fastest</h2>
+        <div class="d-probs" data-reveal data-reveal-group>
+          <div class="d-prob">
+            <p data-en="Customers message after hours — and get a real answer straight away, every night." data-ar="العملاء بيبعتوا بعد مواعيد الشغل — وبياخدوا رد حقيقي على طول، كل ليلة.">Customers message after hours — and get a real answer straight away, every night.</p>
+            <a class="link" href="#services"><span data-en="Conversation" data-ar="محادثات">Conversation</span> <span class="arw" aria-hidden="true">&rarr;</span></a>
+          </div>
+          <div class="d-prob">
+            <p data-en="Invoices arrive in every format — and land in your system as clean, checked data." data-ar="الفواتير بتيجي بكل الأشكال — وبتوصل نظامك بيانات مرتبة ومتراجعة.">Invoices arrive in every format — and land in your system as clean, checked data.</p>
+            <a class="link" href="#services"><span data-en="Documents &amp; data" data-ar="مستندات وبيانات">Documents &amp; data</span> <span class="arw" aria-hidden="true">&rarr;</span></a>
+          </div>
+          <div class="d-prob">
+            <p data-en="Deals move through the pipeline — and the CRM stays current on its own." data-ar="الصفقات بتتحرك في المسار — والـ CRM بيفضل محدّث لوحده.">Deals move through the pipeline — and the CRM stays current on its own.</p>
+            <a class="link" href="#services"><span data-en="Systems &amp; workflow" data-ar="أنظمة وسير عمل">Systems &amp; workflow</span> <span class="arw" aria-hidden="true">&rarr;</span></a>
+          </div>
+          <div class="d-prob">
+            <p data-en="Prices and policies change — and everyone has the current answer in seconds." data-ar="الأسعار والسياسات بتتغير — وكل واحد بياخد الإجابة الحالية في ثواني.">Prices and policies change — and everyone has the current answer in seconds.</p>
+            <a class="link" href="#services"><span data-en="Knowledge &amp; search" data-ar="معرفة وبحث">Knowledge &amp; search</span> <span class="arw" aria-hidden="true">&rarr;</span></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="zig-viz">
+        <div class="viz ar-flow" data-reveal data-src-en="assets/Automation%20Flow%20(standalone).html">
+          <div class="viz-frame">
+            <div class="viz-load" aria-hidden="true"><span class="spin"></span><span data-en="Loading animation" data-ar="جاري تحميل الرسم المتحرك">Loading animation</span></div>
+            <iframe role="img" tabindex="-1" loading="lazy" scrolling="no"
+              title="Automation flow"
+              aria-label="An animation of repeated work moving through an automated system. Message cards queue up on one side, pass one at a time through a processing block, and fan out sorted on the other side."></iframe>
+          </div>
+          <p class="viz-cap">
+            <span class="mk" aria-hidden="true">&rarr;</span>
+            <span data-en="The repeated work moving through the system: it arrives, it is handled in order, and it leaves finished." data-ar="الشغل المتكرر وهو بيتحرك جوه النظام: بيوصل، بيتعالج بالترتيب، وبيخرج خلصان.">The repeated work moving through the system: it arrives, it is handled in order, and it leaves finished.</span>
+          </p>
+        </div>
+      </div>
     </section>
+  </div>
 
-    <!-- Services Section -->
-    <section id="services" class="services">
-        <div class="container">
-            <div class="section-header">
-                <h2 data-key="section_services">What I Build</h2>
-                <p data-key="section_services_subtitle">Intelligent systems designed for real business impact</p>
-            </div>
-
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-robot"></i></div>
-                    <h3 data-key="service_agents">AI Agents</h3>
-                    <p data-key="service_agents_desc">Autonomous agents that think, decide, and act. LLM-powered systems with memory, tool use, and multi-step reasoning.</p>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-cogs"></i></div>
-                    <h3 data-key="service_automation">Workflow Automation</h3>
-                    <p data-key="service_automation_desc">End-to-end workflows that eliminate manual work. From data pipelines to customer journeys, fully automated and logged.</p>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-users"></i></div>
-                    <h3 data-key="service_customer">Customer & Lead Systems</h3>
-                    <p data-key="service_customer_desc">Intelligent systems for customer interaction. AI-powered qualification, engagement, and relationship management at scale.</p>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-file-alt"></i></div>
-                    <h3 data-key="service_document">Document Intelligence</h3>
-                    <p data-key="service_document_desc">Extract meaning from documents at scale. OCR, classification, extraction, and analysis powered by vision models and LLMs.</p>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-brain"></i></div>
-                    <h3 data-key="service_knowledge">Knowledge Systems</h3>
-                    <p data-key="service_knowledge_desc">RAG systems that make your data useful. Connect your documents, databases, and APIs into searchable, queryable intelligence.</p>
-                </div>
-
-                <div class="service-card">
-                    <div class="service-icon"><i class="fas fa-cube"></i></div>
-                    <h3 data-key="service_custom">Custom AI Systems</h3>
-                    <p data-key="service_custom_desc">Purpose-built solutions for your unique problem. From prototypes to production, designed and engineered specifically for you.</p>
-                </div>
-            </div>
+  <!-- ══════════════ ZIG 2 — process loop | services ══════════════ -->
+  <div class="shell pad">
+    <section class="d-sec" id="services" aria-labelledby="svcTitle">
+      <div class="zig zig-rev">
+        <div class="zig-text">
+          <p class="lab" data-reveal data-en="Services" data-ar="الخدمات">Services</p>
+          <h2 id="svcTitle" data-reveal data-en="One place to start, then five kinds of work" data-ar="نقطة بداية واحدة، وبعدين خمس مجالات شغل">One place to start, then five kinds of work</h2>
+          <div class="d-startcard" data-reveal>
+            <span class="flag" data-en="Start here" data-ar="ابدأ من هنا">Start here</span>
+            <h3 data-en="A process audit, before anything gets built" data-ar="مراجعة العمليات، قبل ما نبني أي حاجة">A process audit, before anything gets built</h3>
+            <p data-en="We sit with the people who run the work, map how it actually moves through your business, and rank what is worth automating by how fast it pays back. You get the roadmap either way — including the parts where the honest answer is that automation is not worth it yet." data-ar="بنقعد مع الناس اللي شغالة على العملية فعلاً، وبنرسم إزاي الشغل بيتحرك جوه الشركة، وبنرتب اللي يستاهل أتمتة حسب سرعة العائد. الخريطة بتاعتك في الحالتين — بما فيها الأجزاء اللي الإجابة الصريحة فيها إن الأتمتة لسه مش مستاهلة.">We sit with the people who run the work, map how it actually moves through your business, and rank what is worth automating by how fast it pays back. You get the roadmap either way — including the parts where the honest answer is that automation is not worth it yet.</p>
+          </div>
         </div>
+
+        <div class="zig-viz">
+          <div class="viz ar-loop" data-reveal data-src-en="assets/Engineering%20Process%20Loop.html">
+            <div class="viz-frame">
+              <div class="viz-load" aria-hidden="true"><span class="spin"></span><span data-en="Loading animation" data-ar="جاري تحميل الرسم المتحرك">Loading animation</span></div>
+              <iframe role="img" tabindex="-1" loading="lazy" scrolling="no"
+                title="The engineering loop"
+                aria-label="An animation of the engineering loop: a measuring dial sweeps, a block of work passes along a rail, and the cycle repeats — build, put in front of real work, measure, adjust."></iframe>
+            </div>
+            <p class="viz-cap">
+              <span class="mk" aria-hidden="true">&rarr;</span>
+              <span data-en="How the work runs after the audit: build the smallest useful version, put it in front of real work, measure it, adjust. The loop does not stop at launch." data-ar="إزاي الشغل بيمشي بعد المراجعة: بنبني أصغر نسخة مفيدة، بنحطها على شغل حقيقي، بنقيس، وبنعدّل. اللفة دي مبتقفش عند الإطلاق.">How the work runs after the audit: build the smallest useful version, put it in front of real work, measure it, adjust. The loop does not stop at launch.</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-famlegend" data-reveal style="margin-top:clamp(30px,4vw,48px);">
+        <span class="fl" data-en="Conversation" data-ar="محادثات">Conversation</span>
+        <span class="fl" data-en="Documents &amp; data" data-ar="مستندات وبيانات">Documents &amp; data</span>
+        <span class="fl" data-en="Systems &amp; workflow" data-ar="أنظمة وسير عمل">Systems &amp; workflow</span>
+        <span class="fl" data-en="Knowledge &amp; search" data-ar="معرفة وبحث">Knowledge &amp; search</span>
+        <span class="fl" data-en="Prediction &amp; scoring" data-ar="تنبؤ وتقييم">Prediction &amp; scoring</span>
+      </div>
+
+      <div class="d-svcs" data-reveal-group>
+        <div class="d-svc lead" data-reveal>
+          <span class="chips"><span class="fam" data-en="Conversation" data-ar="محادثات">Conversation</span><span class="flag" data-en="Most asked for" data-ar="الأكتر طلبًا">Most asked for</span></span>
+          <h3 data-en="Answer WhatsApp around the clock" data-ar="رد على واتساب على مدار اليوم">Answer WhatsApp around the clock</h3>
+          <p data-en="Routine questions answered in Arabic and English. Anything unusual reaches your team with the conversation attached." data-ar="الأسئلة المتكررة بيتم الرد عليها بالعربي والإنجليزي، وأي حالة مختلفة بتوصل لفريقك ومعاها المحادثة كاملة.">Routine questions answered in Arabic and English. Anything unusual reaches your team with the conversation attached.</p>
+        </div>
+        <div class="d-svc" data-reveal>
+          <span class="chips"><span class="fam" data-en="Conversation" data-ar="محادثات">Conversation</span></span>
+          <h3 data-en="Qualify leads before sales sees them" data-ar="افرز العملاء المحتملين قبل ما يوصلوا للمبيعات">Qualify leads before sales sees them</h3>
+          <p data-en="Budget, timeline, and need asked once, automatically. Sales opens a finished record and starts on the real conversation." data-ar="الميزانية والتوقيت واحتياج العميل بيتسألوا مرة واحدة أوتوماتيك، والمبيعات بتفتح ملف جاهز وتبدأ المحادثة الحقيقية على طول.">Budget, timeline, and need asked once, automatically. Sales opens a finished record and starts on the real conversation.</p>
+        </div>
+        <div class="d-svc" data-reveal>
+          <span class="chips"><span class="fam" data-en="Conversation" data-ar="محادثات">Conversation</span></span>
+          <h3 data-en="Take bookings without phone calls" data-ar="احجز مواعيد من غير مكالمات">Take bookings without phone calls</h3>
+          <p data-en="Slots, confirmations, and reminders handled in the chat the customer already uses." data-ar="المواعيد والتأكيدات والتذكيرات كلها في نفس الشات اللي العميل بيستخدمه.">Slots, confirmations, and reminders handled in the chat the customer already uses.</p>
+        </div>
+        <div class="d-svc" data-reveal>
+          <span class="chips"><span class="fam" data-en="Documents" data-ar="مستندات">Documents</span></span>
+          <h3 data-en="Turn invoices into data automatically" data-ar="حوّل الفواتير لبيانات أوتوماتيك">Turn invoices into data automatically</h3>
+          <p data-en="A PDF or a photo becomes structured rows in your sheet or accounting system, ready for someone to approve." data-ar="الـ PDF أو الصورة بتتحول لبيانات مرتبة في الشيت أو في نظام الحسابات، جاهزة إن حد يراجعها ويعتمدها.">A PDF or a photo becomes structured rows in your sheet or accounting system, ready for someone to approve.</p>
+        </div>
+        <div class="d-svc" data-reveal>
+          <span class="chips"><span class="fam" data-en="Systems" data-ar="أنظمة">Systems</span></span>
+          <h3 data-en="Keep the CRM current by itself" data-ar="خلي الـ CRM محدّث لوحده">Keep the CRM current by itself</h3>
+          <p data-en="Conversations, notes, and stages written back automatically, so nothing depends on remembering." data-ar="المحادثات والملاحظات والمراحل بتتسجل أوتوماتيك، فمفيش حاجة معتمدة على إن حد يفتكر.">Conversations, notes, and stages written back automatically, so nothing depends on remembering.</p>
+        </div>
+        <div class="d-svc" data-reveal>
+          <span class="chips"><span class="fam" data-en="Systems" data-ar="أنظمة">Systems</span></span>
+          <h3 data-en="Have the weekly report ready before Sunday" data-ar="التقرير الأسبوعي جاهز قبل الأحد">Have the weekly report ready before Sunday</h3>
+          <p data-en="Numbers pulled, checked, and sent on Sunday morning, so the meeting starts with the report already read." data-ar="الأرقام بتتجمع وتتراجع وتتبعت صبح الأحد، فالاجتماع بيبدأ والتقرير متقري خلاص.">Numbers pulled, checked, and sent on Sunday morning, so the meeting starts with the report already read.</p>
+        </div>
+        <div class="d-svc" data-reveal>
+          <span class="chips"><span class="fam" data-en="Knowledge" data-ar="معرفة">Knowledge</span></span>
+          <h3 data-en="Give your team instant answers from your own files" data-ar="جاوب على فريقك من ملفات الشركة على طول">Give your team instant answers from your own files</h3>
+          <p data-en="Policies, prices, and procedures searchable in plain language, so nobody has to interrupt the one person who knows." data-ar="السياسات والأسعار والإجراءات بيتبحث فيها بلغة عادية، فمحدش محتاج يقطع على الشخص الوحيد اللي عارف.">Policies, prices, and procedures searchable in plain language, so nobody has to interrupt the one person who knows.</p>
+        </div>
+        <div class="d-svc" data-reveal>
+          <span class="chips"><span class="fam" data-en="Prediction" data-ar="تنبؤ">Prediction</span></span>
+          <h3 data-en="Forecast demand before you commit stock or shifts" data-ar="توقّع الطلب قبل ما تلتزم بمخزون أو ورديات">Forecast demand before you commit stock or shifts</h3>
+          <p data-en="Models trained on your own history, so planning stops being a guess and starts being a range." data-ar="نماذج متدربة على تاريخ شركتك انت، فالتخطيط يبطل تخمين ويبقى نطاق واضح.">Models trained on your own history, so planning stops being a guess and starts being a range.</p>
+        </div>
+        <div class="d-svc" data-reveal>
+          <span class="chips"><span class="fam" data-en="Prediction" data-ar="تنبؤ">Prediction</span></span>
+          <h3 data-en="Score and rank what comes in" data-ar="قيّم ورتّب اللي بيوصلك">Score and rank what comes in</h3>
+          <p data-en="Leads, tickets, or applications ordered by your own definition of important, so the team works the top of the list first." data-ar="العملاء المحتملين أو التذاكر أو الطلبات بتترتب حسب تعريفك انت للأهمية، فالفريق يبدأ بالأهم.">Leads, tickets, or applications ordered by your own definition of important, so the team works the top of the list first.</p>
+        </div>
+      </div>
     </section>
+  </div>
 
-    <!-- Systems Section -->
-    <section id="systems" class="systems">
-        <div class="container">
-            <div class="section-header">
-                <h2 data-key="section_systems">Systems I've Built</h2>
-                <p data-key="section_systems_subtitle">Real solutions to real problems</p>
+  <!-- ══════════════ ZIG 3 — benchmarks | benchmark visualisation ══════════════ -->
+  <div class="shell pad">
+    <section class="d-sec zig" id="benchmarks" aria-labelledby="benchTitle">
+      <div class="zig-text">
+        <p class="lab" data-reveal data-en="Industry benchmarks &mdash; not our client results" data-ar="أرقام القطاع — مش نتائج عملائنا">Industry benchmarks &mdash; not our client results</p>
+        <h2 id="benchTitle" data-reveal data-en="What businesses gain after automating routine work" data-ar="اللي الشركات بتكسبه بعد أتمتة الشغل الروتيني">What businesses gain after automating routine work</h2>
+        <div class="d-chartwrap" data-reveal>
+          <div class="d-legend">
+            <span><i style="background:var(--p-rule-strong)" aria-hidden="true"></i><em style="font-style:normal" data-en="Before" data-ar="قبل">Before</em></span>
+            <span><i style="background:var(--p-accent)" aria-hidden="true"></i><em style="font-style:normal" data-en="After" data-ar="بعد">After</em></span>
+          </div>
+          <div class="d-chart" id="dChart">
+            <div class="d-metric">
+              <div class="mh">
+                <span class="nm" data-en="Routine queries handled automatically" data-ar="الاستفسارات الروتينية اللي بتتعمل أوتوماتيك">Routine queries handled automatically</span>
+                <span class="vals">12% &rarr; <b>68%</b></span>
+              </div>
+              <div class="d-bars" aria-hidden="true">
+                <div class="d-bar before"><i style="--w:12%"></i></div>
+                <div class="d-bar after"><i style="--w:68%"></i></div>
+              </div>
             </div>
-
-            <div class="systems-list">
-                <div class="system-card">
-                    <div class="system-label" data-key="system_label_agent">AI Agent</div>
-                    <h3 data-key="system_1_title">AI Financial Advisor</h3>
-                    <div class="system-problem">
-                        <strong>Challenge:</strong>
-                        <span data-key="system_1_challenge">Financial institutions needed personalized, context-aware advice at scale without requiring dedicated advisors.</span>
-                    </div>
-                    <div class="system-solution">
-                        <strong>Solution:</strong>
-                        <span data-key="system_1_solution">Built an LLM-powered agent with RAG capabilities that retrieves client history, performs complex calculations, and maintains multi-turn conversations while explaining reasoning.</span>
-                    </div>
-                    <div class="system-stack">
-                        <span>LangChain</span>
-                        <span>Claude API</span>
-                        <span>RAG</span>
-                        <span>Python</span>
-                    </div>
-                    <div class="system-outcome">
-                        <strong>Outcome:</strong>
-                        <span data-key="system_1_outcome">Accurate financial recommendations with explainable AI, maintaining context across extended conversations.</span>
-                    </div>
-                </div>
-
-                <div class="system-card">
-                    <div class="system-label" data-key="system_label_automation">Automation Workflow</div>
-                    <h3 data-key="system_2_title">WhatsApp Clinic Agent</h3>
-                    <div class="system-problem">
-                        <strong>Challenge:</strong>
-                        <span data-key="system_2_challenge">Healthcare providers needed a scalable way to handle initial patient consultations and symptom assessment without overwhelming their staff.</span>
-                    </div>
-                    <div class="system-solution">
-                        <strong>Solution:</strong>
-                        <span data-key="system_2_solution">Developed an intelligent NLP agent integrated with WhatsApp that understands patient symptoms, retrieves relevant medical history, and provides comprehensive reports to doctors for faster diagnosis.</span>
-                    </div>
-                    <div class="system-stack">
-                        <span>NLP</span>
-                        <span>WhatsApp API</span>
-                        <span>Agent Framework</span>
-                        <span>Real-time Processing</span>
-                    </div>
-                    <div class="system-outcome">
-                        <strong>Outcome:</strong>
-                        <span data-key="system_2_outcome">Doctors receive detailed patient profiles enabling faster, more informed consultations.</span>
-                    </div>
-                </div>
-
-                <div class="system-card">
-                    <div class="system-label" data-key="system_label_security">Security System</div>
-                    <h3 data-key="system_3_title">Phishing Detection ML Model</h3>
-                    <div class="system-problem">
-                        <strong>Challenge:</strong>
-                        <span data-key="system_3_challenge">Email-based phishing attacks continue to bypass traditional rule-based filters, requiring pattern recognition at scale.</span>
-                    </div>
-                    <div class="system-solution">
-                        <strong>Solution:</strong>
-                        <span data-key="system_3_solution">Trained ML models analyzing URL characteristics, domain patterns, and structural anomalies to identify phishing attempts with high accuracy and low false positives.</span>
-                    </div>
-                    <div class="system-stack">
-                        <span>Machine Learning</span>
-                        <span>Feature Engineering</span>
-                        <span>Classification</span>
-                        <span>Cybersecurity</span>
-                    </div>
-                    <div class="system-outcome">
-                        <strong>Outcome:</strong>
-                        <span data-key="system_3_outcome">Detects sophisticated phishing with 94%+ accuracy, protecting organizations from social engineering.</span>
-                    </div>
-                </div>
-
-                <div class="system-card">
-                    <div class="system-label" data-key="system_label_medical">Medical AI</div>
-                    <h3 data-key="system_4_title">X-Ray Cardiomegaly Classifier</h3>
-                    <div class="system-problem">
-                        <strong>Challenge:</strong>
-                        <span data-key="system_4_challenge">Radiologists face increasing case volumes; computer vision support for cardiac enlargement detection could improve throughput and consistency.</span>
-                    </div>
-                    <div class="system-solution">
-                        <strong>Solution:</strong>
-                        <span data-key="system_4_solution">Built deep learning model deployed as Flask web app analyzing chest X-rays for cardiomegaly with confidence scores and visual explanations for clinical review.</span>
-                    </div>
-                    <div class="system-stack">
-                        <span>Computer Vision</span>
-                        <span>Deep Learning</span>
-                        <span>Flask</span>
-                        <span>Medical Imaging</span>
-                    </div>
-                    <div class="system-outcome">
-                        <strong>Outcome:</strong>
-                        <span data-key="system_4_outcome">Assists radiologists with second-opinion analysis, improving diagnostic accuracy and speed.</span>
-                    </div>
-                </div>
+            <div class="d-metric">
+              <div class="mh">
+                <span class="nm" data-en="Invoice data ready for approval on arrival" data-ar="بيانات الفواتير الجاهزة للاعتماد أول ما توصل">Invoice data ready for approval on arrival</span>
+                <span class="vals">6% &rarr; <b>92%</b></span>
+              </div>
+              <div class="d-bars" aria-hidden="true">
+                <div class="d-bar before"><i style="--w:6%"></i></div>
+                <div class="d-bar after"><i style="--w:92%"></i></div>
+              </div>
             </div>
+            <div class="d-metric">
+              <div class="mh">
+                <span class="nm" data-en="Records updated the same day" data-ar="السجلات اللي بتتحدّث في نفس اليوم">Records updated the same day</span>
+                <span class="vals">34% &rarr; <b>96%</b></span>
+              </div>
+              <div class="d-bars" aria-hidden="true">
+                <div class="d-bar before"><i style="--w:34%"></i></div>
+                <div class="d-bar after"><i style="--w:96%"></i></div>
+              </div>
+            </div>
+            <div class="d-metric">
+              <div class="mh">
+                <span class="nm" data-en="Volume the same team can absorb" data-ar="حجم الشغل اللي نفس الفريق يقدر يستوعبه">Volume the same team can absorb</span>
+                <span class="vals">100% &rarr; <b>240%</b></span>
+              </div>
+              <div class="d-bars" aria-hidden="true">
+                <div class="d-bar before"><i style="--w:42%"></i></div>
+                <div class="d-bar after"><i style="--w:100%"></i></div>
+              </div>
+            </div>
+          </div>
+          <p class="d-src">
+            <span class="mk" aria-hidden="true">!</span>
+            <span data-en="Placeholder figures. Every number here is replaced with a named published source and year before this block ships &mdash; that gate is a Week 0 task, and nothing renders without a URL in the source file." data-ar="أرقام توضيحية مؤقتة. كل رقم هنا هيتبدل بمصدر منشور باسمه وسنة نشره قبل ما القسم ده ينزل، ومفيش رقم هيظهر من غير لينك مصدره.">Placeholder figures. Every number here is replaced with a named published source and year before this block ships &mdash; that gate is a Week 0 task, and nothing renders without a URL in the source file.</span>
+          </p>
         </div>
+      </div>
+
+      <div class="zig-viz">
+        <div class="viz ar-bench" data-reveal
+             data-src-en="assets/Benchmark%20Visualization.html"
+             data-src-ar="assets/Benchmark%20Visualization%20AR.html">
+          <div class="viz-frame">
+            <div class="viz-load" aria-hidden="true"><span class="spin"></span><span data-en="Loading animation" data-ar="جاري تحميل الرسم المتحرك">Loading animation</span></div>
+            <iframe role="img" tabindex="-1" loading="lazy" scrolling="no"
+              title="Benchmark visualisation"
+              aria-label="An animated chart of the same placeholder benchmarks: average operational productivity up 21 percent against baseline, average operating cost down 14 percent, and the share of organisations reporting measurable enterprise-wide impact from AI."></iframe>
+          </div>
+          <p class="viz-cap">
+            <span class="mk" aria-hidden="true">!</span>
+            <span data-en="The same placeholder benchmarks, drawn out. This visual is replaced along with the figures once each one has a named published source." data-ar="نفس الأرقام التوضيحية المؤقتة، بس مرسومة. الرسم ده هيتبدل مع الأرقام أول ما يبقى لكل رقم مصدر منشور باسمه.">The same placeholder benchmarks, drawn out. This visual is replaced along with the figures once each one has a named published source.</span>
+          </p>
+        </div>
+      </div>
     </section>
+  </div>
 
-    <!-- How We Work Section -->
-    <section class="how-we-work">
-        <div class="container">
-            <div class="section-header">
-                <h2 data-key="section_how_we_work">How We Work</h2>
-                <p data-key="section_how_we_work_subtitle">A structured approach to building intelligent systems</p>
+  <!-- ══════════════ ZIG 4 — capacity flow | calculator ══════════════ -->
+  <div class="shell pad">
+    <section class="d-sec zig zig-rev" id="calculator" aria-labelledby="calcTitle">
+      <div class="zig-text">
+        <p class="lab" data-reveal data-en="Work it out yourself" data-ar="احسبها بنفسك">Work it out yourself</p>
+        <h2 id="calcTitle" data-reveal data-en="How much more can your business handle with what you already have?" data-ar="شركتك تقدر تستوعب كام زيادة بنفس اللي عندك دلوقتي؟">How much more can your business handle with what you already have?</h2>
+        <div class="d-calc" data-reveal>
+          <div class="d-calc-in">
+            <div class="d-field">
+              <span class="lab" id="calcWorkLabel" data-en="Kind of work" data-ar="نوع الشغل">Kind of work</span>
+              <div class="d-seg" id="calcWork" role="group" aria-labelledby="calcWorkLabel">
+                <button type="button" data-w="messages" aria-pressed="true" data-en="Messages" data-ar="رسايل">Messages</button>
+                <button type="button" data-w="documents" aria-pressed="false" data-en="Documents" data-ar="مستندات">Documents</button>
+                <button type="button" data-w="reports" aria-pressed="false" data-en="Reports" data-ar="تقارير">Reports</button>
+              </div>
             </div>
-
-            <div class="process-steps">
-                <div class="step">
-                    <div class="step-number">01</div>
-                    <h3 data-key="step_1_title">Discover</h3>
-                    <p data-key="step_1_desc">Understand your business challenge deeply. Map the problem, identify constraints, and define what success looks like.</p>
-                </div>
-
-                <div class="step-divider"></div>
-
-                <div class="step">
-                    <div class="step-number">02</div>
-                    <h3 data-key="step_2_title">Design</h3>
-                    <p data-key="step_2_desc">Architect the solution. Choose the right AI techniques, design system workflows, and plan the integration points.</p>
-                </div>
-
-                <div class="step-divider"></div>
-
-                <div class="step">
-                    <div class="step-number">03</div>
-                    <h3 data-key="step_3_title">Build</h3>
-                    <p data-key="step_3_desc">Engineer and develop. Write production-grade code with proper testing, error handling, and performance optimization.</p>
-                </div>
-
-                <div class="step-divider"></div>
-
-                <div class="step">
-                    <div class="step-number">04</div>
-                    <h3 data-key="step_4_title">Integrate</h3>
-                    <p data-key="step_4_desc">Connect to your systems. APIs, databases, third-party services—everything works together seamlessly.</p>
-                </div>
-
-                <div class="step-divider"></div>
-
-                <div class="step">
-                    <div class="step-number">05</div>
-                    <h3 data-key="step_5_title">Deploy & Improve</h3>
-                    <p data-key="step_5_desc">Launch to production. Monitor performance, collect feedback, and continuously improve the system over time.</p>
-                </div>
+            <div class="d-field">
+              <label for="calcVol" id="calcVolLabel" data-en="Customer messages per month" data-ar="عدد رسايل العملاء في الشهر">Customer messages per month</label>
+              <input id="calcVol" type="number" min="0" max="500000" step="50" value="1800" inputmode="numeric">
             </div>
+            <div class="d-field">
+              <label for="calcGrowth" data-en="Growth you're planning for over 12 months (%)" data-ar="نسبة النمو اللي مخطط ليها خلال 12 شهر (%)">Growth you're planning for over 12 months (%)</label>
+              <input id="calcGrowth" type="number" min="0" max="500" step="5" value="30" inputmode="numeric">
+            </div>
+            <div class="d-field">
+              <label for="calcCost" data-en="Loaded staff cost per hour (EGP)" data-ar="التكلفة الفعلية لساعة الموظف (جنيه)">Loaded staff cost per hour (EGP)</label>
+              <input id="calcCost" type="number" min="0" max="10000" step="5" value="65" inputmode="numeric">
+            </div>
+            <p class="d-assump" id="calcNote"></p>
+          </div>
+          <div class="d-calc-out" role="status" aria-live="polite" aria-atomic="true">
+            <p class="d-out-lab" id="calcOutLab"></p>
+            <p class="d-out-n"><span id="calcCap">2,200</span></p>
+            <p class="d-out-sub" id="calcCapSub"></p>
+            <div class="d-outlist">
+              <div><span class="k" id="calcK1"></span><span class="v" id="calcV1"></span></div>
+              <div><span class="k" id="calcK2"></span><span class="v" id="calcV2"></span></div>
+              <div><span class="k" id="calcK3"></span><span class="v" id="calcV3"></span></div>
+            </div>
+            <p class="d-assump" id="calcService" style="margin-top:14px;"></p>
+          </div>
         </div>
+      </div>
+
+      <div class="zig-viz">
+        <div class="viz ar-capacity" data-reveal
+             data-src-en="assets/Capacity%20Flow.html"
+             data-src-ar="assets/Capacity%20Flow%20AR.html">
+          <div class="viz-frame">
+            <div class="viz-load" aria-hidden="true"><span class="spin"></span><span data-en="Loading animation" data-ar="جاري تحميل الرسم المتحرك">Loading animation</span></div>
+            <iframe role="img" tabindex="-1" loading="lazy" scrolling="no"
+              title="Capacity flow"
+              aria-label="An animation of work capacity. Incoming work forms a manual queue, passes through an AI automation block, and comes out finished, with a separate branch routed to human review."></iframe>
+          </div>
+          <p class="viz-cap">
+            <span class="mk" aria-hidden="true">&rarr;</span>
+            <span data-en="The same idea as the calculator, drawn out: the repeated share of the work stops taking team hours, so the volume the same team can carry goes up." data-ar="نفس فكرة الحاسبة، بس مرسومة: الجزء المتكرر من الشغل بيبطل ياخد ساعات من الفريق، فحجم الشغل اللي نفس الفريق يشيله بيزيد.">The same idea as the calculator, drawn out: the repeated share of the work stops taking team hours, so the volume the same team can carry goes up.</span>
+          </p>
+        </div>
+      </div>
     </section>
+  </div>
 
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <div class="about-grid">
-                <div class="about-content">
-                    <h2 data-key="about_title">About</h2>
-                    <p data-key="about_p1">I'm Mahmoud Osama, an AI engineer and software developer specializing in intelligent systems and automation workflows.</p>
-                    <p data-key="about_p2">I build AI agents that reason and decide. Systems that learn from data. Workflows that eliminate manual work. My focus is solving real business problems with production-grade AI—not hype, not prototypes.</p>
-                    <p data-key="about_p3">With a background in AI, machine learning, and cybersecurity, I understand both the technical depth required for complex systems and the business impact that matters.</p>
-                    <p data-key="about_p4">I work independently, giving clients direct access to the engineer building their solution. Every system is custom-designed for the specific problem at hand.</p>
-                    <div class="about-cta">
-                        <a href="#contact" class="btn btn-primary" data-key="about_cta">Let's Talk</a>
-                    </div>
-                </div>
-                <div class="about-stats">
-                    <div class="stat">
-                        <div class="stat-number" data-key="about_stat_1_num">10+</div>
-                        <div class="stat-label" data-key="about_stat_1_label">Projects Delivered</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-number" data-key="about_stat_2_num">4</div>
-                        <div class="stat-label" data-key="about_stat_2_label">Years AI/ML Focus</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-number" data-key="about_stat_3_num">100%</div>
-                        <div class="stat-label" data-key="about_stat_3_label">Custom Solutions</div>
-                    </div>
-                </div>
-            </div>
+  <!-- ══════════════ FOUNDER ══════════════ -->
+  <div class="shell pad">
+    <section class="d-sec" id="about" aria-labelledby="aboutName">
+      <div class="d-founder" data-reveal>
+        <div class="d-photo" data-en="Photograph<br>required<br>§16" data-ar="صورة شخصية<br>مطلوبة<br>§16">Photograph<br>required<br>§16</div>
+        <div>
+          <p class="nm" id="aboutName" data-en="Mahmoud Osama" data-ar="محمود أسامة">Mahmoud Osama</p>
+          <p class="role" data-en="AI engineer · Mansoura, Egypt" data-ar="مهندس ذكاء اصطناعي · المنصورة، مصر">AI engineer · Mansoura, Egypt</p>
+          <p data-en="You deal directly with the engineer who builds your system — no account manager in between. A change you ask for today is usually running tomorrow, and your team is trained to operate what gets built rather than left depending on me." data-ar="بتتعامل مباشرة مع المهندس اللي بيبني نظامك، من غير وسطاء. التعديل اللي بتطلبه النهاردة بيكون شغال بكرة، وفريقك بيتدرب يشغّل النظام بنفسه بدل ما يفضل معتمد عليّا.">You deal directly with the engineer who builds your system — no account manager in between. A change you ask for today is usually running tomorrow, and your team is trained to operate what gets built rather than left depending on me.</p>
+          <div class="d-proj">
+            <b data-en="WhatsApp booking system for a clinic" data-ar="نظام حجز على واتساب لعيادة">WhatsApp booking system for a clinic</b>
+            <span data-en=" — patients book, reschedule, and get triaged over WhatsApp in Egyptian Arabic, with anything urgent passed to reception. Built with Python, FastAPI, and the WhatsApp Business API. Source on GitHub." data-ar=" — المرضى بيحجزوا ويأجّلوا مواعيدهم على واتساب بالعامية المصرية، والحالات العاجلة بتتحول للاستقبال. متبني بـ Python و FastAPI و WhatsApp Business API، والكود على GitHub."> — patients book, reschedule, and get triaged over WhatsApp in Egyptian Arabic, with anything urgent passed to reception. Built with Python, FastAPI, and the WhatsApp Business API. Source on GitHub.</span>
+          </div>
         </div>
+      </div>
     </section>
+  </div>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <div class="contact-content">
-                <div class="contact-info">
-                    <h2 data-key="contact_heading">Let's Build Something Intelligent</h2>
-                    <p data-key="contact_subtitle">Have an AI problem that needs solving? Let's talk about your idea and how I can help.</p>
-                    <div class="contact-details">
-                        <a href="mailto:vip.m.osama@gmail.com" class="contact-link">
-                            <i class="fas fa-envelope"></i>
-                            <span data-key="contact_email_label">Email</span>: vip.m.osama@gmail.com
-                        </a>
-                        <a href="tel:+201003169833" class="contact-link">
-                            <i class="fas fa-phone"></i>
-                            <span data-key="contact_phone_label">Phone</span>: +20 100 3169833
-                        </a>
-                        <div class="contact-location">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span data-key="contact_location_label">Location</span>: <span data-key="contact_location_value">Egypt, Mansoura • Available Worldwide</span>
-                        </div>
-                    </div>
-                </div>
-                <form id="contactForm" class="contact-form">
-                    <div class="form-group">
-                        <input type="text" id="name" name="name" data-key="form_name" placeholder="Your Name" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" id="email" name="email" data-key="form_email" placeholder="Your Email" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="subject" name="subject" data-key="form_subject" placeholder="Project Type" required>
-                    </div>
-                    <div class="form-group">
-                        <textarea id="message" name="message" data-key="form_message" placeholder="Tell me about your challenge..." rows="6" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary" data-key="form_submit">Send Message</button>
-                    <div id="form-status" class="form-status"></div>
-                </form>
-            </div>
-        </div>
-    </section>
+  <!-- ══════════════ CLOSING ══════════════ -->
+  <div class="d-close" id="contact">
+    <div class="shell pad">
+      <h2 data-reveal data-en="Thirty minutes, no commitment" data-ar="نص ساعة، من غير أي التزام">Thirty minutes, no commitment</h2>
+      <p data-reveal data-en="We look at one process you already run, and you leave knowing whether it is worth automating — including if the honest answer is no." data-ar="بنراجع مع بعض عملية واحدة شغالة عندك دلوقتي، وتخرج من المكالمة عارف هي تستاهل أتمتة ولا لأ — حتى لو الإجابة الصريحة لأ.">We look at one process you already run, and you leave knowing whether it is worth automating — including if the honest answer is no.</p>
+      <a class="d-btn d-btn-cta" data-reveal href="https://wa.me/201003169833" data-en="Book a discovery call" data-ar="احجز استشارة مجانية">Book a discovery call</a>
+    </div>
+  </div>
+</main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <a href="#" class="footer-logo">MO<span>.</span></a>
-                </div>
-                <div class="footer-section">
-                    <h4 data-key="nav_services">Services</h4>
-                    <ul>
-                        <li><a href="#home" data-key="nav_home">Home</a></li>
-                        <li><a href="#services" data-key="nav_services">Services</a></li>
-                        <li><a href="#systems" data-key="nav_systems">Systems</a></li>
-                        <li><a href="#about" data-key="nav_about">About</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Connect</h4>
-                    <div class="social-links">
-                        <a href="https://github.com/Mahmoud-Ossama" target="_blank"><i class="fab fa-github"></i></a>
-                        <a href="https://www.linkedin.com/in/mahmoud-osama-ai/" target="_blank"><i class="fab fa-linkedin"></i></a>
-                        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p data-key="footer_rights">© 2025 Mahmoud Osama. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer class="shell pad">
+  <div class="d-foot">
+    <span data-en="Mansoura, Egypt · <span dir='ltr'>+20 100 316 9833</span>" data-ar="المنصورة، مصر · <span dir='ltr'>+20 100 316 9833</span>">Mansoura, Egypt · <span dir="ltr">+20 100 316 9833</span></span>
+    <span data-en="WhatsApp · GitHub · LinkedIn · Privacy · Terms" data-ar="واتساب · GitHub · LinkedIn · الخصوصية · الشروط">WhatsApp · GitHub · LinkedIn · Privacy · Terms</span>
+  </div>
+</footer>
 
-    <script src="js/script.js"></script>
 </body>
 </html>
