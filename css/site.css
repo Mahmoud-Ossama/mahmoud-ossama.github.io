@@ -292,8 +292,13 @@ body[dir="rtl"] .hero-copy h1{letter-spacing:0;line-height:1.34;}
 .hero-copy .sub{font-size:1.04rem;color:var(--p-ink-2);max-width:48ch;margin-bottom:26px;}
 .hero-copy .acts{display:flex;flex-wrap:wrap;gap:10px;}
 
+/* Anchored to the canvas it describes, not floated in the hero's
+   whitespace: it lives inside .hero-stage and is inset to sit under the
+   model's own footprint rather than out at the section edge. */
 .hero-cap{
-  position:absolute;z-index:2;inset-inline-end:clamp(18px,4vw,44px);bottom:16px;
+  position:absolute;z-index:2;
+  inset-inline-end:clamp(20px,7vw,120px);
+  bottom:clamp(18px,7vh,68px);
   display:flex;align-items:center;gap:7px;
   padding:5px 10px;border-radius:4px;
   background:rgba(255,255,255,.9);border:1px solid var(--p-rule-strong);
@@ -301,6 +306,11 @@ body[dir="rtl"] .hero-copy h1{letter-spacing:0;line-height:1.34;}
   color:var(--p-ink-3);pointer-events:none;
   opacity:0;transform:translateY(4px);
   transition:opacity .5s ease .4s,transform .5s var(--ease) .4s;
+}
+@media (max-width:1000px){
+  /* stacked hero: the model sits below the copy, so the pill goes with it */
+  .hero-cap{inset-inline:auto 50%;transform:translate(50%,4px);bottom:clamp(14px,4vh,28px);}
+  .hero.is-ready .hero-cap{transform:translate(50%,0);}
 }
 body[dir="rtl"] .hero-cap{font-family:var(--f-ar);letter-spacing:0;font-size:11px;}
 .hero.is-ready .hero-cap{opacity:1;transform:none;}
@@ -338,6 +348,83 @@ body[dir="rtl"] .hero-load{font-family:var(--f-ar);letter-spacing:0;font-size:12
   .zig{grid-template-columns:1fr;gap:24px;}
   .zig .zig-text{order:1;}
   .zig .zig-viz{order:2;}
+}
+
+/* ===========================================================
+   SCROLLYTELLING — one pinned canvas, four scrolling steps
+   The canvas is seeked to a named scene as each step becomes
+   active, so the graphic really does morph through the
+   pipeline rather than cross-fading between stills.
+   =========================================================== */
+.scrolly{
+  display:grid;
+  grid-template-columns:minmax(0,57fr) minmax(0,43fr);
+  gap:clamp(28px,4vw,64px);
+  align-items:start;
+}
+.scrolly-visual{
+  position:sticky;top:15vh;
+  align-self:start;
+  min-width:0;
+}
+.scrolly-steps{
+  display:grid;gap:0;min-width:0;
+  /* half a viewport of lead-in and lead-out keeps the first and last
+     steps reachable while the canvas is still pinned */
+  padding-block:12vh 22vh;
+}
+.step{
+  min-height:62vh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding-block:clamp(18px,3vh,34px);
+  opacity:.4;
+  transition:opacity .45s var(--ease);
+}
+.step.is-active{opacity:1;}
+.step-n{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:var(--f-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--p-ink-3);margin-bottom:12px;
+}
+body[dir="rtl"] .step-n{font-family:var(--f-ar);letter-spacing:0;font-size:11.5px;}
+.step-n i{
+  width:26px;height:1px;background:var(--p-rule-strong);display:block;
+  transition:width .45s var(--ease),background-color .45s ease;
+}
+.step.is-active .step-n{color:var(--p-accent-ink);}
+.step.is-active .step-n i{width:46px;background:var(--p-accent);}
+.step h3{
+  font-size:clamp(1.15rem,2vw,1.45rem);font-weight:var(--f-display-weight);
+  line-height:1.25;letter-spacing:var(--f-h2-track);margin-bottom:10px;
+}
+body[dir="rtl"] .step h3{letter-spacing:0;line-height:1.45;}
+.step p{font-size:1rem;color:var(--p-ink-2);max-width:46ch;}
+
+/* progress rail beside the steps */
+.scrolly-rail{
+  position:sticky;top:15vh;
+  display:none;
+}
+
+@media (max-width:1000px){
+  .scrolly{grid-template-columns:1fr;gap:0;}
+  /* Unpinned on small screens. The canvas keeps a shallow pin at the top
+     so the state changes stay visible while the steps scroll under it —
+     the bundle is a 1MB document, so it cannot be duplicated per step and
+     moving the iframe in the DOM would reload it. */
+  .scrolly-visual{
+    position:sticky;top:56px;z-index:5;
+    background:var(--p-ground);
+    padding-block:8px;
+    box-shadow:0 12px 16px -12px rgba(14,22,19,.18);
+  }
+  .scrolly-visual .viz-frame{aspect-ratio:16/10;}
+  .scrolly-steps{padding-block:6vh 10vh;}
+  .step{min-height:auto;padding-block:26px;opacity:1;}
+  .step:not(.is-active){opacity:.55;}
+}
+@media (prefers-reduced-motion: reduce){
+  .step,.step:not(.is-active){opacity:1;}
 }
 
 /* ===========================================================
@@ -525,7 +612,14 @@ body[dir="rtl"] .d-seg button{font-family:var(--f-ar);}
 }
 .d-metric .mh .vals b{color:var(--p-accent-ink);font-weight:600;font-size:12.5px;}
 .d-bars{display:grid;gap:4px;}
-.d-bar{height:9px;border-radius:2px;background:var(--p-surface-2);overflow:hidden;}
+/* The empty track is the axis of this chart — it has to be legible
+   against the panel, not a whisper. --p-surface-2 measured 1.10:1 on
+   --p-surface; #D2DAD6 measures 1.35:1 on --p-ground with a 1px
+   --p-rule-strong inset keeping the bar's extent unambiguous. */
+.d-bar{
+  height:10px;border-radius:2px;background:#D2DAD6;overflow:hidden;
+  box-shadow:inset 0 0 0 1px rgba(111,125,118,.42);
+}
 .d-bar i{display:block;height:100%;width:0;border-radius:2px;transition:width .85s var(--ease);}
 .d-bar.before i{background:var(--p-rule-strong);}
 .d-bar.after i{background:var(--p-accent);}
@@ -649,11 +743,9 @@ body[dir="rtl"] .d-close h2{letter-spacing:0;}
    is reserved at the correct size before anything loads and the
    player scales to fill it exactly.
    =========================================================== */
-.viz{
-  position:relative;
-  border:1px solid var(--p-rule);border-radius:6px;overflow:hidden;
-  background:var(--p-surface);
-}
+/* No card wrapper. The artwork sits on the page canvas; only the box is
+   reserved, so there is still nothing for layout to shift into. */
+.viz{position:relative;}
 .viz-frame{position:relative;width:100%;display:block;aspect-ratio:var(--ar,4/3);}
 .viz-frame iframe{
   position:absolute;inset:0;width:100%;height:100%;border:0;display:block;
@@ -663,7 +755,7 @@ body[dir="rtl"] .d-close h2{letter-spacing:0;}
 .viz-load{
   position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:12px;
   font-family:var(--f-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--p-ink-3);background:var(--p-surface);
+  color:var(--p-ink-3);background:var(--p-ground);
   transition:opacity .5s ease;
 }
 body[dir="rtl"] .viz-load{font-family:var(--f-ar);letter-spacing:0;font-size:11.5px;}
@@ -675,9 +767,9 @@ body[dir="rtl"] .viz-load{font-family:var(--f-ar);letter-spacing:0;font-size:11.
 }
 @keyframes spin{ to{transform:rotate(360deg);} }
 .viz-cap{
-  border-top:1px solid var(--p-rule);padding:11px 14px;
+  padding:12px 2px 0;max-width:62ch;
   font-size:11.5px;color:var(--p-ink-3);line-height:1.55;
-  display:flex;gap:8px;align-items:flex-start;background:var(--p-ground);
+  display:flex;gap:8px;align-items:flex-start;
 }
 .viz-cap .mk{
   font-family:var(--f-mono);font-size:9.5px;border:1px solid var(--p-rule-strong);
@@ -685,6 +777,56 @@ body[dir="rtl"] .viz-load{font-family:var(--f-ar);letter-spacing:0;font-size:11.
 }
 .viz.ar-flow,.viz.ar-loop{--ar:16/9;}
 .viz.ar-bench,.viz.ar-capacity{--ar:4/3;}
+
+/* ===========================================================
+   NUMBERS IN RTL
+   Arabic runs right-to-left; a Latin-digit run next to an arrow,
+   a percent sign or a currency word gets reordered by the bidi
+   algorithm unless it is isolated. <bdi> does that natively —
+   these rules only add the typography.
+   =========================================================== */
+bdi,.num{
+  font-variant-numeric:tabular-nums;
+  unicode-bidi:isolate;
+}
+.d-metric .mh .vals bdi{font-family:var(--f-mono);}
+.d-outlist .v bdi,.d-out-n bdi{font-family:var(--f-mono);}
+
+/* ===========================================================
+   CALCULATOR — reactive feedback on the paired canvas
+   =========================================================== */
+.viz.is-recalc .viz-frame::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  border-radius:6px;
+  box-shadow:inset 0 0 0 2px var(--p-accent);
+  opacity:0;
+  animation:recalcPulse .9s var(--ease);
+}
+@keyframes recalcPulse{
+  0%{opacity:0;}
+  18%{opacity:.5;}
+  100%{opacity:0;}
+}
+.calc-badge{
+  position:absolute;z-index:3;
+  inset-inline-start:0;top:0;
+  display:inline-flex;align-items:baseline;gap:8px;
+  padding:7px 12px;border-radius:4px;
+  background:var(--p-accent);color:#fff;
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;
+  box-shadow:0 6px 18px -10px rgba(13,90,78,.7);
+  opacity:0;transform:translateY(-4px);
+  transition:opacity .35s ease,transform .35s var(--ease);
+  pointer-events:none;white-space:nowrap;
+}
+body[dir="rtl"] .calc-badge{font-family:var(--f-ar);letter-spacing:0;font-size:12px;}
+.viz.is-live .calc-badge{opacity:1;transform:none;}
+.calc-badge b{font-weight:600;font-size:13px;}
+.calc-badge .lbl{opacity:.82;font-size:10px;}
+body[dir="rtl"] .calc-badge .lbl{font-size:11px;}
+@media (prefers-reduced-motion: reduce){
+  .viz.is-recalc .viz-frame::after{animation:none;}
+}
 
 /* ===========================================================
    SCROLL REVEAL

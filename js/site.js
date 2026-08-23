@@ -277,6 +277,183 @@
   }
 
   /* ===========================================================
+     SEEKING A BUNDLE TO A NAMED SCENE
+     The runtime listens for 'data-om-seek-to-time-frame' on its own
+     canvas and renders exactly that timestamp, pausing its clock.
+     A seek marked {playing:true} latches "a host clock is driving
+     me"; an unmarked seek parks it on a single frame. So a tween
+     sends marked seeks while it is moving and one unmarked seek to
+     settle — which is precisely the contract the runtime documents.
+     =========================================================== */
+  function seekTarget(viz){
+    var f = viz.querySelector("iframe");
+    try{
+      var d = f.contentDocument;
+      return d && d.querySelector("svg[data-om-exportable-video-with-duration-secs]");
+    }catch(e){ return null; }
+  }
+
+  function seekTo(viz, time, moving){
+    var svg = seekTarget(viz);
+    if(!svg) return false;
+    var win = viz.querySelector("iframe").contentWindow;
+    try{
+      svg.dispatchEvent(new win.CustomEvent("data-om-seek-to-time-frame", {
+        detail: { time: time, playing: !!moving, sync: true }
+      }));
+      return true;
+    }catch(e){ return false; }
+  }
+
+  /* Tween the playhead so the graphic morphs through the frames between
+     two scenes instead of cutting. Reduced motion gets the cut. */
+  function makeSeeker(viz){
+    var raf = null, current = null, guard = null;
+    function stop(){
+      if(raf){ cancelAnimationFrame(raf); raf = null; }
+      if(guard){ clearTimeout(guard); guard = null; }
+    }
+    return function(target, dur){
+      if(current === null || REDUCE || !dur){
+        stop();
+        if(seekTo(viz, target, false)) current = target;
+        return;
+      }
+      if(Math.abs(target - current) < 0.05) return;
+      stop();
+      var from = current, t0 = null;
+      (function step(ts){
+        if(t0 === null) t0 = ts;
+        var k = Math.min(1, (ts - t0) / dur);
+        var e = k < .5 ? 2*k*k : 1 - Math.pow(-2*k + 2, 2) / 2;
+        current = from + (target - from) * e;
+        /* Every frame of a scroll tween is a scrub, not host playback.
+           Marking them {playing:true} latches the runtime's "a host clock
+           is driving me" flag, which left the graphic a step behind the
+           text. Unmarked seeks clear that latch in the same commit. */
+        seekTo(viz, current, false);
+        if(k < 1){ raf = requestAnimationFrame(step); }
+        else {
+          raf = null; current = target;
+          seekTo(viz, target, false);
+          /* re-assert once the runtime's own commit has settled */
+          setTimeout(function(){ if(current === target) seekTo(viz, target, false); }, 120);
+        }
+      })(performance.now());
+
+      /* Smoothness is a nicety; landing on the right frame is not. If rAF
+         is starved the tween above never advances, so a watchdog snaps to
+         the target once the tween has overrun its budget. */
+      guard = setTimeout(function(){
+        guard = null;
+        if(current === target) return;
+        stop();
+        current = target;
+        seekTo(viz, target, false);
+      }, dur + 260);
+    };
+  }
+
+  /* ===========================================================
+     SCROLLYTELLING
+     One pinned canvas, four scrolling steps. The active step is the
+     one nearest the middle of the viewport; it drives both the
+     highlight and the seek.
+     =========================================================== */
+  (function scrolly(){
+    var host = document.getElementById("scrolly");
+    if(!host) return;
+    var viz = document.getElementById("scrollyViz");
+    var steps = Array.prototype.slice.call(host.querySelectorAll(".step"));
+    if(!viz || !steps.length) return;
+
+    var seek = makeSeeker(viz);
+    var active = -1;
+    var primed = false;
+
+    function setActive(i, animate){
+      if(i === active) return;
+      active = i;
+      for(var n = 0; n < steps.length; n++){
+        steps[n].classList.toggle("is-active", n === i);
+      }
+      var t = parseFloat(steps[i].getAttribute("data-seek"));
+      if(!isNaN(t)) seek(t, animate ? 620 : 0);
+    }
+
+    /* prime once the bundle is actually running, otherwise the first
+       seek lands before the runtime has attached its listener */
+    function prime(){
+      if(primed) return;
+      if(!seekTarget(viz)) return;
+      primed = true;
+      var i = active < 0 ? 0 : active;
+      active = -1;
+      setActive(i, false);
+    }
+    var primeTimer = setInterval(function(){
+      prime();
+      if(primed) clearInterval(primeTimer);
+    }, 300);
+    setTimeout(function(){ clearInterval(primeTimer); }, 30000);
+
+    /* Which step is active is decided by distance from a reading line,
+       not by intersection ratio. A step is 62vh tall and the useful band
+       is much shorter, so every step tops out at a similar low ratio and
+       ties fall back to document order — which strands the last step.
+       Nearest-to-the-line is unambiguous and handles the ends. */
+    function pick(){
+      var line = window.innerHeight * 0.42;
+      var best = 0, bestD = Infinity;
+      for(var i = 0; i < steps.length; i++){
+        var r = steps[i].getBoundingClientRect();
+        var d = Math.abs((r.top + r.bottom) / 2 - line);
+        if(d < bestD){ bestD = d; best = i; }
+      }
+      prime();
+      setActive(best, primed);
+    }
+
+    var pending = false, watching = false;
+    /* rAF is the right clock for a scroll handler, but it is not
+       guaranteed to fire — a backgrounded tab or a long task starves it.
+       A plain `if(ticking) return` guard reset only inside the rAF
+       callback would then latch closed and kill the section for good, so
+       a timer races it and whichever arrives first does the work. */
+    function onScroll(){
+      if(pending) return;
+      pending = true;
+      var done = false;
+      var run = function(){
+        if(done) return;
+        done = true; pending = false;
+        pick();
+      };
+      requestAnimationFrame(run);
+      setTimeout(run, 120);
+    }
+
+    /* Only listen while the section is actually on screen. */
+    if("IntersectionObserver" in window){
+      new IntersectionObserver(function(entries){
+        var on = entries[0].isIntersecting;
+        if(on === watching) return;
+        watching = on;
+        if(on){
+          window.addEventListener("scroll", onScroll, { passive: true });
+          pick();
+        }else{
+          window.removeEventListener("scroll", onScroll);
+        }
+      }, { rootMargin: "20% 0px" }).observe(host);
+    }else{
+      window.addEventListener("scroll", onScroll, { passive: true });
+    }
+    window.addEventListener("resize", onScroll, { passive: true });
+    pick();
+  })();
+
+  /* ===========================================================
      3D HERO MODEL
      model-viewer renders on demand, but auto-rotate keeps asking
      for frames. Stop the turntable once the hero is off-screen.
@@ -350,6 +527,7 @@
     egp:  { en:"%N EGP / year", ar:"%N جنيه / سنة" },
     svc:  { en:"On top of that: customers get an answer outside working hours, and a first response in seconds at any volume.",
             ar:"وكمان: العملاء بياخدوا رد بره مواعيد الشغل، وأول رد في ثواني مهما كان الحجم." },
+    badge: { en:"extra capacity", ar:"طاقة إضافية" },
     tail: { en:" Both figures sit at the cautious end on purpose, and both are editable on the full calculator.",
             ar:" الافتراضين دول عند أقل تقدير عن قصد، وتقدر تعدّلهم في الحاسبة الكاملة." }
   };
@@ -363,6 +541,36 @@
 
   function t(key){ return COPY[key][state.lang === "ar" ? "ar" : "en"]; }
   function setTxt(id, v){ document.getElementById(id).textContent = v; }
+
+  /* ---- reactive feedback on the paired capacity canvas ----
+     Capacity Flow's own timeline ends on a scene the authors named
+     "Capacity" (9.6-12s): "incoming volume doubles while the queue holds
+     steady". That is the frame that answers the calculator, so a change
+     to any input pulses the canvas and drives it there. */
+  var capacityViz = document.getElementById("capacityViz");
+  var capSeek = capacityViz ? makeSeeker(capacityViz) : null;
+  var badgeVal = document.getElementById("calcBadgeVal");
+  var badgeLbl = document.getElementById("calcBadgeLbl");
+  var recalcTimer = null, pulseTimer = null;
+
+  function reactToInput(extraCapacity, unit){
+    if(!capacityViz) return;
+    if(badgeVal) badgeVal.textContent = nf.format(Math.round(extraCapacity)) + " " + unit;
+    if(badgeLbl) badgeLbl.textContent = t("badge");
+    capacityViz.classList.add("is-live");
+
+    if(REDUCE) return;
+    capacityViz.classList.remove("is-recalc");
+    void capacityViz.offsetWidth;           /* restart the pulse */
+    capacityViz.classList.add("is-recalc");
+    clearTimeout(pulseTimer);
+    pulseTimer = setTimeout(function(){ capacityViz.classList.remove("is-recalc"); }, 950);
+
+    clearTimeout(recalcTimer);
+    recalcTimer = setTimeout(function(){
+      if(capacityViz.getAttribute("data-onscreen") === "1" && capSeek) capSeek(10.9, 700);
+    }, 220);
+  }
 
   /* count-up for the headline figure; falls back to a plain write */
   var capAnim = null, capShown = 0;
@@ -419,6 +627,8 @@
 
     setTxt("calcService", t("svc"));
     setTxt("calcNote", w.note[lang] + t("tail"));
+
+    reactToInput(extraCapacity, w.unit[lang]);
   }
 
   function syncWork(){

@@ -73,6 +73,7 @@
         environment-image="neutral"
         disable-tap
         loading="eager"></model-viewer>
+      <p class="hero-cap" aria-hidden="true"><i></i><span data-en="In &rarr; processed &rarr; out" data-ar="داخل ← معالجة ← خارج">In &rarr; processed &rarr; out</span></p>
     </div>
     <div class="hero-scrim" aria-hidden="true"></div>
 
@@ -90,7 +91,6 @@
       </div>
     </div>
 
-    <p class="hero-cap" aria-hidden="true"><i></i><span data-en="In &rarr; processed &rarr; out" data-ar="داخل ← معالجة ← خارج">In &rarr; processed &rarr; out</span></p>
   </section>
 
   <!-- ══════════════ OVERNIGHT QUEUE + TRUST ══════════════ -->
@@ -99,14 +99,14 @@
          aria-label="An overnight work queue. Four routine items are marked done — a shipment question at 23:41, a supplier invoice at 01:12, a new lead written to the CRM at 03:07, and the weekly sales report at 05:00. A fifth item, a complaint needing judgement, is still waiting for the team at 06:03.">
       <div class="d-fig-head">
         <span class="lab" data-en="What your team walked in to" data-ar="إيه اللي فريقك هيلاقيه جاهز الصبح؟">What your team walked in to</span>
-        <span class="d-fig-n">4</span>
+        <span class="d-fig-n"><bdi>4</bdi></span>
       </div>
       <div class="d-queue" aria-hidden="true">
-        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="Customer asked where a shipment is" data-ar="عميل بيسأل: طلبي وصل لحد فين؟">Customer asked where a shipment is</span><span class="tag" data-en="Chat" data-ar="محادثات">Chat</span><span class="t">23:41</span></div>
-        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="Supplier invoice read, 14 lines" data-ar="فاتورة مورد اتسجلت، 14 بند">Supplier invoice read, 14 lines</span><span class="tag" data-en="Documents" data-ar="مستندات">Documents</span><span class="t">01:12</span></div>
-        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="New lead scored and written to the CRM" data-ar="عميل جديد اتسجل واتصنّف تلقائيًا">New lead scored and written to the CRM</span><span class="tag" data-en="Systems" data-ar="أنظمة">Systems</span><span class="t">03:07</span></div>
-        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="Weekly sales report built and sent" data-ar="تقرير المبيعات الأسبوعي اتعمل واتبعت">Weekly sales report built and sent</span><span class="tag" data-en="Reporting" data-ar="تقارير">Reporting</span><span class="t">05:00</span></div>
-        <div class="d-q pending"><span class="tick">·</span><span class="body" data-en="A complaint — this one needs judgement" data-ar="شكوى — دي محتاجة قرار من حد">A complaint — this one needs judgement</span><span class="tag" data-en="For the team" data-ar="للفريق">For the team</span><span class="t">06:03</span></div>
+        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="Customer asked where a shipment is" data-ar="عميل بيسأل: طلبي وصل لحد فين؟">Customer asked where a shipment is</span><span class="tag" data-en="Chat" data-ar="محادثات">Chat</span><span class="t"><bdi>23:41</bdi></span></div>
+        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="Supplier invoice read, 14 lines" data-ar="فاتورة مورد اتسجلت، 14 بند">Supplier invoice read, 14 lines</span><span class="tag" data-en="Documents" data-ar="مستندات">Documents</span><span class="t"><bdi>01:12</bdi></span></div>
+        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="New lead scored and written to the CRM" data-ar="عميل جديد اتسجل واتصنّف تلقائيًا">New lead scored and written to the CRM</span><span class="tag" data-en="Systems" data-ar="أنظمة">Systems</span><span class="t"><bdi>03:07</bdi></span></div>
+        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="Weekly sales report built and sent" data-ar="تقرير المبيعات الأسبوعي اتعمل واتبعت">Weekly sales report built and sent</span><span class="tag" data-en="Reporting" data-ar="تقارير">Reporting</span><span class="t"><bdi>05:00</bdi></span></div>
+        <div class="d-q pending"><span class="tick">·</span><span class="body" data-en="A complaint — this one needs judgement" data-ar="شكوى — دي محتاجة قرار من حد">A complaint — this one needs judgement</span><span class="tag" data-en="For the team" data-ar="للفريق">For the team</span><span class="t"><bdi>06:03</bdi></span></div>
       </div>
       <p class="d-src" style="margin-top:13px;">
         <span class="mk" aria-hidden="true">&rarr;</span>
@@ -130,42 +130,47 @@
 
   <!-- ══════════════ ZIG 1 — opportunity | automation flow ══════════════ -->
   <div class="shell pad">
-    <section class="d-sec zig" id="opportunity" aria-labelledby="oppTitle">
-      <div class="zig-text">
-        <p class="lab" data-reveal data-en="Where the gains usually are" data-ar="المكاسب عادة بتيجي منين">Where the gains usually are</p>
-        <h2 id="oppTitle" data-reveal data-en="Four places where AI pays back fastest" data-ar="فين الذكاء الاصطناعي ممكن يوفّر على شركتك أسرع؟">Four places where AI pays back fastest</h2>
-        <div class="d-probs" data-reveal data-reveal-group>
-          <div class="d-prob">
-            <p data-en="Customers message after hours — and get a real answer straight away, every night." data-ar="العملاء بيبعتوا بعد مواعيد الشغل — وبياخدوا رد حقيقي على طول، كل ليلة.">Customers message after hours — and get a real answer straight away, every night.</p>
-            <a class="link" href="#services"><span data-en="Conversation" data-ar="محادثات">Conversation</span> <span class="arw" aria-hidden="true">&rarr;</span></a>
-          </div>
-          <div class="d-prob">
-            <p data-en="Invoices arrive in every format — and land in your system as clean, checked data." data-ar="الفواتير بتيجي بأشكال مختلفة، وبتدخل على نظامك كبيانات مرتبة وجاهزة للمراجعة.">Invoices arrive in every format — and land in your system as clean, checked data.</p>
-            <a class="link" href="#services"><span data-en="Documents &amp; data" data-ar="مستندات وبيانات">Documents &amp; data</span> <span class="arw" aria-hidden="true">&rarr;</span></a>
-          </div>
-          <div class="d-prob">
-            <p data-en="Deals move through the pipeline — and the CRM stays current on its own." data-ar="العملاء المحتملين بيتنقلوا بين مراحل البيع تلقائيًا، والـ CRM بيفضل محدّث من غير تدخل يدوي.">Deals move through the pipeline — and the CRM stays current on its own.</p>
-            <a class="link" href="#services"><span data-en="Systems &amp; workflow" data-ar="أنظمة وسير عمل">Systems &amp; workflow</span> <span class="arw" aria-hidden="true">&rarr;</span></a>
-          </div>
-          <div class="d-prob">
-            <p data-en="Prices and policies change — and everyone has the current answer in seconds." data-ar="الأسعار والسياسات بتتغير، وكل واحد يقدر يوصل للمعلومة الصح في ثواني.">Prices and policies change — and everyone has the current answer in seconds.</p>
-            <a class="link" href="#services"><span data-en="Knowledge &amp; search" data-ar="معرفة وبحث">Knowledge &amp; search</span> <span class="arw" aria-hidden="true">&rarr;</span></a>
+    <section class="d-sec" id="opportunity" aria-labelledby="oppTitle">
+      <p class="lab" data-reveal data-en="How the work moves" data-ar="إزاي الشغل بيتحرك">How the work moves</p>
+      <h2 id="oppTitle" data-reveal data-en="Four stages, start to finish" data-ar="أربع مراحل، من أول ما يوصل لحد ما يخلص">Four stages, start to finish</h2>
+
+      <div class="scrolly" id="scrolly">
+        <div class="scrolly-visual">
+          <div class="viz ar-flow" id="scrollyViz" data-src-en="assets/Automation%20Flow%20(standalone).html">
+            <div class="viz-frame">
+              <div class="viz-load" aria-hidden="true"><span class="spin"></span><span data-en="Loading animation" data-ar="جاري تحميل الرسم المتحرك">Loading animation</span></div>
+              <iframe role="img" tabindex="-1" loading="lazy" scrolling="no"
+                title="Automation pipeline"
+                aria-label="An animation of the automation pipeline. Work arrives and queues, the system pulls items off the queue, outcomes fan out into three routed lanes, and the queue clears."></iframe>
+            </div>
+            <p class="viz-cap" id="scrollyCap" aria-live="polite">
+              <span class="mk" aria-hidden="true">&rarr;</span>
+              <span data-en="The pipeline, driven by the step you are reading." data-ar="خط الشغل، بيتحرك مع الخطوة اللي بتقراها.">The pipeline, driven by the step you are reading.</span>
+            </p>
           </div>
         </div>
-      </div>
 
-      <div class="zig-viz">
-        <div class="viz ar-flow" data-reveal data-src-en="assets/Automation%20Flow%20(standalone).html">
-          <div class="viz-frame">
-            <div class="viz-load" aria-hidden="true"><span class="spin"></span><span data-en="Loading animation" data-ar="جاري تحميل الرسم المتحرك">Loading animation</span></div>
-            <iframe role="img" tabindex="-1" loading="lazy" scrolling="no"
-              title="Automation flow"
-              aria-label="An animation of repeated work moving through an automated system. Message cards queue up on one side, pass one at a time through a processing block, and fan out sorted on the other side."></iframe>
-          </div>
-          <p class="viz-cap">
-            <span class="mk" aria-hidden="true">&rarr;</span>
-            <span data-en="The repeated work moving through the system: it arrives, it is handled in order, and it leaves finished." data-ar="الشغل المتكرر بيدخل النظام، بيتعالج تلقائيًا، والنتيجة بتوصل جاهزة.">The repeated work moving through the system: it arrives, it is handled in order, and it leaves finished.</span>
-          </p>
+        <div class="scrolly-steps" id="scrollySteps">
+          <article class="step is-active" data-step="0" data-seek="2.4" data-scene="Arrive">
+            <span class="step-n"><i aria-hidden="true"></i><bdi>01</bdi></span>
+            <h3 data-en="Omnichannel Ingestion" data-ar="استقبال البيانات والطلبات">Omnichannel Ingestion</h3>
+            <p data-en="AI captures customer messages, documents, and queries across all channels instantly, 24/7." data-ar="الذكاء الاصطناعي يستقبل رسائل العملاء، المستندات، والاستفسارات عبر جميع القنوات فوراً وعلى مدار الساعة.">AI captures customer messages, documents, and queries across all channels instantly, 24/7.</p>
+          </article>
+          <article class="step" data-step="1" data-seek="5.5" data-scene="Engage">
+            <span class="step-n"><i aria-hidden="true"></i><bdi>02</bdi></span>
+            <h3 data-en="Automated Processing" data-ar="المعالجة الآلية">Automated Processing</h3>
+            <p data-en="Unstructured data like raw invoices and PDFs are parsed, cleaned, and converted into structured formats." data-ar="يتم تحليل البيانات غير المهيكلة مثل الفواتير وملفات الـ PDF وتحويلها لبيانات منظمة بدون تدخل يدوي.">Unstructured data like raw invoices and PDFs are parsed, cleaned, and converted into structured formats.</p>
+          </article>
+          <article class="step" data-step="2" data-seek="9.8" data-scene="Process">
+            <span class="step-n"><i aria-hidden="true"></i><bdi>03</bdi></span>
+            <h3 data-en="Smart CRM Routing" data-ar="التوجيه الذكي وتحديث النظام">Smart CRM Routing</h3>
+            <p data-en="Processed workflows are routed to the exact right stage, updating your CRM systems in real time." data-ar="يتم توجيه المهام تلقائياً للمسار الصحيح، مع تحديث نظام إدارة علاقات العملاء (CRM) لحظياً.">Processed workflows are routed to the exact right stage, updating your CRM systems in real time.</p>
+          </article>
+          <article class="step" data-step="3" data-seek="16.8" data-scene="Settle">
+            <span class="step-n"><i aria-hidden="true"></i><bdi>04</bdi></span>
+            <h3 data-en="Instant Resolution" data-ar="التنفيذ الفوري وإغلاق المهام">Instant Resolution</h3>
+            <p data-en="The system executes final actions, answers queries based on your rules, and clears the queue seamlessly." data-ar="النظام ينفذ الإجراءات، يجيب على الاستفسارات بناءً على قواعد عملك، وينهي دورة العمل بنجاح.">The system executes final actions, answers queries based on your rules, and clears the queue seamlessly.</p>
+          </article>
         </div>
       </div>
     </section>
@@ -274,7 +279,7 @@
             <div class="d-metric">
               <div class="mh">
                 <span class="nm" data-en="Routine queries handled automatically" data-ar="الاستفسارات الروتينية اللي بتتعمل أوتوماتيك">Routine queries handled automatically</span>
-                <span class="vals">12% &rarr; <b>68%</b></span>
+                <span class="vals"><bdi>12%</bdi> &rarr; <b><bdi>68%</bdi></b></span>
               </div>
               <div class="d-bars" aria-hidden="true">
                 <div class="d-bar before"><i style="--w:12%"></i></div>
@@ -284,7 +289,7 @@
             <div class="d-metric">
               <div class="mh">
                 <span class="nm" data-en="Invoice data ready for approval on arrival" data-ar="بيانات الفواتير الجاهزة للاعتماد أول ما توصل">Invoice data ready for approval on arrival</span>
-                <span class="vals">6% &rarr; <b>92%</b></span>
+                <span class="vals"><bdi>6%</bdi> &rarr; <b><bdi>92%</bdi></b></span>
               </div>
               <div class="d-bars" aria-hidden="true">
                 <div class="d-bar before"><i style="--w:6%"></i></div>
@@ -294,7 +299,7 @@
             <div class="d-metric">
               <div class="mh">
                 <span class="nm" data-en="Records updated the same day" data-ar="السجلات اللي بتتحدّث في نفس اليوم">Records updated the same day</span>
-                <span class="vals">34% &rarr; <b>96%</b></span>
+                <span class="vals"><bdi>34%</bdi> &rarr; <b><bdi>96%</bdi></b></span>
               </div>
               <div class="d-bars" aria-hidden="true">
                 <div class="d-bar before"><i style="--w:34%"></i></div>
@@ -304,7 +309,7 @@
             <div class="d-metric">
               <div class="mh">
                 <span class="nm" data-en="Volume the same team can absorb" data-ar="حجم الشغل اللي نفس الفريق يقدر يستوعبه">Volume the same team can absorb</span>
-                <span class="vals">100% &rarr; <b>240%</b></span>
+                <span class="vals"><bdi>100%</bdi> &rarr; <b><bdi>240%</bdi></b></span>
               </div>
               <div class="d-bars" aria-hidden="true">
                 <div class="d-bar before"><i style="--w:42%"></i></div>
@@ -370,12 +375,12 @@
           </div>
           <div class="d-calc-out" role="status" aria-live="polite" aria-atomic="true">
             <p class="d-out-lab" id="calcOutLab"></p>
-            <p class="d-out-n"><span id="calcCap">2,200</span></p>
+            <p class="d-out-n"><bdi id="calcCap">2,200</bdi></p>
             <p class="d-out-sub" id="calcCapSub"></p>
             <div class="d-outlist">
-              <div><span class="k" id="calcK1"></span><span class="v" id="calcV1"></span></div>
-              <div><span class="k" id="calcK2"></span><span class="v" id="calcV2"></span></div>
-              <div><span class="k" id="calcK3"></span><span class="v" id="calcV3"></span></div>
+              <div><span class="k" id="calcK1"></span><span class="v"><bdi id="calcV1"></bdi></span></div>
+              <div><span class="k" id="calcK2"></span><span class="v"><bdi id="calcV2"></bdi></span></div>
+              <div><span class="k" id="calcK3"></span><span class="v"><bdi id="calcV3"></bdi></span></div>
             </div>
             <p class="d-assump" id="calcService" style="margin-top:14px;"></p>
           </div>
@@ -383,10 +388,11 @@
       </div>
 
       <div class="zig-viz">
-        <div class="viz ar-capacity" data-reveal
+        <div class="viz ar-capacity" id="capacityViz" data-reveal
              data-src-en="assets/Capacity%20Flow.html"
              data-src-ar="assets/Capacity%20Flow%20AR.html">
           <div class="viz-frame">
+            <p class="calc-badge" id="calcBadge" aria-hidden="true"><span class="lbl" id="calcBadgeLbl"></span><b><bdi id="calcBadgeVal">—</bdi></b></p>
             <div class="viz-load" aria-hidden="true"><span class="spin"></span><span data-en="Loading animation" data-ar="جاري تحميل الرسم المتحرك">Loading animation</span></div>
             <iframe role="img" tabindex="-1" loading="lazy" scrolling="no"
               title="Capacity flow"
