@@ -676,3 +676,36 @@
   requestAnimationFrame(showHero);
   setTimeout(showHero, 150);
 })();
+
+/* ══════════════ BRAND MARK ══════════════
+   The mark assembles on the first paint of a session, then settles into the
+   heartbeat. Returning to the page mid-session skips straight to the idle so
+   the nav does not re-animate on every internal navigation. */
+(function brandMark(){
+  var played;
+  try{ played = sessionStorage.getItem("mk") === "1"; }
+  catch(e){ played = false; }          /* private mode / blocked storage */
+
+  var marks = document.querySelectorAll(".mk[data-mk-entry]");
+  for(var i = 0; i < marks.length; i++){
+    (function(el){
+      if(played){ el.classList.add("is-beat"); return; }
+      el.classList.add("is-assemble");
+      /* The node is the last thing to animate, so its animationend is the
+         signal the whole assemble is done. A timer backs it up in case the
+         animation never fires (reduced motion, or a backgrounded tab). */
+      var done = false;
+      var settle = function(){
+        if(done) return;
+        done = true;
+        el.classList.remove("is-assemble");
+        el.classList.add("is-beat");
+      };
+      el.addEventListener("animationend", function(ev){
+        if(ev.target === el.querySelector(".mk-n")) settle();
+      });
+      setTimeout(settle, 1200);
+    })(marks[i]);
+  }
+  try{ sessionStorage.setItem("mk", "1"); }catch(e){}
+})();

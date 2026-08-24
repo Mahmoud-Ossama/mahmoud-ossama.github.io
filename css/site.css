@@ -51,6 +51,7 @@
 
   --shell:1240px;
   --ease:cubic-bezier(.22,.7,.3,1);
+  --mk-ease:var(--ease);          /* the mark's curve is the site's curve */
 }
 
 *{box-sizing:border-box;}
@@ -116,12 +117,83 @@ body[dir="rtl"] .lab{font-family:var(--f-ar);letter-spacing:0;font-size:11.5px;}
   font-family:var(--f-display);font-weight:var(--f-display-weight);
   font-size:15px;letter-spacing:-.02em;white-space:nowrap;
   color:inherit;text-decoration:none;flex:0 0 auto;
+  /* NOT a flex container: the wordmark's text runs ("Osama", ".", "engineering")
+     would each become an anonymous flex item and the gap would open up around
+     the accent dot. The mark is spaced with a margin instead. */
 }
-.d-mark span{
-  color:var(--p-accent-ink);display:inline-block;
-  transition:transform .35s var(--ease);
+.d-mark span{color:var(--p-accent-ink);display:inline-block;}
+/* The `.` used to jump on hover. With the mark in the lockup that was two
+   things moving on one hover, so the clamp state carries it alone now. */
+
+/* ══════════════ BRAND MARK — clamp geometry, three motion states ══════════════
+   Two interlocking brackets holding a node. Structure inherits currentColor,
+   the node reads --mk-accent. Mirror-symmetric about the vertical axis, so it
+   needs NO RTL flip — do not add one. */
+.mk{
+  /* --p-accent-ink is the dark petrol (#0A4A40); the terracotta the mark's node
+     wants is --p-cta. The handoff's literal fallback (#BE5410) is the giveaway. */
+  --mk-accent:var(--p-cta,#BE5410);
+  width:1em;height:1em;          /* scales with the font-size of its context */
+  flex:0 0 auto;display:block;
+  overflow:visible;              /* the clamp state moves 0.8px outside the box */
 }
-.d-mark:hover span{transform:translateY(-3px) scale(1.25);}
+.mk .mk-n{fill:var(--mk-accent);transform-box:fill-box;transform-origin:center;}
+
+/* ── state 1 · assemble — brackets draw in, node lands last. Once per session. */
+@keyframes mk-draw{ from{stroke-dashoffset:37} to{stroke-dashoffset:0} }
+@keyframes mk-in-t{ from{transform:translateY(-5px);opacity:0} to{transform:none;opacity:1} }
+@keyframes mk-in-b{ from{transform:translateY(5px);opacity:0}  to{transform:none;opacity:1} }
+@keyframes mk-node-in{
+  0%{transform:scale(0);opacity:0}
+  60%{transform:scale(1.2);opacity:1}
+  100%{transform:scale(1);opacity:1}
+}
+.mk.is-assemble .mk-t{stroke-dasharray:37;animation:mk-draw .62s var(--mk-ease) both,mk-in-t .62s var(--mk-ease) both;}
+.mk.is-assemble .mk-b{stroke-dasharray:37;animation:mk-draw .62s var(--mk-ease) both,mk-in-b .62s var(--mk-ease) both;}
+.mk.is-assemble .mk-n{animation:mk-node-in .42s var(--mk-ease) .48s both;}
+
+/* ── state 2 · heartbeat — the ambient idle. Node only. */
+@keyframes mk-beat{ 0%,70%,100%{transform:scale(1)} 82%{transform:scale(1.16)} }
+.mk.is-beat .mk-n{animation:mk-beat 4s var(--mk-ease) infinite;}
+
+/* ── state 3 · clamp — hover / active. Brackets bite, node answers. */
+.mk .mk-t,.mk .mk-b{transition:transform .2s var(--mk-ease);}
+a:hover .mk .mk-t,button:hover .mk .mk-t,a:focus-visible .mk .mk-t{transform:translateY(-.8px);}
+a:hover .mk .mk-b,button:hover .mk .mk-b,a:focus-visible .mk .mk-b{transform:translateY(.8px);}
+a:hover .mk .mk-n,button:hover .mk .mk-n{animation:mk-beat .9s var(--mk-ease);}
+
+/* ── loop variant for loaders: assemble, HELD, repeated.
+   These need their own keyframes rather than reusing the one-shot pair above.
+   A from/to pair spread over 2.2s makes the mark a slow continuous fade that
+   is near-invisible for most of the cycle; the design completes the motion in
+   the first ~30% and holds the rest, so the mark reads as solid between
+   assemblies. Percentages match the source animation. */
+@keyframes mk-loop-draw{ 0%{stroke-dashoffset:37} 26%,100%{stroke-dashoffset:0} }
+@keyframes mk-loop-t{ 0%{transform:translateY(-5px);opacity:0} 22%,100%{transform:none;opacity:1} }
+@keyframes mk-loop-b{ 0%{transform:translateY(5px);opacity:0}  22%,100%{transform:none;opacity:1} }
+@keyframes mk-loop-n{
+  0%,14%{transform:scale(0);opacity:0}
+  30%{transform:scale(1.2);opacity:1}
+  38%,100%{transform:scale(1);opacity:1}
+}
+.mk.is-loop .mk-t{stroke-dasharray:37;animation:mk-loop-draw 2.2s var(--mk-ease) infinite,mk-loop-t 2.2s var(--mk-ease) infinite;}
+.mk.is-loop .mk-b{stroke-dasharray:37;animation:mk-loop-draw 2.2s var(--mk-ease) infinite,mk-loop-b 2.2s var(--mk-ease) infinite;}
+.mk.is-loop .mk-n{animation:mk-loop-n 2.2s var(--mk-ease) infinite;}
+
+/* ── per-context sizing. 1em would tie the mark to body copy size; these are
+   the sizes the lockup was drawn at. */
+.d-mark .mk{
+  width:24px;height:24px;color:var(--p-accent);
+  display:inline-block;vertical-align:-.36em;margin-inline-end:9px;
+}
+.d-foot .mk{width:20px;height:20px;color:var(--p-accent);}
+.hero-load .mk{width:28px;height:28px;color:var(--p-accent);}
+.viz-load .mk{width:24px;height:24px;color:var(--p-accent);opacity:.85;}
+
+@media (prefers-reduced-motion:reduce){
+  .mk *{animation:none !important;transition:none !important;transform:none !important;}
+  .mk .mk-t,.mk .mk-b{stroke-dasharray:none !important;stroke-dashoffset:0 !important;}
+}
 .d-links{display:flex;gap:16px;flex:1 1 auto;flex-wrap:wrap;font-size:13.5px;color:var(--p-ink-2);}
 .d-links a{
   color:inherit;text-decoration:none;position:relative;padding-block:2px;
@@ -324,10 +396,20 @@ body[dir="rtl"] .hero-cap{font-family:var(--f-ar);letter-spacing:0;font-size:11p
    slow one shows a calm surface rather than debug text. */
 .hero-load{
   position:absolute;inset:0;z-index:1;
+  display:grid;place-items:center;
   background:radial-gradient(115% 85% at 62% 18%, #FFFFFF 0%, var(--p-surface) 58%, var(--p-surface-2) 100%);
   transition:opacity .55s ease;
 }
 .hero.is-ready .hero-load{opacity:0;pointer-events:none;}
+
+/* GLB failure left the hero as an empty scrim with no subject. Rather than add
+   markup, the veil stays up and its mark becomes a static watermark, so the
+   failure reads as deliberate instead of broken. */
+.hero.is-failed .hero-load{opacity:1;}
+.hero.is-failed .hero-load .mk{
+  width:96px;height:96px;opacity:.10;color:var(--p-ink);
+}
+.hero.is-failed .hero-load .mk *{animation:none !important;stroke-dasharray:none;}
 
 /* ===========================================================
    ZIG-ZAG FEATURE ROWS
