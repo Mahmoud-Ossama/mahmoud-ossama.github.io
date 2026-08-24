@@ -18,10 +18,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="css/site.css">
+<link rel="stylesheet" href="css/site.css?v=20260823">
 
 <script type="module" src="vendor/model-viewer.min.js"></script>
-<script defer src="js/site.js"></script>
+<script defer src="js/site.js?v=20260823"></script>
 </head>
 <body dir="ltr">
 
@@ -53,7 +53,7 @@
   <!-- ══════════════ HERO — full-bleed automation engine (GLB) ══════════════ -->
   <section class="hero" id="hero" aria-labelledby="heroTitle">
     <div class="hero-stage" id="heroStage">
-      <div class="hero-load" data-en="Loading the engine" data-ar="جاري تحميل النموذج">Loading the engine</div>
+      <div class="hero-load" aria-hidden="true"></div>
       <model-viewer
         id="heroModel"
         src="assets/automation-engine.glb"
@@ -145,7 +145,7 @@
             </div>
             <p class="viz-cap" id="scrollyCap" aria-live="polite">
               <span class="mk" aria-hidden="true">&rarr;</span>
-              <span data-en="The pipeline, driven by the step you are reading." data-ar="خط الشغل، بيتحرك مع الخطوة اللي بتقراها.">The pipeline, driven by the step you are reading.</span>
+              <span data-en="One continuous pipeline. Each stage above is the same system at a different moment." data-ar="خط شغل واحد متصل. كل مرحلة فوق هي نفس النظام في لحظة مختلفة.">One continuous pipeline. Each stage above is the same system at a different moment.</span>
             </p>
           </div>
         </div>
@@ -411,7 +411,7 @@
   <div class="shell pad">
     <section class="d-sec" id="about" aria-labelledby="aboutName">
       <div class="d-founder" data-reveal>
-        <div class="d-photo" data-en="Photograph<br>required<br>§16" data-ar="صورة شخصية<br>مطلوبة<br>§16">Photograph<br>required<br>§16</div>
+        <div class="d-photo" aria-hidden="true">MO</div>
         <div>
           <p class="nm" id="aboutName" data-en="Mahmoud Osama" data-ar="محمود أسامة">Mahmoud Osama</p>
           <p class="role" data-en="AI engineer · Mansoura, Egypt" data-ar="مهندس ذكاء اصطناعي · المنصورة، مصر">AI engineer · Mansoura, Egypt</p>
