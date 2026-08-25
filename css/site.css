@@ -552,7 +552,7 @@ body[dir="rtl"] .step h3{letter-spacing:0;line-height:1.45;}
    complaint next to what gets built for it. They are set as a two-column band
    so the eye reads complaint → answer across, and the hairline between them
    carries the transformation instead of an arrow glyph. */
-.d-pile{padding-block:clamp(52px,8vw,92px) clamp(20px,3vw,32px);}
+.d-pile{padding-block:clamp(52px,8vw,92px) clamp(44px,6vw,72px);}
 .d-pile-head{max-width:66ch;}
 .d-pile-head h2{
   font-family:var(--f-display);font-weight:var(--f-display-weight);
@@ -562,91 +562,18 @@ body[dir="rtl"] .step h3{letter-spacing:0;line-height:1.45;}
 body[dir="rtl"] .d-pile-head h2{letter-spacing:0;line-height:1.34;}
 .d-pile-sub{color:var(--p-ink-2);font-size:1.02rem;line-height:1.62;max-width:56ch;}
 
-/* the hinge between "here is the pile" and "here is what each piece needs" */
-.d-pile-turn{
-  margin:clamp(30px,4vw,44px) 0 clamp(16px,2vw,22px);
-  font-family:var(--f-display);font-weight:var(--f-display-weight);
-  font-size:clamp(1.02rem,1.8vw,1.22rem);color:var(--p-ink);
-  padding-inline-start:14px;border-inline-start:2px solid var(--p-accent);
-  max-width:52ch;line-height:1.45;
-}
-
-.d-rows{list-style:none;margin:0;padding:0;border-top:1px solid var(--p-rule);}
-.d-row{
-  display:grid;gap:6px 30px;align-items:baseline;
-  grid-template-columns:minmax(120px,150px) minmax(0,1fr);
-  padding:clamp(17px,2.4vw,23px) 0;
-  border-bottom:1px solid var(--p-rule);
-}
-@media (min-width:900px){
-  .d-row{grid-template-columns:minmax(130px,160px) minmax(0,.92fr) minmax(0,1.08fr);}
-}
-.d-row-k{
-  font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--p-ink-3);padding-top:.34em;
-}
-/* Arabic takes neither the tracking nor the uppercasing: letter-spacing pulls
-   the joined script apart, and there is no case to transform. Same treatment
-   the other mono labels on the page already get. */
-body[dir="rtl"] .d-row-k{
-  font-family:var(--f-ar);letter-spacing:0;text-transform:none;font-size:11.5px;
-}
-body[dir="rtl"] .d-row-p{font-family:var(--f-ar);}
-.d-row-p{
-  color:var(--p-ink);font-size:1rem;line-height:1.5;
-  font-family:var(--f-display);font-weight:500;
-}
-.d-row-a{color:var(--p-ink-2);font-size:.95rem;line-height:1.62;}
-@media (min-width:900px){
-  .d-row-a{padding-inline-start:30px;border-inline-start:1px solid var(--p-rule);}
-}
-/* the one row that ends with a person, not a system */
-.d-row.is-human .d-row-k{color:var(--p-cta);}
-.d-row.is-human .d-row-a{color:var(--p-ink);}
-
 .d-pile-thesis{
   margin:clamp(30px,4vw,44px) 0 0;max-width:54ch;
   font-family:var(--f-display);font-weight:var(--f-display-weight);
   font-size:clamp(1.06rem,2vw,1.3rem);line-height:1.42;color:var(--p-ink);
 }
 
-/* ── row entrance ───────────────────────────────────────────────────────
-   Driven by ONE observer on the <ol>, not by the page-wide [data-reveal]
-   system. That system gives every element its own observer, so on a list
-   this tall each row crossed its own threshold at a different scroll point
-   and the stagger never read as a sequence — rows just appeared as you
-   reached them.
-
-   The offsets are written out per direction rather than through a custom
-   property: translateX(-48px) in English so rows arrive from the left,
-   +48px in Arabic so they arrive from the right. Opacity runs a clean 0 → 1
-   with no blur and no colour change, so the text is at full contrast the
-   moment it is legible. Per-row delay is set inline in JS from the index. */
-.d-rows > .d-row{
-  opacity:0;
-  transform:translateX(-48px);
-  transition:opacity .7s cubic-bezier(.16,1,.3,1),
-             transform .7s cubic-bezier(.16,1,.3,1);
-}
-body[dir="rtl"] .d-rows > .d-row{transform:translateX(48px);}
-.d-rows.is-visible > .d-row,
-body[dir="rtl"] .d-rows.is-visible > .d-row{
-  opacity:1;transform:translateX(0);
-}
-@media (prefers-reduced-motion:reduce){
-  .d-rows > .d-row,
-  body[dir="rtl"] .d-rows > .d-row{
-    opacity:1;transform:none;transition:none;
-  }
-}
-
 .d-fig-lede{
-  max-width:56ch;margin:0 0 clamp(18px,2.4vw,26px);
+  max-width:56ch;margin:clamp(30px,4vw,44px) 0 clamp(18px,2.4vw,26px);
   font-family:var(--f-display);font-weight:var(--f-display-weight);
   font-size:clamp(1.02rem,1.9vw,1.24rem);line-height:1.45;color:var(--p-ink);
 }
 
-.d-figband{padding-block:clamp(28px,4vw,44px) 0;}
 /* The card carries its structure with a shadow rather than a drawn border: the
    rigid outer rule made it read as a screenshot pasted onto the page. */
 .d-fig{
@@ -663,18 +590,38 @@ body[dir="rtl"] .d-rows.is-visible > .d-row{
   display:grid;grid-template-columns:auto 1fr auto auto;gap:14px;align-items:center;
   padding:13px 16px;border-radius:8px;background:var(--p-ground);
   border:1px solid var(--p-rule);font-size:13px;color:var(--p-ink-2);
-  transition:border-color .2s ease,background-color .2s ease,transform .2s var(--ease);
+  transition:border-color .2s ease,background-color .2s ease,transform .2s var(--ease),
+             opacity .7s cubic-bezier(.16,1,.3,1),translate .7s cubic-bezier(.16,1,.3,1);
 }
 .d-q:hover{border-color:var(--p-rule-strong);background:var(--p-surface);transform:translateX(2px);}
 body[dir="rtl"] .d-q:hover{transform:translateX(-2px);}
 
 /* Rows arrive one at a time — the queue reads as events landing, not as a table
-   that was always there. 150ms apart, on top of the shared [data-reveal] system. */
-.d-queue[data-reveal-group] > [data-reveal]{
-  transform:translateY(10px);
-  transition-delay:calc(var(--i,0) * 150ms);
+   that was always there. 150ms apart, driven by ONE observer on the list.
+
+   Not by the page-wide [data-reveal] system: that gives every element its own
+   observer, so each row crossed its own threshold at a different scroll point
+   and the stagger never read as a sequence.
+
+   Offsets are written out per direction — -48px in English so rows arrive from
+   the left, +48px in Arabic so they arrive from the right. The entrance moves
+   `translate`; the hover nudge below keeps `transform`, so the two compose
+   instead of overwriting one another. Per-row delay is set inline in JS. */
+.d-queue > .d-q{
+  opacity:0;
+  translate:-48px 0;
 }
-.d-queue[data-reveal-group] > [data-reveal].is-in{transform:none;}
+body[dir="rtl"] .d-queue > .d-q{translate:48px 0;}
+.d-queue.is-visible > .d-q,
+body[dir="rtl"] .d-queue.is-visible > .d-q{
+  opacity:1;translate:0 0;
+}
+@media (prefers-reduced-motion:reduce){
+  .d-queue > .d-q,
+  body[dir="rtl"] .d-queue > .d-q{
+    opacity:1;translate:none;transition:none;
+  }
+}
 .d-q b{font-weight:500;color:var(--p-ink);}
 .d-q .tick{
   width:15px;height:15px;border-radius:50%;display:grid;place-items:center;

@@ -106,14 +106,6 @@
   /* ===========================================================
      SCROLL REVEAL
      =========================================================== */
-  (function stagger(){
-    var groups = document.querySelectorAll("[data-reveal-group]");
-    for(var i=0;i<groups.length;i++){
-      var kids = groups[i].querySelectorAll("[data-reveal]");
-      for(var j=0;j<kids.length;j++){ kids[j].style.setProperty("--i", j); }
-    }
-  })();
-
   function reveal(){
     var items = document.querySelectorAll("[data-reveal]");
     if(REDUCE || !("IntersectionObserver" in window)){
@@ -266,16 +258,17 @@
   }
 
   /* ===========================================================
-     PROBLEM/ANSWER ROWS — one observer, group stagger
-     The page-wide [data-reveal] system observes each element separately,
-     which on a list this tall means each row fires when it personally
-     scrolls in — so the stagger is never seen. This watches the list once,
-     then lets all five rows run off a single trigger with an index delay.
+     MORNING QUEUE ROWS — one observer, group stagger
+     The page-wide [data-reveal] system observes each element separately, so
+     each row fired when it personally scrolled in and the stagger was never
+     seen as a sequence. This watches the queue once, then lets all five rows
+     run off that single trigger with an index delay. Only the rows inside the
+     card move; the paragraphs around it keep the page-wide reveal.
      =========================================================== */
-  function pileRows(){
-    var list = document.getElementById("pileRows");
+  function queueRows(){
+    var list = document.getElementById("queueRows");
     if(!list) return;
-    var rows = list.querySelectorAll(".d-row");
+    var rows = list.querySelectorAll(".d-q");
     if(!rows.length) return;
 
     for(var i=0;i<rows.length;i++){
@@ -841,7 +834,7 @@
   syncWork();
   calc();
   reveal();
-  pileRows();
+  queueRows();
   chartReveal();
   svcCarousel();
 
