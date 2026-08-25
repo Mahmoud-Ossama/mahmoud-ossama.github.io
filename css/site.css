@@ -466,6 +466,11 @@ body[dir="rtl"] .hero-cap{font-family:var(--f-ar);letter-spacing:0;font-size:11p
   align-self:start;
   min-width:0;
 }
+/* The section title rides inside the pinned column. Previously it scrolled away
+   with the page, so by step 02 the reader had four numbered stages and nothing
+   naming what they were stages OF. */
+.scrolly-head{margin-bottom:clamp(14px,2vw,22px);}
+.scrolly-head h2{margin-bottom:0;}
 .scrolly-steps{
   display:grid;gap:0;min-width:0;
   /* half a viewport of lead-in and lead-out keeps the first and last
@@ -517,6 +522,11 @@ body[dir="rtl"] .step h3{letter-spacing:0;line-height:1.45;}
     padding-block:8px;
     box-shadow:0 12px 16px -12px rgba(14,22,19,.18);
   }
+  /* The pinned bar has a phone's vertical budget to respect, so the title stays
+     and the eyebrow goes — the h2 is what actually supplies the context. */
+  .scrolly-head{margin-bottom:8px;}
+  .scrolly-head .lab{display:none;}
+  .scrolly-head h2{font-size:1.06rem;line-height:1.3;}
   .scrolly-visual .viz-frame{aspect-ratio:16/10;}
   .scrolly-steps{padding-block:6vh 10vh;}
   .step{min-height:auto;padding-block:26px;opacity:1;}
