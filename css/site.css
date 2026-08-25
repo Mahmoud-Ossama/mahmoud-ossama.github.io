@@ -440,6 +440,14 @@ body[dir="rtl"] .hero-cap{font-family:var(--f-ar);letter-spacing:0;font-size:11p
   align-items:center;
 }
 .zig-text,.zig-viz{min-width:0;}
+/* The calculator's columns are very unequal — the input card plus its result
+   cards run ~889px against a ~481px visual — so align-items:center parked the
+   graphic in the middle and left ~200px of dead space above AND below it. Top
+   aligning puts the animation level with the first input, which is where the
+   eye expects it, and the slack collapses to one place instead of two. */
+#calculator{align-items:start;}
+#calculator .zig-viz{margin-block:0;position:sticky;top:96px;}
+#calculator .viz-cap{padding-top:8px;max-width:52ch;}
 .zig-rev .zig-text{order:2;}
 .zig-rev .zig-viz{order:1;}
 .zig .viz{margin-top:0;}
