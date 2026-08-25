@@ -265,6 +265,42 @@
     }
   }
 
+  /* ===========================================================
+     PROBLEM/ANSWER ROWS — one observer, group stagger
+     The page-wide [data-reveal] system observes each element separately,
+     which on a list this tall means each row fires when it personally
+     scrolls in — so the stagger is never seen. This watches the list once,
+     then lets all five rows run off a single trigger with an index delay.
+     =========================================================== */
+  function pileRows(){
+    var list = document.getElementById("pileRows");
+    if(!list) return;
+    var rows = list.querySelectorAll(".d-row");
+    if(!rows.length) return;
+
+    for(var i=0;i<rows.length;i++){
+      rows[i].style.transitionDelay = (i * 150) + "ms";
+    }
+
+    function show(){ list.classList.add("is-visible"); }
+    if(REDUCE || !("IntersectionObserver" in window)){ show(); return; }
+
+    var io = new IntersectionObserver(function(entries){
+      if(!entries[0].isIntersecting) return;
+      io.disconnect();
+      show();
+    }, { threshold: 0, rootMargin: "0px 0px -12% 0px" });
+    io.observe(list);
+
+    /* rAF/observer callbacks are throttled in a background tab; if the list
+       is already in view on load, don't wait for a scroll that never comes. */
+    setTimeout(function(){
+      if(list.classList.contains("is-visible")) return;
+      var r = list.getBoundingClientRect();
+      if(r.top < window.innerHeight && r.bottom > 0){ io.disconnect(); show(); }
+    }, 1200);
+  }
+
   function chartReveal(){
     var chart = document.getElementById("dChart");
     if(!chart) return;
@@ -805,6 +841,7 @@
   syncWork();
   calc();
   reveal();
+  pileRows();
   chartReveal();
   svcCarousel();
 
