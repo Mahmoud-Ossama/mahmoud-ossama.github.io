@@ -283,17 +283,33 @@ body[dir="rtl"] .d-btn:hover .arw{transform:scaleX(-1) translateX(3px);}
   min-height:min(88svh,860px);
   display:flex;align-items:center;
   overflow:hidden;
-  border-bottom:1px solid var(--p-rule);
+  /* No border-bottom. The rule plus the stage's --p-surface-2 endpoint landing
+     against a --p-ground page read as a hard seam; the stage now fades to
+     --p-ground instead so the hero dissolves into the section below. */
+  background:var(--p-ground);
   /* reserved before the model initialises, so nothing shifts */
   contain:layout paint;
 }
+/* The spotlight is kept, but a ground-coloured fade is composited over its last
+   third so the gradient resolves to exactly the page colour at y=100% instead of
+   stopping on a tinted step. Layered on the stage itself rather than a ::before,
+   which would paint over the model. */
 .hero-stage{
   position:absolute;inset:0;z-index:0;
-  background:radial-gradient(115% 85% at 62% 18%, #FFFFFF 0%, var(--p-surface) 58%, var(--p-surface-2) 100%);
+  background:
+    linear-gradient(to bottom,
+      rgba(255,255,255,0) 55%,
+      rgba(255,255,255,.72) 82%,
+      var(--p-ground) 100%),
+    radial-gradient(115% 85% at 62% 18%, #FFFFFF 0%, var(--p-surface) 58%, var(--p-surface-2) 100%);
 }
 .hero-stage model-viewer{
   width:100%;height:100%;display:block;
-  background:transparent;outline:none;
+  /* !important: model-viewer sets its own background on the shadow host, which
+     otherwise paints an opaque box over the fade above. */
+  background:transparent !important;
+  background-color:transparent !important;
+  outline:none;
   --poster-color:transparent;
   --progress-bar-color:var(--p-accent);
   --progress-mask:transparent;
@@ -514,22 +530,34 @@ body[dir="rtl"] .step h3{letter-spacing:0;line-height:1.45;}
    HERO QUEUE FIGURE
    =========================================================== */
 .d-figband{padding-block:clamp(28px,4vw,44px) 0;}
+/* The card carries its structure with a shadow rather than a drawn border: the
+   rigid outer rule made it read as a screenshot pasted onto the page. */
 .d-fig{
-  border:1px solid var(--p-rule);border-radius:6px;background:var(--p-surface);
-  padding:18px;transition:border-color .25s ease;
+  border:1px solid var(--p-rule);border-radius:14px;background:var(--p-ground);
+  padding:clamp(20px,3vw,32px);
+  box-shadow:0 1px 2px rgba(14,22,19,.04), 0 8px 24px -12px rgba(14,22,19,.16);
+  transition:box-shadow .25s var(--ease);
 }
-.d-fig:hover{border-color:var(--p-rule-strong);}
-.d-fig-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;gap:10px;}
+.d-fig:hover{box-shadow:0 1px 2px rgba(14,22,19,.05), 0 14px 34px -14px rgba(14,22,19,.2);}
+.d-fig-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px;gap:10px;}
 .d-fig-n{font-family:var(--f-mono);font-size:1.5rem;font-weight:500;font-variant-numeric:tabular-nums;color:var(--p-accent-ink);}
-.d-queue{display:grid;gap:6px;}
+.d-queue{display:grid;gap:8px;}
 .d-q{
-  display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;align-items:center;
-  padding:7px 10px;border-radius:4px;background:var(--p-ground);
-  border:1px solid var(--p-rule);font-size:12.5px;color:var(--p-ink-2);
-  transition:border-color .2s ease,transform .2s var(--ease);
+  display:grid;grid-template-columns:auto 1fr auto auto;gap:14px;align-items:center;
+  padding:13px 16px;border-radius:8px;background:var(--p-ground);
+  border:1px solid var(--p-rule);font-size:13px;color:var(--p-ink-2);
+  transition:border-color .2s ease,background-color .2s ease,transform .2s var(--ease);
 }
-.d-q:hover{border-color:var(--p-rule-strong);transform:translateX(2px);}
+.d-q:hover{border-color:var(--p-rule-strong);background:var(--p-surface);transform:translateX(2px);}
 body[dir="rtl"] .d-q:hover{transform:translateX(-2px);}
+
+/* Rows arrive one at a time — the queue reads as events landing, not as a table
+   that was always there. 150ms apart, on top of the shared [data-reveal] system. */
+.d-queue[data-reveal-group] > [data-reveal]{
+  transform:translateY(10px);
+  transition-delay:calc(var(--i,0) * 150ms);
+}
+.d-queue[data-reveal-group] > [data-reveal].is-in{transform:none;}
 .d-q b{font-weight:500;color:var(--p-ink);}
 .d-q .tick{
   width:15px;height:15px;border-radius:50%;display:grid;place-items:center;
@@ -549,12 +577,17 @@ body[dir="rtl"] .d-q .tag{font-family:var(--f-ar);letter-spacing:0;font-size:10p
 /* ===========================================================
    TRUST STRIP
    =========================================================== */
+/* Lives above .d-foot at the bottom of the page. Only a top rule: the footer
+   below supplies its own, and doubling them drew a 2px band. Left-aligned
+   rather than space-between — with the second group removed, distributing would
+   strand the label against the far edge. */
 .d-trust{
-  border-block:1px solid var(--p-rule);background:var(--p-surface);
-  padding-block:16px;display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;
-  justify-content:space-between;margin-top:clamp(28px,4vw,44px);
+  border-top:1px solid var(--p-rule);
+  padding-block:18px 16px;
+  display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;
 }
-.d-trust .grp{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:12.5px;color:var(--p-ink-2);}
+.d-trust .stack{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.d-trust .lab{flex:0 0 auto;}
 .d-trust .plat{
   border:1px solid var(--p-rule-strong);border-radius:3px;padding:4px 9px;
   font-family:var(--f-mono);font-size:11px;color:var(--p-ink-2);

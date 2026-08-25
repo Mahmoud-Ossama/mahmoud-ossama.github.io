@@ -34,10 +34,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="css/site.css?v=20260825">
+<link rel="stylesheet" href="css/site.css?v=20260826">
 
 <script type="module" src="vendor/model-viewer.min.js"></script>
-<script defer src="js/site.js?v=20260825"></script>
+<script defer src="js/site.js?v=20260826"></script>
 </head>
 <body dir="ltr">
 
@@ -117,12 +117,12 @@
         <span class="lab" data-en="What your team walked in to" data-ar="إيه اللي فريقك هيلاقيه جاهز الصبح؟">What your team walked in to</span>
         <span class="d-fig-n"><bdi>4</bdi></span>
       </div>
-      <div class="d-queue" aria-hidden="true">
-        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="Customer asked where a shipment is" data-ar="عميل بيسأل: طلبي وصل لحد فين؟">Customer asked where a shipment is</span><span class="tag" data-en="Chat" data-ar="محادثات">Chat</span><span class="t"><bdi>23:41</bdi></span></div>
-        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="Supplier invoice read, 14 lines" data-ar="فاتورة مورد اتسجلت، 14 بند">Supplier invoice read, 14 lines</span><span class="tag" data-en="Documents" data-ar="مستندات">Documents</span><span class="t"><bdi>01:12</bdi></span></div>
-        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="New lead scored and written to the CRM" data-ar="عميل جديد اتسجل واتصنّف تلقائيًا">New lead scored and written to the CRM</span><span class="tag" data-en="Systems" data-ar="أنظمة">Systems</span><span class="t"><bdi>03:07</bdi></span></div>
-        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="Weekly sales report built and sent" data-ar="تقرير المبيعات الأسبوعي اتعمل واتبعت">Weekly sales report built and sent</span><span class="tag" data-en="Reporting" data-ar="تقارير">Reporting</span><span class="t"><bdi>05:00</bdi></span></div>
-        <div class="d-q pending"><span class="tick">·</span><span class="body" data-en="A complaint — this one needs judgement" data-ar="شكوى — دي محتاجة قرار من حد">A complaint — this one needs judgement</span><span class="tag" data-en="For the team" data-ar="للفريق">For the team</span><span class="t"><bdi>06:03</bdi></span></div>
+      <div class="d-queue" data-reveal-group aria-hidden="true">
+        <div class="d-q" data-reveal><span class="tick">✓</span><span class="body" data-en="Customer asked where a shipment is" data-ar="عميل بيسأل: طلبي وصل لحد فين؟">Customer asked where a shipment is</span><span class="tag" data-en="Chat" data-ar="محادثات">Chat</span><span class="t"><bdi>23:41</bdi></span></div>
+        <div class="d-q" data-reveal><span class="tick">✓</span><span class="body" data-en="Supplier invoice read, 14 lines" data-ar="فاتورة مورد اتسجلت، 14 بند">Supplier invoice read, 14 lines</span><span class="tag" data-en="Documents" data-ar="مستندات">Documents</span><span class="t"><bdi>01:12</bdi></span></div>
+        <div class="d-q" data-reveal><span class="tick">✓</span><span class="body" data-en="New lead scored and written to the CRM" data-ar="عميل جديد اتسجل واتصنّف تلقائيًا">New lead scored and written to the CRM</span><span class="tag" data-en="Systems" data-ar="أنظمة">Systems</span><span class="t"><bdi>03:07</bdi></span></div>
+        <div class="d-q" data-reveal><span class="tick">✓</span><span class="body" data-en="Weekly sales report built and sent" data-ar="تقرير المبيعات الأسبوعي اتعمل واتبعت">Weekly sales report built and sent</span><span class="tag" data-en="Reporting" data-ar="تقارير">Reporting</span><span class="t"><bdi>05:00</bdi></span></div>
+        <div class="d-q pending" data-reveal><span class="tick">·</span><span class="body" data-en="A complaint — this one needs judgement" data-ar="شكوى — دي محتاجة قرار من حد">A complaint — this one needs judgement</span><span class="tag" data-en="For the team" data-ar="للفريق">For the team</span><span class="t"><bdi>06:03</bdi></span></div>
       </div>
       <p class="d-src" style="margin-top:13px;">
         <span class="mk" aria-hidden="true">&rarr;</span>
@@ -130,18 +130,6 @@
       </p>
     </div>
 
-    <div class="d-trust">
-      <div class="grp">
-        <span class="lab" data-en="Built on" data-ar="مبني على">Built on</span>
-        <span class="plat">WhatsApp Business API</span>
-        <span class="plat">OpenAI</span>
-        <span class="plat">Anthropic</span>
-        <span class="plat">Supabase</span>
-      </div>
-      <div class="grp">
-        <span data-en="AI engineer · Working code on GitHub · Mansoura, Egypt" data-ar="مهندس ذكاء اصطناعي · الكود متاح على GitHub · المنصورة، مصر">AI engineer · Working code on GitHub · Mansoura, Egypt</span>
-      </div>
-    </div>
   </div>
 
   <!-- ══════════════ ZIG 1 — opportunity | automation flow ══════════════ -->
@@ -453,6 +441,17 @@
 
 <!-- ══════════════ FOOTER ══════════════ -->
 <footer class="shell pad">
+  <div class="d-trust" data-reveal>
+    <span class="lab" data-en="Engineered with" data-ar="مُصمم هندسيًا باستخدام">Engineered with</span>
+    <span class="stack">
+      <span class="plat">n8n</span>
+      <span class="plat">RAG Pipelines</span>
+      <span class="plat">Multi-Agent Systems</span>
+      <span class="plat">FastAPI</span>
+      <span class="plat">PostgreSQL</span>
+      <span class="plat">Python</span>
+    </span>
+  </div>
   <div class="d-foot">
     <svg class="mk is-beat" viewBox="0 0 32 32" fill="none" aria-hidden="true"><path class="mk-t" d="M28.64 12.6V8.7L16 1.4 3.36 8.7v3.9" stroke="currentColor" stroke-width="2.6"/><path class="mk-b" d="M28.64 19.4v3.9L16 30.6 3.36 23.3v-3.9" stroke="currentColor" stroke-width="2.6"/><path class="mk-n" d="M16 11.96 23 16 16 20.04 9 16Z"/></svg>
     <span data-en="Mansoura, Egypt · <span dir='ltr'>+20 100 316 9833</span>" data-ar="المنصورة، مصر · <span dir='ltr'>+20 100 316 9833</span>">Mansoura, Egypt · <span dir="ltr">+20 100 316 9833</span></span>
