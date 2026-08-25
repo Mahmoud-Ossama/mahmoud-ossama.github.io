@@ -34,10 +34,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="css/site.css?v=20260826">
+<link rel="stylesheet" href="css/site.css?v=20260829">
 
 <script type="module" src="vendor/model-viewer.min.js"></script>
-<script defer src="js/site.js?v=20260826"></script>
+<script defer src="js/site.js?v=20260829"></script>
 </head>
 <body dir="ltr">
 
@@ -211,59 +211,57 @@
         </div>
       </div>
 
-      <div class="d-famlegend" data-reveal style="margin-top:clamp(30px,4vw,48px);">
-        <span class="fl" data-en="Conversation" data-ar="محادثات">Conversation</span>
-        <span class="fl" data-en="Documents &amp; data" data-ar="مستندات وبيانات">Documents &amp; data</span>
-        <span class="fl" data-en="Systems &amp; workflow" data-ar="أنظمة وسير عمل">Systems &amp; workflow</span>
-        <span class="fl" data-en="Knowledge &amp; search" data-ar="معرفة وبحث">Knowledge &amp; search</span>
-        <span class="fl" data-en="Prediction &amp; scoring" data-ar="تنبؤ وتقييم">Prediction &amp; scoring</span>
-      </div>
 
-      <div class="d-svcs" data-reveal-group>
-        <div class="d-svc lead" data-reveal>
+      <div class="svc-rail" data-reveal>
+        <div class="svc-pointer" aria-hidden="true">
+          <span class="svc-pointer-text" id="svcCat" data-en="Conversation" data-ar="محادثات">Conversation</span>
+        </div>
+        <div class="d-svcs" id="svcTrack" role="list">
+        <div data-cat-en="Conversation" data-cat-ar="محادثات" class="d-svc lead">
           <span class="chips"><span class="fam" data-en="Conversation" data-ar="محادثات">Conversation</span><span class="flag" data-en="Most asked for" data-ar="الأكتر طلبًا">Most asked for</span></span>
           <h3 data-en="Answer WhatsApp around the clock" data-ar="رد على واتساب على مدار اليوم">Answer WhatsApp around the clock</h3>
           <p data-en="Routine questions answered in Arabic and English. Anything unusual reaches your team with the conversation attached." data-ar="الأسئلة المتكررة بيتم الرد عليها بالعربي والإنجليزي، وأي حالة مختلفة بتوصل لفريقك ومعاها المحادثة كاملة.">Routine questions answered in Arabic and English. Anything unusual reaches your team with the conversation attached.</p>
         </div>
-        <div class="d-svc" data-reveal>
+        <div data-cat-en="Conversation" data-cat-ar="محادثات" class="d-svc">
           <span class="chips"><span class="fam" data-en="Conversation" data-ar="محادثات">Conversation</span></span>
           <h3 data-en="Qualify leads before sales sees them" data-ar="افرز العملاء المحتملين قبل ما يوصلوا للمبيعات">Qualify leads before sales sees them</h3>
           <p data-en="Budget, timeline, and need asked once, automatically. Sales opens a finished record and starts on the real conversation." data-ar="الميزانية والتوقيت واحتياج العميل بيتسألوا مرة واحدة أوتوماتيك، والمبيعات بتفتح ملف جاهز وتبدأ المحادثة الحقيقية على طول.">Budget, timeline, and need asked once, automatically. Sales opens a finished record and starts on the real conversation.</p>
         </div>
-        <div class="d-svc" data-reveal>
+        <div data-cat-en="Conversation" data-cat-ar="محادثات" class="d-svc">
           <span class="chips"><span class="fam" data-en="Conversation" data-ar="محادثات">Conversation</span></span>
           <h3 data-en="Take bookings without phone calls" data-ar="احجز مواعيد من غير مكالمات">Take bookings without phone calls</h3>
           <p data-en="Slots, confirmations, and reminders handled in the chat the customer already uses." data-ar="المواعيد والتأكيدات والتذكيرات كلها في نفس الشات اللي العميل بيستخدمه.">Slots, confirmations, and reminders handled in the chat the customer already uses.</p>
         </div>
-        <div class="d-svc" data-reveal>
+        <div data-cat-en="Documents" data-cat-ar="مستندات" class="d-svc">
           <span class="chips"><span class="fam" data-en="Documents" data-ar="مستندات">Documents</span></span>
           <h3 data-en="Turn invoices into data automatically" data-ar="حوّل الفواتير لبيانات أوتوماتيك">Turn invoices into data automatically</h3>
           <p data-en="A PDF or a photo becomes structured rows in your sheet or accounting system, ready for someone to approve." data-ar="الـ PDF أو الصورة بتتحول لبيانات مرتبة في الشيت أو في نظام الحسابات، جاهزة إن حد يراجعها ويعتمدها.">A PDF or a photo becomes structured rows in your sheet or accounting system, ready for someone to approve.</p>
         </div>
-        <div class="d-svc" data-reveal>
+        <div data-cat-en="Systems" data-cat-ar="أنظمة" class="d-svc">
           <span class="chips"><span class="fam" data-en="Systems" data-ar="أنظمة">Systems</span></span>
           <h3 data-en="Keep the CRM current by itself" data-ar="خلي الـ CRM محدّث لوحده">Keep the CRM current by itself</h3>
           <p data-en="Conversations, notes, and stages written back automatically, so nothing depends on remembering." data-ar="المحادثات والملاحظات والمراحل بتتسجل أوتوماتيك، فمفيش حاجة معتمدة على إن حد يفتكر.">Conversations, notes, and stages written back automatically, so nothing depends on remembering.</p>
         </div>
-        <div class="d-svc" data-reveal>
+        <div data-cat-en="Systems" data-cat-ar="أنظمة" class="d-svc">
           <span class="chips"><span class="fam" data-en="Systems" data-ar="أنظمة">Systems</span></span>
           <h3 data-en="Have the weekly report ready before Sunday" data-ar="التقرير الأسبوعي جاهز قبل الأحد">Have the weekly report ready before Sunday</h3>
           <p data-en="Numbers pulled, checked, and sent on Sunday morning, so the meeting starts with the report already read." data-ar="الأرقام بتتجمع وتتراجع وتتبعت صبح الأحد، فالاجتماع بيبدأ والتقرير متقري خلاص.">Numbers pulled, checked, and sent on Sunday morning, so the meeting starts with the report already read.</p>
         </div>
-        <div class="d-svc" data-reveal>
+        <div data-cat-en="Knowledge" data-cat-ar="معرفة" class="d-svc">
           <span class="chips"><span class="fam" data-en="Knowledge" data-ar="معرفة">Knowledge</span></span>
           <h3 data-en="Give your team instant answers from your own files" data-ar="جاوب على فريقك من ملفات الشركة على طول">Give your team instant answers from your own files</h3>
           <p data-en="Policies, prices, and procedures searchable in plain language, so nobody has to interrupt the one person who knows." data-ar="السياسات والأسعار والإجراءات بيتبحث فيها بلغة عادية، فمحدش محتاج يقطع على الشخص الوحيد اللي عارف.">Policies, prices, and procedures searchable in plain language, so nobody has to interrupt the one person who knows.</p>
         </div>
-        <div class="d-svc" data-reveal>
+        <div data-cat-en="Prediction" data-cat-ar="تنبؤ" class="d-svc">
           <span class="chips"><span class="fam" data-en="Prediction" data-ar="تنبؤ">Prediction</span></span>
           <h3 data-en="Forecast demand before you commit stock or shifts" data-ar="توقّع الطلب قبل ما تلتزم بمخزون أو ورديات">Forecast demand before you commit stock or shifts</h3>
           <p data-en="Models trained on your own history, so planning stops being a guess and starts being a range." data-ar="نماذج متدربة على تاريخ شركتك انت، فالتخطيط يبطل تخمين ويبقى نطاق واضح.">Models trained on your own history, so planning stops being a guess and starts being a range.</p>
         </div>
-        <div class="d-svc" data-reveal>
+        <div data-cat-en="Prediction" data-cat-ar="تنبؤ" class="d-svc">
           <span class="chips"><span class="fam" data-en="Prediction" data-ar="تنبؤ">Prediction</span></span>
           <h3 data-en="Score and rank what comes in" data-ar="قيّم ورتّب اللي بيوصلك">Score and rank what comes in</h3>
           <p data-en="Leads, tickets, or applications ordered by your own definition of important, so the team works the top of the list first." data-ar="العملاء المحتملين أو التذاكر أو الطلبات بتترتب حسب تعريفك انت للأهمية، فالفريق يبدأ بالأهم.">Leads, tickets, or applications ordered by your own definition of important, so the team works the top of the list first.</p>
+        </div>
         </div>
       </div>
     </section>

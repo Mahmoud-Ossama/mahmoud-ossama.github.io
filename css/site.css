@@ -650,8 +650,60 @@ body[dir="rtl"] .d-prob .link:hover .arw{transform:scaleX(-1) translateX(3px);}
    =========================================================== */
 /* Nine cards on a 4-column auto-fit leave one alone on the last row.
    Capped at 3 so the grid resolves 3/3/3. */
-.d-svcs{display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:12px;}
-@media (min-width:1000px){ .d-svcs{grid-template-columns:repeat(3,minmax(0,1fr));} }
+/* ── work examples: a centre-locked horizontal carousel ────────────────────
+   The rail is full-bleed inside the shell so cards can sit half-off both
+   edges; the centred card is the one being read. */
+.svc-rail{position:relative;margin-top:clamp(26px,3.5vw,40px);}
+.d-svcs{
+  display:flex;flex-wrap:nowrap;gap:16px;
+  overflow-x:auto;overflow-y:visible;
+  scroll-snap-type:x mandatory;
+  scroll-padding-inline:50%;
+  /* half the rail on each side so the first and last cards can reach centre */
+  padding-block:44px 8px;
+  padding-inline:calc(50% - (var(--svc-w) / 2));
+  scrollbar-width:none;-ms-overflow-style:none;
+  overscroll-behavior-x:contain;
+  -webkit-overflow-scrolling:touch;
+}
+.d-svcs::-webkit-scrollbar{display:none;}
+.d-svcs > .d-svc{
+  --svc-w:296px;
+  flex:0 0 var(--svc-w);width:var(--svc-w);
+  scroll-snap-align:center;scroll-snap-stop:always;
+  transform:scale(.9);opacity:.5;
+  transition:transform .38s var(--ease),opacity .38s var(--ease),box-shadow .38s var(--ease),border-color .2s ease;
+}
+.d-svcs{--svc-w:296px;}
+.d-svcs > .d-svc.is-centre{
+  transform:scale(1.1);opacity:1;
+  box-shadow:0 2px 6px rgba(14,22,19,.06), 0 20px 44px -18px rgba(14,22,19,.28);
+  z-index:2;
+}
+/* the centre indicator — replaces the old category tab row */
+.svc-pointer{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  z-index:3;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+.svc-pointer-text{
+  font-family:var(--f-mono);font-size:10.5px;font-weight:500;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--p-accent-ink);
+  background:var(--p-accent-soft);border:1px solid var(--p-accent);
+  border-radius:999px;padding:5px 14px;white-space:nowrap;
+}
+body[dir="rtl"] .svc-pointer-text{font-family:var(--f-ar);letter-spacing:0;font-size:12px;}
+.svc-pointer::after{
+  content:"";width:1px;height:14px;background:var(--p-accent);opacity:.55;
+}
+/* .d-svc:hover sets translateY(-2px), which would replace the carousel's scale
+   and make a hovered card snap back to full size out of centre. */
+.d-svcs > .d-svc:hover,.d-svcs > .d-svc:focus-within{transform:scale(.9);}
+.d-svcs > .d-svc.is-centre:hover,.d-svcs > .d-svc.is-centre:focus-within{transform:scale(1.1);}
+@media (max-width:560px){ .d-svcs,.d-svcs > .d-svc{--svc-w:250px;} }
+@media (prefers-reduced-motion: reduce){
+  .d-svcs{scroll-behavior:auto;}
+  .d-svcs > .d-svc{transition:none;}
+}
 .d-svc{
   border:1px solid var(--p-rule);border-radius:5px;background:var(--p-surface);
   padding:17px 18px;display:flex;flex-direction:column;gap:7px;

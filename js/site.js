@@ -128,6 +128,68 @@
     for(var j=0;j<items.length;j++){ io.observe(items[j]); }
   }
 
+  /* ===========================================================
+     WORK EXAMPLES — centre-locked carousel
+     The centred card is the one being read, and the pointer above the rail
+     names its category. Centre is measured against the RAIL, not the viewport:
+     the rail is not full-width, so a viewport-centre test drifts.
+     =========================================================== */
+  function svcCarousel(){
+    var track = document.getElementById("svcTrack");
+    var label = document.getElementById("svcCat");
+    if(!track || !label) return;
+    var cards = track.querySelectorAll(".d-svc");
+    if(!cards.length) return;
+
+    function setCentre(card){
+      if(card.classList.contains("is-centre")) return;
+      for(var i=0;i<cards.length;i++){ cards[i].classList.remove("is-centre"); }
+      card.classList.add("is-centre");
+      var en = card.getAttribute("data-cat-en") || "";
+      var ar = card.getAttribute("data-cat-ar") || en;
+      /* keep both so renderLang() can swap it on a language change */
+      label.setAttribute("data-en", en);
+      label.setAttribute("data-ar", ar);
+      label.textContent = (body.getAttribute("dir") === "rtl") ? ar : en;
+    }
+
+    function pick(){
+      var box = track.getBoundingClientRect();
+      var mid = box.left + box.width / 2;
+      var best = null, bestD = Infinity;
+      for(var i=0;i<cards.length;i++){
+        var r = cards[i].getBoundingClientRect();
+        var d = Math.abs((r.left + r.width / 2) - mid);
+        if(d < bestD){ bestD = d; best = cards[i]; }
+      }
+      if(best) setCentre(best);
+    }
+
+    /* rAF alone stalls in a background tab and the rail would latch on one
+       card, so a timer races it — same guard the scrollytelling uses. */
+    var pending = false;
+    function onScroll(){
+      if(pending) return;
+      pending = true;
+      var done = false;
+      var run = function(){ if(done) return; done = true; pending = false; pick(); };
+      requestAnimationFrame(run);
+      setTimeout(run, 120);
+    }
+
+    track.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    pick();
+
+    /* open on the lead card rather than at the rail's start edge */
+    var lead = track.querySelector(".d-svc.lead") || cards[0];
+    if(lead){
+      var lr = lead.getBoundingClientRect(), tr = track.getBoundingClientRect();
+      track.scrollLeft += (lr.left + lr.width / 2) - (tr.left + tr.width / 2);
+      pick();
+    }
+  }
+
   function chartReveal(){
     var chart = document.getElementById("dChart");
     if(!chart) return;
@@ -668,6 +730,7 @@
   calc();
   reveal();
   chartReveal();
+  svcCarousel();
 
   /* rAF alone is not enough: it never fires while the tab is in the
      background, which would leave the hero permanently invisible for
