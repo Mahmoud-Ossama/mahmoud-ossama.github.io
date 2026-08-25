@@ -34,10 +34,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="css/site.css?v=20260831">
+<link rel="stylesheet" href="css/site.css?v=20260901">
 
 <script type="module" src="vendor/model-viewer.min.js"></script>
-<script defer src="js/site.js?v=20260831"></script>
+<script defer src="js/site.js?v=20260901"></script>
 </head>
 <body dir="ltr">
 
@@ -89,7 +89,7 @@
         environment-image="neutral"
         disable-tap
         loading="eager"></model-viewer>
-      <p class="hero-cap" aria-hidden="true"><i></i><span data-en="In &rarr; processed &rarr; out" data-ar="داخل ← معالجة ← خارج">In &rarr; processed &rarr; out</span></p>
+      <p class="hero-cap" data-reveal aria-hidden="true"><i></i><span data-en="In &rarr; processed &rarr; out" data-ar="داخل ← معالجة ← خارج">In &rarr; processed &rarr; out</span></p>
     </div>
     <div class="hero-scrim" aria-hidden="true"></div>
 
@@ -109,8 +109,65 @@
 
   </section>
 
-  <!-- ══════════════ OVERNIGHT QUEUE + TRUST ══════════════ -->
+  <!-- ══════════════ THE PILE → THE RIGHT ANSWER → THE MORNING ══════════════
+       Three beats. The section opens on a backlog every owner recognises, with
+       no technology in it; then pairs each kind of work with what actually gets
+       built for it, in business words; then shows the morning that results.
+       The order matters: naming the technology first is what makes this kind of
+       section read as a services list. ══════════════════════════════════════ -->
+  <section class="shell pad d-pile" id="operations" aria-labelledby="pileTitle">
+    <header class="d-pile-head">
+      <p class="lab" data-reveal data-en="Where the day actually goes" data-ar="الشغل بيروح فين بالظبط">Where the day actually goes</p>
+      <h2 id="pileTitle" data-reveal
+          data-en="The workday starts &mdash; and the backlog started before it"
+          data-ar="يوم الشغل بيبدأ… والمهام بدأت تتراكم قبله">The workday starts &mdash; and the backlog started before it</h2>
+      <p class="d-pile-sub" data-reveal
+         data-en="Every morning opens on the same pile: messages waiting on a reply, invoices waiting to be entered, leads waiting on follow-up, and numbers waiting for someone to read them."
+         data-ar="كل يوم بيفتح على نفس الكومة: رسايل مستنية رد، فواتير مستنية تسجيل، عملاء مستنيين متابعة، وأرقام مستنية حد يقراها.">Every morning opens on the same pile: messages waiting on a reply, invoices waiting to be entered, leads waiting on follow-up, and numbers waiting for someone to read them.</p>
+    </header>
+
+    <p class="d-pile-turn" data-reveal
+       data-en="None of it is the same problem, so none of it takes the same solution."
+       data-ar="ودي مش كلها نفس المشكلة، وبالتالي مش كلها ليها نفس الحل.">None of it is the same problem, so none of it takes the same solution.</p>
+
+    <ol class="d-rows" data-reveal-group>
+      <li class="d-row" data-reveal>
+        <span class="d-row-k" data-en="Customer requests" data-ar="طلبات العملاء">Customer requests</span>
+        <p class="d-row-p" data-en="&ldquo;The same question comes in all day, and someone has to stop and answer it.&rdquo;" data-ar="«نفس السؤال بيتكرر طول اليوم، ولازم حد يسيب شغله ويرد.»">&ldquo;The same question comes in all day, and someone has to stop and answer it.&rdquo;</p>
+        <p class="d-row-a" data-en="A system that reads the request, finds the answer where it actually lives, and replies when it is safe to &mdash; and hands over the rest." data-ar="نظام بيفهم الطلب، يجيب المعلومة من مكانها الصح، ويرد لما يكون الرد واضح — ويسلّم الباقي للفريق.">A system that reads the request, finds the answer where it actually lives, and replies when it is safe to &mdash; and hands over the rest.</p>
+      </li>
+      <li class="d-row" data-reveal>
+        <span class="d-row-k" data-en="Invoices &amp; documents" data-ar="الفواتير والمستندات">Invoices &amp; documents</span>
+        <p class="d-row-p" data-en="&ldquo;Every sheet gets read and typed in by hand.&rdquo;" data-ar="«كل ورقة لازم حد يقراها ويدخّلها بإيده.»">&ldquo;Every sheet gets read and typed in by hand.&rdquo;</p>
+        <p class="d-row-a" data-en="A system that reads the document, pulls out the figures, checks them against what you already hold, and files them where they belong." data-ar="نظام بيقرا المستند، يطلّع الأرقام، يراجعها على اللي عندك، ويحطها في مكانها.">A system that reads the document, pulls out the figures, checks them against what you already hold, and files them where they belong.</p>
+      </li>
+      <li class="d-row" data-reveal>
+        <span class="d-row-k" data-en="New leads" data-ar="العملاء المحتملين">New leads</span>
+        <p class="d-row-p" data-en="&ldquo;Good opportunities go cold because follow-up is slow or uneven.&rdquo;" data-ar="«فرص كويسة بتبرد لأن المتابعة بتتأخر أو مش منتظمة.»">&ldquo;Good opportunities go cold because follow-up is slow or uneven.&rdquo;</p>
+        <p class="d-row-a" data-en="A system that sorts who is worth calling first and moves each one to its next step, so nothing sits unattended." data-ar="نظام بيرتّب مين يستاهل مكالمة الأول، وبيحرّك كل عميل للخطوة اللي بعدها، فمفيش حاجة بتقف.">A system that sorts who is worth calling first and moves each one to its next step, so nothing sits unattended.</p>
+      </li>
+      <li class="d-row" data-reveal>
+        <span class="d-row-k" data-en="Numbers &amp; reporting" data-ar="الأرقام والتقارير">Numbers &amp; reporting</span>
+        <p class="d-row-p" data-en="&ldquo;We have the data. Nobody has the hours to sit with it.&rdquo;" data-ar="«البيانات موجودة، بس محدش فاضي يقعد يحللها.»">&ldquo;We have the data. Nobody has the hours to sit with it.&rdquo;</p>
+        <p class="d-row-a" data-en="Analysis and forecasting that surface the patterns and the figures a decision actually turns on &mdash; on a schedule, not on request." data-ar="تحليل وتوقعات بتطلّع الأنماط والأرقام اللي القرار بيتوقف عليها — في مواعيد ثابتة، من غير ما حد يطلبها.">Analysis and forecasting that surface the patterns and the figures a decision actually turns on &mdash; on a schedule, not on request.</p>
+      </li>
+      <li class="d-row is-human" data-reveal>
+        <span class="d-row-k" data-en="The unusual case" data-ar="الحالات غير العادية">The unusual case</span>
+        <p class="d-row-p" data-en="&ldquo;Some of it should never be decided by a machine.&rdquo;" data-ar="«وفيه حاجات المفروض ما تتاخدش بقرار آلي.»">&ldquo;Some of it should never be decided by a machine.&rdquo;</p>
+        <p class="d-row-a" data-en="The system gathers the history, prepares the case, and puts it in front of the right person. The decision stays yours." data-ar="النظام بيجمّع التفاصيل والتاريخ، يجهّز الحالة، ويحطها قدام الشخص المناسب. والقرار يفضل قراركم.">The system gathers the history, prepares the case, and puts it in front of the right person. The decision stays yours.</p>
+      </li>
+    </ol>
+
+    <p class="d-pile-thesis" data-reveal
+       data-en="We don&rsquo;t sell chatbots. We look at where the work actually gets stuck, and build the thing that fits it."
+       data-ar="إحنا مش بنبيع Chatbots. بنشوف الشغل بيقف فين بالظبط، وبنبني الحاجة اللي تناسبه.">We don&rsquo;t sell chatbots. We look at where the work actually gets stuck, and build the thing that fits it.</p>
+  </section>
+
+  <!-- ══════════════ THE MORNING THAT RESULTS ══════════════ -->
   <div class="shell pad d-figband">
+    <p class="d-fig-lede" data-reveal
+       data-en="So the morning looks different. Your team doesn&rsquo;t start by catching up &mdash; it starts at the point that actually needed them."
+       data-ar="فالصبح بقى شكله مختلف. فريقك مش بيبدأ يومه وهو بيلحق المتأخر — بيبدأ من النقطة اللي فعلاً كانت محتاجاه.">So the morning looks different. Your team doesn&rsquo;t start by catching up &mdash; it starts at the point that actually needed them.</p>
     <div class="d-fig" data-reveal role="img"
          aria-label="An overnight work queue. Four routine items are marked done — a shipment question at 23:41, a supplier invoice at 01:12, a new lead written to the CRM at 03:07, and the weekly sales report at 05:00. A fifth item, a complaint needing judgement, is still waiting for the team at 06:03.">
       <div class="d-fig-head">
@@ -216,6 +273,12 @@
         <div class="svc-pointer" aria-hidden="true">
           <span class="svc-pointer-text" id="svcCat" data-en="Conversation" data-ar="محادثات">Conversation</span>
         </div>
+        <button class="svc-arrow svc-prev" type="button" id="svcPrev" aria-label="Previous example">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10.5 2.5 5 8l5.5 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="svc-arrow svc-next" type="button" id="svcNext" aria-label="Next example">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5.5 2.5 11 8l-5.5 5.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
         <div class="d-svcs" id="svcTrack" role="list">
         <div data-cat-en="Conversation" data-cat-ar="محادثات" class="d-svc lead">
           <span class="chips"><span class="fam" data-en="Conversation" data-ar="محادثات">Conversation</span><span class="flag" data-en="Most asked for" data-ar="الأكتر طلبًا">Most asked for</span></span>

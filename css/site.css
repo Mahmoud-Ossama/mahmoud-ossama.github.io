@@ -547,6 +547,86 @@ body[dir="rtl"] .step h3{letter-spacing:0;line-height:1.45;}
 /* ===========================================================
    HERO QUEUE FIGURE
    =========================================================== */
+/* ══════════════ THE PILE — problem, then the right answer ══════════════
+   The rows are the argument of this section: each one holds the owner's own
+   complaint next to what gets built for it. They are set as a two-column band
+   so the eye reads complaint → answer across, and the hairline between them
+   carries the transformation instead of an arrow glyph. */
+.d-pile{padding-block:clamp(52px,8vw,92px) clamp(20px,3vw,32px);}
+.d-pile-head{max-width:66ch;}
+.d-pile-head h2{
+  font-family:var(--f-display);font-weight:var(--f-display-weight);
+  font-size:clamp(1.5rem,3.4vw,2.25rem);line-height:1.2;letter-spacing:-.018em;
+  margin:6px 0 14px;
+}
+body[dir="rtl"] .d-pile-head h2{letter-spacing:0;line-height:1.34;}
+.d-pile-sub{color:var(--p-ink-2);font-size:1.02rem;line-height:1.62;max-width:56ch;}
+
+/* the hinge between "here is the pile" and "here is what each piece needs" */
+.d-pile-turn{
+  margin:clamp(30px,4vw,44px) 0 clamp(16px,2vw,22px);
+  font-family:var(--f-display);font-weight:var(--f-display-weight);
+  font-size:clamp(1.02rem,1.8vw,1.22rem);color:var(--p-ink);
+  padding-inline-start:14px;border-inline-start:2px solid var(--p-accent);
+  max-width:52ch;line-height:1.45;
+}
+
+.d-rows{list-style:none;margin:0;padding:0;border-top:1px solid var(--p-rule);}
+.d-row{
+  display:grid;gap:6px 30px;align-items:baseline;
+  grid-template-columns:minmax(120px,150px) minmax(0,1fr);
+  padding:clamp(17px,2.4vw,23px) 0;
+  border-bottom:1px solid var(--p-rule);
+}
+@media (min-width:900px){
+  .d-row{grid-template-columns:minmax(130px,160px) minmax(0,.92fr) minmax(0,1.08fr);}
+}
+.d-row-k{
+  font-family:var(--f-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--p-ink-3);padding-top:.34em;
+}
+/* Arabic takes neither the tracking nor the uppercasing: letter-spacing pulls
+   the joined script apart, and there is no case to transform. Same treatment
+   the other mono labels on the page already get. */
+body[dir="rtl"] .d-row-k{
+  font-family:var(--f-ar);letter-spacing:0;text-transform:none;font-size:11.5px;
+}
+body[dir="rtl"] .d-row-p{font-family:var(--f-ar);}
+.d-row-p{
+  color:var(--p-ink);font-size:1rem;line-height:1.5;
+  font-family:var(--f-display);font-weight:500;
+}
+.d-row-a{color:var(--p-ink-2);font-size:.95rem;line-height:1.62;}
+@media (min-width:900px){
+  .d-row-a{padding-inline-start:30px;border-inline-start:1px solid var(--p-rule);}
+}
+/* the one row that ends with a person, not a system */
+.d-row.is-human .d-row-k{color:var(--p-cta);}
+.d-row.is-human .d-row-a{color:var(--p-ink);}
+
+.d-pile-thesis{
+  margin:clamp(30px,4vw,44px) 0 0;max-width:54ch;
+  font-family:var(--f-display);font-weight:var(--f-display-weight);
+  font-size:clamp(1.06rem,2vw,1.3rem);line-height:1.42;color:var(--p-ink);
+}
+
+/* Directional entrance, mirrored per language: rows arrive from the edge the
+   reader starts at — the right in Arabic, the left in English — so the reveal
+   runs with the reading direction instead of against it. 150ms apart. */
+.d-rows[data-reveal-group] > [data-reveal]{
+  transform:translateX(calc(var(--rd,-1) * 26px));
+  transition:opacity .62s var(--ease),transform .62s var(--ease);
+  transition-delay:calc(var(--i,0) * 150ms);
+}
+.d-rows[data-reveal-group] > [data-reveal].is-in{transform:none;}
+body[dir="rtl"] .d-rows[data-reveal-group] > [data-reveal]{--rd:1;}
+
+.d-fig-lede{
+  max-width:56ch;margin:0 0 clamp(18px,2.4vw,26px);
+  font-family:var(--f-display);font-weight:var(--f-display-weight);
+  font-size:clamp(1.02rem,1.9vw,1.24rem);line-height:1.45;color:var(--p-ink);
+}
+
 .d-figband{padding-block:clamp(28px,4vw,44px) 0;}
 /* The card carries its structure with a shadow rather than a drawn border: the
    rigid outer rule made it read as a screenshot pasted onto the page. */
@@ -662,6 +742,43 @@ body[dir="rtl"] .d-prob .link:hover .arw{transform:scaleX(-1) translateX(3px);}
    The rail is full-bleed inside the shell so cards can sit half-off both
    edges; the centred card is the one being read. */
 .svc-rail{position:relative;margin-top:clamp(26px,3.5vw,40px);}
+
+/* ── rail affordance ────────────────────────────────────────────────────
+   A centre-snapped rail with no scrollbar gives the reader nothing to tell
+   them it moves, so it reads as a static card. Two things fix that: real
+   arrow controls (also the keyboard path), and a single small nudge the
+   first time the rail is seen — the cards drift and settle once, which
+   reads as "this moves" without becoming an ambient animation. */
+.svc-arrow{
+  position:absolute;top:calc(50% + 18px);transform:translateY(-50%);
+  z-index:4;width:38px;height:38px;border-radius:50%;
+  display:grid;place-items:center;cursor:pointer;
+  background:var(--p-ground);border:1px solid var(--p-rule-2);
+  color:var(--p-ink-2);
+  box-shadow:0 1px 3px rgba(14,22,19,.05), 0 8px 20px -10px rgba(14,22,19,.22);
+  transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s var(--ease);
+}
+.svc-arrow svg{width:16px;height:16px;}
+.svc-arrow:hover{background:var(--p-accent);border-color:var(--p-accent);color:#fff;}
+.svc-arrow:active{transform:translateY(-50%) scale(.94);}
+.svc-arrow:focus-visible{outline:2px solid var(--p-accent);outline-offset:3px;}
+.svc-arrow[disabled]{opacity:.32;pointer-events:none;}
+/* physical edges — the glyphs already point the right way per language, and
+   the JS maps each button to the correct scroll direction for the dir. */
+.svc-prev{inset-inline-start:-4px;}
+.svc-next{inset-inline-end:-4px;}
+body[dir="rtl"] .svc-prev svg{transform:scaleX(-1);}
+body[dir="rtl"] .svc-next svg{transform:scaleX(-1);}
+@media (max-width:640px){
+  .svc-arrow{width:34px;height:34px;}
+  .svc-prev{inset-inline-start:2px;}
+  .svc-next{inset-inline-end:2px;}
+}
+
+/* The nudge is done by scrolling the rail in JS, not by transforming the
+   cards: the cards already carry scale(.9)/scale(1.1) for the centre state,
+   and animating transform here would stomp it mid-hint. Scrolling also shows
+   the snap behaviour, which is the thing being advertised. */
 .d-svcs{
   display:flex;flex-wrap:nowrap;gap:16px;
   overflow-x:auto;overflow-y:visible;
@@ -1032,12 +1149,28 @@ body[dir="rtl"] .calc-badge .lbl{font-size:11px;}
 }
 [data-reveal].is-in{opacity:1;transform:none;}
 
-/* the hero reveals on mount rather than on scroll */
-#hero [data-reveal]{opacity:0;transform:translateY(14px);}
-#hero.is-hero-in [data-reveal]{opacity:1;transform:none;}
-#hero.is-hero-in [data-reveal]:nth-child(2){transition-delay:.08s;}
-#hero.is-hero-in [data-reveal]:nth-child(3){transition-delay:.16s;}
-#hero.is-hero-in [data-reveal]:nth-child(4){transition-delay:.24s;}
+/* The hero reveals on mount rather than on scroll.
+
+   Pacing: the old 80ms step landed the whole block at once, which reads as a
+   page-load flicker rather than a sequence. The step is now 520ms — under the
+   ~1.5s it takes to actually read each line, so it never feels like waiting,
+   but long enough that the eye arrives on each element separately and the
+   promise lands before the qualifier. Order is eyebrow → headline → paragraph
+   → buttons → the in/processed/out caption on the canvas, which reads last
+   because it labels the machine, not the copy. */
+#hero [data-reveal]{
+  opacity:0;transform:translateY(14px);
+  transition:opacity .85s var(--ease),transform .85s var(--ease);
+}
+#hero.is-hero-in [data-reveal]{
+  opacity:1;transform:none;
+  transition-delay:calc(var(--i,0) * 520ms);
+}
+.hero-copy .lab{--i:0;}
+.hero-copy h1{--i:1;}
+.hero-copy .sub{--i:2;}
+.hero-copy .acts{--i:3;}
+.hero-cap{--i:4;}
 
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto;}

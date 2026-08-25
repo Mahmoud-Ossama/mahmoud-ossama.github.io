@@ -183,10 +183,85 @@
 
     /* open on the lead card rather than at the rail's start edge */
     var lead = track.querySelector(".d-svc.lead") || cards[0];
-    if(lead){
-      var lr = lead.getBoundingClientRect(), tr = track.getBoundingClientRect();
-      track.scrollLeft += (lr.left + lr.width / 2) - (tr.left + tr.width / 2);
+    function centreOn(card, smooth){
+      if(!card) return;
+      var cr = card.getBoundingClientRect(), tr2 = track.getBoundingClientRect();
+      var delta = (cr.left + cr.width / 2) - (tr2.left + tr2.width / 2);
+      if(smooth && !REDUCE && track.scrollBy){
+        track.scrollBy({ left: delta, behavior: "smooth" });
+      } else {
+        track.scrollLeft += delta;
+      }
       pick();
+    }
+    centreOn(lead, false);
+
+    /* ── arrows ──────────────────────────────────────────────────────────
+       step() moves by one card in *reading* order. In RTL the rail's
+       scrollLeft runs the other way, so "previous" and "next" are mapped
+       through the document direction rather than hard-coded to left/right. */
+    function step(dirSign){
+      var rtl = body.getAttribute("dir") === "rtl";
+      var order = Array.prototype.slice.call(cards);
+      if(rtl) order.reverse();
+      var idx = 0;
+      for(var i=0;i<order.length;i++){ if(order[i].classList.contains("is-centre")){ idx = i; break; } }
+      var next = Math.min(order.length - 1, Math.max(0, idx + dirSign));
+      centreOn(order[next], true);
+    }
+    var prevBtn = document.getElementById("svcPrev");
+    var nextBtn = document.getElementById("svcNext");
+    if(prevBtn) prevBtn.addEventListener("click", function(){ step(-1); });
+    if(nextBtn) nextBtn.addEventListener("click", function(){ step(1); });
+
+    function syncArrows(){
+      if(!prevBtn || !nextBtn) return;
+      var order = Array.prototype.slice.call(cards);
+      if(body.getAttribute("dir") === "rtl") order.reverse();
+      var idx = 0;
+      for(var i=0;i<order.length;i++){ if(order[i].classList.contains("is-centre")){ idx = i; break; } }
+      prevBtn.disabled = idx === 0;
+      nextBtn.disabled = idx === order.length - 1;
+      var rtl = body.getAttribute("dir") === "rtl";
+      prevBtn.setAttribute("aria-label", rtl ? "المثال السابق" : "Previous example");
+      nextBtn.setAttribute("aria-label", rtl ? "المثال التالي" : "Next example");
+    }
+    track.addEventListener("scroll", syncArrows, { passive: true });
+    document.getElementById("langBtn").addEventListener("click", function(){
+      setTimeout(syncArrows, 0);
+    });
+    syncArrows();
+
+    /* keyboard: the rail is focusable, so arrow keys should drive it */
+    track.setAttribute("tabindex", "0");
+    track.addEventListener("keydown", function(ev){
+      if(ev.key === "ArrowRight"){ ev.preventDefault(); step(body.getAttribute("dir") === "rtl" ? -1 : 1); }
+      else if(ev.key === "ArrowLeft"){ ev.preventDefault(); step(body.getAttribute("dir") === "rtl" ? 1 : -1); }
+    });
+
+    /* ── the one-time nudge ──────────────────────────────────────────────
+       Fires once, the first time the rail is actually seen: drift one third
+       of a card toward the next one and settle back. Enough to read as "this
+       moves", short enough not to become ambient decoration. */
+    if(!REDUCE && "IntersectionObserver" in window){
+      var hinted = false;
+      try{ hinted = sessionStorage.getItem("svc-hint") === "1"; }catch(e){}
+      if(!hinted){
+        var hio = new IntersectionObserver(function(entries){
+          if(!entries[0].isIntersecting) return;
+          hio.disconnect();
+          try{ sessionStorage.setItem("svc-hint", "1"); }catch(e){}
+          var rtl = body.getAttribute("dir") === "rtl";
+          var amount = (cards[0].getBoundingClientRect().width || 296) * 0.34;
+          var out = rtl ? -amount : amount;
+          setTimeout(function(){
+            if(!track.scrollBy){ return; }
+            track.scrollBy({ left: out, behavior: "smooth" });
+            setTimeout(function(){ track.scrollBy({ left: -out, behavior: "smooth" }); }, 620);
+          }, 420);
+        }, { threshold: 0.45 });
+        hio.observe(track);
+      }
     }
   }
 
@@ -610,10 +685,9 @@
      steady". That is the frame that answers the calculator, so a change
      to any input pulses the canvas and drives it there. */
   var capacityViz = document.getElementById("capacityViz");
-  var capSeek = capacityViz ? makeSeeker(capacityViz) : null;
   var badgeVal = document.getElementById("calcBadgeVal");
   var badgeLbl = document.getElementById("calcBadgeLbl");
-  var recalcTimer = null, pulseTimer = null;
+  var pulseTimer = null;
 
   function reactToInput(extraCapacity, unit){
     if(!capacityViz) return;
@@ -628,10 +702,12 @@
     clearTimeout(pulseTimer);
     pulseTimer = setTimeout(function(){ capacityViz.classList.remove("is-recalc"); }, 950);
 
-    clearTimeout(recalcTimer);
-    recalcTimer = setTimeout(function(){
-      if(capacityViz.getAttribute("data-onscreen") === "1" && capSeek) capSeek(10.9, 700);
-    }, 220);
+    /* Deliberately NOT seeking the canvas any more. Driving it to the
+       "Capacity" frame (10.9s) answered the calculator, but a seek hands the
+       clock to the host and the scene then holds that frame — so the canvas
+       sat frozen from the first paint, because the initial recompute fired it
+       too. The pulse above and the badge carry the recalc feedback; the scene
+       keeps running its own 12s loop like every other canvas on the page. */
   }
 
   /* count-up for the headline figure; falls back to a plain write */
