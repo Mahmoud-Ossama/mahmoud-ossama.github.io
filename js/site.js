@@ -620,28 +620,47 @@
   })();
 
   /* ===========================================================
-     3D HERO MODEL
-     model-viewer renders on demand, but auto-rotate keeps asking
-     for frames. Stop the turntable once the hero is off-screen.
+     HERO SCULPTURE
+     The component owns its own render loop and already parks
+     itself when scrolled out of view or the tab is hidden, so
+     there is no turntable to start and stop from here. All this
+     does is gate the reveal: the stage stays at opacity 0 until
+     the first valid frame is on the canvas, so the visitor never
+     sees the scene initialise or the camera settle.
      =========================================================== */
-  (function heroModel(){
+  (function heroSculpture(){
     var hero = document.getElementById("hero");
-    var mv = document.getElementById("heroModel");
-    if(!hero || !mv) return;
+    var machine = document.getElementById("heroMachine");
+    if(!hero) return;
 
-    mv.addEventListener("load", function(){ hero.classList.add("is-ready"); });
-    mv.addEventListener("error", function(){ hero.classList.add("is-ready","is-failed"); });
+    function ready(){ hero.classList.add("is-ready"); }
+    function failed(){ hero.classList.add("is-ready","is-failed"); }
 
-    if(REDUCE){ mv.removeAttribute("auto-rotate"); return; }
+    /* No custom element at all (module blocked, or a browser without
+       WebGL/customElements): fall through to the watermark rather than
+       leaving an empty column. */
+    if(!machine || !("customElements" in window)){ failed(); return; }
 
-    if("IntersectionObserver" in window){
-      new IntersectionObserver(function(entries){
-        entries.forEach(function(e){
-          if(e.isIntersecting){ mv.setAttribute("auto-rotate",""); }
-          else { mv.removeAttribute("auto-rotate"); }
-        });
-      }, { rootMargin: "80px 0px" }).observe(hero);
-    }
+    /* The element upgrades the moment its module evaluates, which can be
+       before this deferred script runs — so it may already have drawn and
+       announced. Read the sticky attribute first; only subscribe if the
+       event is still ahead of us. */
+    if(machine.hasAttribute("data-ready")){ ready(); return; }
+    if(machine.hasAttribute("data-failed")){ failed(); return; }
+
+    machine.addEventListener("machine-ready", ready, { once:true });
+    machine.addEventListener("machine-error", failed, { once:true });
+
+    /* Backstop, for a module that never arrives or a context that dies
+       without throwing: show the watermark rather than a hole. */
+    var t = setTimeout(function(){
+      if(hero.classList.contains("is-ready")) return;
+      if(machine.hasAttribute("data-ready")){ ready(); return; }
+      failed();
+    }, 6000);
+    function stop(){ clearTimeout(t); }
+    machine.addEventListener("machine-ready", stop, { once:true });
+    machine.addEventListener("machine-error", stop, { once:true });
   })();
 
   /* ===========================================================
