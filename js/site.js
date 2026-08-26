@@ -258,40 +258,123 @@
   }
 
   /* ===========================================================
-     MORNING QUEUE ROWS — one observer, group stagger
-     The page-wide [data-reveal] system observes each element separately, so
-     each row fired when it personally scrolled in and the stagger was never
-     seen as a sequence. This watches the queue once, then lets all five rows
-     run off that single trigger with an index delay. Only the rows inside the
-     card move; the paragraphs around it keep the page-wide reveal.
-     =========================================================== */
-  function queueRows(){
-    var list = document.getElementById("queueRows");
-    if(!list) return;
-    var rows = list.querySelectorAll(".d-q");
-    if(!rows.length) return;
+     THE NIGHT SHIFT — the section's sequence
+     Five rows walk pending -> working -> done, except the last, which is
+     prepared for a person instead. One timeline, one observer.
 
-    for(var i=0;i<rows.length;i++){
-      rows[i].style.transitionDelay = (i * 150) + "ms";
+     Nothing here changes layout: every row's steps and outcome are already
+     laid out at full size and only their opacity moves, so the list holds
+     its final height from the first frame and a replay cannot shift the
+     page. Timers are tracked so a replay can cancel a run in flight.
+     =========================================================== */
+  function nightShift(){
+    var feed = document.getElementById("nightFeed");
+    var turn = document.getElementById("nightTurn");
+    var morning = document.getElementById("nightMorning");
+    if(!feed || !turn || !morning) return;
+
+    var items = [].slice.call(feed.querySelectorAll(".d-item"));
+    if(!items.length) return;
+
+    var ARRIVE_FIRST = 350, ARRIVE_GAP = 560;
+    var TURN_PAUSE   = 620;
+    var WORK_LEAD    = 800, WORK_GAP = 780, STEP_GAP = 340, RESOLVE_PAD = 420;
+
+    var timers = [];
+    function at(ms, fn){ timers.push(setTimeout(fn, ms)); }
+    function clearAll(){
+      for(var i=0;i<timers.length;i++){ clearTimeout(timers[i]); }
+      timers = [];
     }
 
-    function show(){ list.classList.add("is-visible"); }
-    if(REDUCE || !("IntersectionObserver" in window)){ show(); return; }
+    /* Only the transient state classes are cleared; .is-human is authored in
+       the markup and identifies the exception row for good. */
+    function reset(){
+      clearAll();
+      for(var i=0;i<items.length;i++){
+        items[i].classList.remove("is-in","is-working","is-done","is-ready");
+        var st = items[i].querySelectorAll(".d-step");
+        for(var j=0;j<st.length;j++){ st[j].classList.remove("is-on"); }
+      }
+      turn.classList.remove("is-in");
+      morning.classList.remove("is-in");
+    }
 
-    var io = new IntersectionObserver(function(entries){
-      if(!entries[0].isIntersecting) return;
-      io.disconnect();
-      show();
-    }, { threshold: 0, rootMargin: "0px 0px -12% 0px" });
-    io.observe(list);
+    /* The finished state, with no timeline at all. */
+    function settle(){
+      clearAll();
+      for(var i=0;i<items.length;i++){
+        var it = items[i];
+        it.classList.add("is-in");
+        it.classList.add(it.classList.contains("is-human") ? "is-ready" : "is-done");
+        var st = it.querySelectorAll(".d-step");
+        for(var j=0;j<st.length;j++){ st[j].classList.add("is-on"); }
+      }
+      turn.classList.add("is-in");
+      morning.classList.add("is-in");
+    }
 
-    /* rAF/observer callbacks are throttled in a background tab; if the list
-       is already in view on load, don't wait for a scroll that never comes. */
+    function play(){
+      reset();
+
+      /* 1 — the work arrives, one piece at a time, and sits there pending */
+      items.forEach(function(it, i){
+        at(ARRIVE_FIRST + i * ARRIVE_GAP, function(){ it.classList.add("is-in"); });
+      });
+      var accumulated = ARRIVE_FIRST + (items.length - 1) * ARRIVE_GAP + 500;
+
+      /* 2 — the turn */
+      var turnAt = accumulated + TURN_PAUSE;
+      at(turnAt, function(){ turn.classList.add("is-in"); });
+
+      /* 3 — each row runs its own process, then resolves */
+      var last = turnAt + WORK_LEAD;
+      items.forEach(function(it, i){
+        var steps = [].slice.call(it.querySelectorAll(".d-step"));
+        var human = it.classList.contains("is-human");
+        var begin = turnAt + WORK_LEAD + i * WORK_GAP;
+
+        at(begin, function(){ it.classList.add("is-working"); });
+        steps.forEach(function(st, k){
+          at(begin + k * STEP_GAP, function(){ st.classList.add("is-on"); });
+        });
+
+        var done = begin + steps.length * STEP_GAP + RESOLVE_PAD;
+        at(done, function(){
+          it.classList.remove("is-working");
+          it.classList.add(human ? "is-ready" : "is-done");
+        });
+        if(done > last){ last = done; }
+      });
+
+      /* 4 — the morning */
+      at(last + 480, function(){ morning.classList.add("is-in"); });
+    }
+
+    if(REDUCE || !("IntersectionObserver" in window)){ settle(); return; }
+
+    /* Plays on entry and re-arms once the section has fully left, so a
+       visitor who scrolls back sees the story again without a control. */
+    var running = false;
+    new IntersectionObserver(function(entries){
+      var e = entries[0];
+      if(e.isIntersecting && e.intersectionRatio >= 0.22){
+        if(running) return;
+        running = true;
+        play();
+      } else if(!e.isIntersecting){
+        running = false;
+        reset();
+      }
+    }, { threshold: [0, 0.22] }).observe(feed);
+
+    /* Observer callbacks are throttled in a background tab; if the section is
+       already in view on load, don't wait for a scroll that never comes. */
     setTimeout(function(){
-      if(list.classList.contains("is-visible")) return;
-      var r = list.getBoundingClientRect();
-      if(r.top < window.innerHeight && r.bottom > 0){ io.disconnect(); show(); }
-    }, 1200);
+      if(running) return;
+      var r = feed.getBoundingClientRect();
+      if(r.top < window.innerHeight * 0.85 && r.bottom > 0){ running = true; play(); }
+    }, 1400);
   }
 
   function chartReveal(){
@@ -853,7 +936,7 @@
   syncWork();
   calc();
   reveal();
-  queueRows();
+  nightShift();
   chartReveal();
   svcCarousel();
 

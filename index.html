@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="css/site.css?v=20260904">
+<link rel="stylesheet" href="css/site.css?v=20260905">
 
 <!-- Hero sculpture. three.js is vendored rather than pulled from a CDN: the
      hero is above the fold, and this replaces model-viewer, which shipped its
@@ -51,7 +51,7 @@
 <link rel="modulepreload" href="vendor/three/three.core.js">
 <link rel="modulepreload" href="js/machine-geometry.js?v=20260904">
 <script type="module" src="js/intelligence-machine.js?v=20260904"></script>
-<script defer src="js/site.js?v=20260904"></script>
+<script defer src="js/site.js?v=20260905"></script>
 </head>
 <body dir="ltr">
 
@@ -120,50 +120,142 @@
     </div>
   </section>
 
-  <!-- ══════════════ THE PILE → THE MORNING ══════════════
-       Two beats, one argument. The section opens on a backlog every owner
-       recognises, with no technology named in it, then shows the morning that
-       results. The problem/answer list that used to sit between them made the
-       same case a second time and was cut: one claim, one piece of evidence.
+  <!-- ══════════════ THE NIGHT SHIFT ══════════════
+       Three beats in one section, told by a single list that changes state
+       rather than by cards swapping out.
+
+       1. The problem: work keeps arriving after the team has gone home.
+          Five real items land one at a time and sit there, pending.
+       2. The turn: "none of that has to wait until morning" — and the list
+          above starts working. Each item shows its own short process, so the
+          section argues that different work takes different handling without
+          ever naming a technology.
+       3. The morning: four routine items closed, one exception prepared for
+          a person. The 4 and the 1 are the tally of what was just watched.
+
+       Every row's steps and outcome are in the DOM at full size from the
+       start, held at opacity 0. The list therefore occupies its final height
+       before the first item appears, so nothing reflows when the sequence
+       runs, replays, or is skipped entirely.
        ══════════════════════════════════════════════════════════════════════ -->
-  <section class="shell pad d-pile" id="operations" aria-labelledby="pileTitle">
-    <header class="d-pile-head">
+  <section class="shell pad d-night" id="operations" aria-labelledby="nightTitle">
+
+    <header class="d-night-head">
       <p class="lab" data-reveal data-en="Where the day actually goes" data-ar="الشغل بيروح فين بالظبط">Where the day actually goes</p>
-      <h2 id="pileTitle" data-reveal
-          data-en="The workday starts &mdash; and the backlog started before it"
-          data-ar="يوم الشغل بيبدأ… والمهام بدأت تتراكم قبله">The workday starts &mdash; and the backlog started before it</h2>
-      <p class="d-pile-sub" data-reveal
-         data-en="Every morning opens on the same pile: messages waiting on a reply, invoices waiting to be entered, leads waiting on follow-up, and numbers waiting for someone to read them."
-         data-ar="كل يوم بيفتح على نفس الكومة: رسايل مستنية رد، فواتير مستنية تسجيل، عملاء مستنيين متابعة، وأرقام مستنية حد يقراها.">Every morning opens on the same pile: messages waiting on a reply, invoices waiting to be entered, leads waiting on follow-up, and numbers waiting for someone to read them.</p>
+      <h2 id="nightTitle" data-reveal
+          data-en="The work doesn&rsquo;t stop when your team&rsquo;s day does."
+          data-ar="الشغل مش بيقف لما فريقك يخلص يومه.">The work doesn&rsquo;t stop when your team&rsquo;s day does.</h2>
+      <p class="d-night-sub" data-reveal
+         data-en="Messages come in, documents need entering, new leads need following up &mdash; and the work piles up until someone has time for it."
+         data-ar="رسائل بتوصل، مستندات محتاجة تتسجل، عملاء جداد محتاجين متابعة، وشغل بيتراكم لحد ما حد يفضى له.">Messages come in, documents need entering, new leads need following up &mdash; and the work piles up until someone has time for it.</p>
     </header>
 
-    <!-- The morning that results: the last beat of the same argument,
-         kept inside this section rather than a band of its own. -->
-    <p class="d-fig-lede" data-reveal
-       data-en="So the morning looks different. Your team doesn&rsquo;t start by catching up &mdash; it starts at the point that actually needed them."
-       data-ar="فالصبح بقى شكله مختلف. فريقك مش بيبدأ يومه وهو بيلحق المتأخر — بيبدأ من النقطة اللي فعلاً كانت محتاجاه.">So the morning looks different. Your team doesn&rsquo;t start by catching up &mdash; it starts at the point that actually needed them.</p>
-    <div class="d-fig" data-reveal role="img"
-         aria-label="An overnight work queue. Four routine items are marked done — a shipment question at 23:41, a supplier invoice at 01:12, a new lead written to the CRM at 03:07, and the weekly sales report at 05:00. A fifth item, a complaint needing judgement, is still waiting for the team at 06:03.">
-      <div class="d-fig-head">
-        <span class="lab" data-en="What your team walked in to" data-ar="إيه اللي فريقك هيلاقيه جاهز الصبح؟">What your team walked in to</span>
-        <span class="d-fig-n"><bdi>4</bdi></span>
+    <ol class="d-feed" id="nightFeed">
+
+      <li class="d-item">
+        <span class="d-item-time"><bdi>23:41</bdi></span>
+        <span class="d-item-mark" aria-hidden="true"></span>
+        <p class="d-item-task"
+           data-en="A customer asks: where has my order got to?"
+           data-ar="عميل بيسأل: طلبي وصل لحد فين؟">A customer asks: where has my order got to?</p>
+        <ol class="d-steps">
+          <li class="d-step" data-en="Understood the request" data-ar="فهم الطلب">Understood the request</li>
+          <li class="d-step" data-en="Fetched the shipment status" data-ar="جاب حالة الشحن">Fetched the shipment status</li>
+          <li class="d-step" data-en="Replied" data-ar="تم الرد">Replied</li>
+        </ol>
+        <p class="d-item-out"><span class="d-out-tick" aria-hidden="true">✓</span><span data-en="Done automatically" data-ar="تم تلقائيًا">Done automatically</span></p>
+      </li>
+
+      <li class="d-item">
+        <span class="d-item-time"><bdi>01:12</bdi></span>
+        <span class="d-item-mark" aria-hidden="true"></span>
+        <p class="d-item-task"
+           data-en="A supplier invoice arrived &mdash; 14 lines"
+           data-ar="فاتورة مورد وصلت — 14 بند">A supplier invoice arrived &mdash; 14 lines</p>
+        <ol class="d-steps">
+          <li class="d-step" data-en="Read the document" data-ar="قراءة المستند">Read the document</li>
+          <li class="d-step" data-en="Extracted the data" data-ar="استخراج البيانات">Extracted the data</li>
+          <li class="d-step" data-en="Entered the lines" data-ar="تسجيل البنود">Entered the lines</li>
+        </ol>
+        <p class="d-item-out"><span class="d-out-tick" aria-hidden="true">✓</span><span data-en="Done automatically" data-ar="تم تلقائيًا">Done automatically</span></p>
+      </li>
+
+      <li class="d-item">
+        <span class="d-item-time"><bdi>03:07</bdi></span>
+        <span class="d-item-mark" aria-hidden="true"></span>
+        <p class="d-item-task"
+           data-en="A new lead needs classifying and following up"
+           data-ar="عميل جديد محتاج يتصنف ويتابع">A new lead needs classifying and following up</p>
+        <ol class="d-steps">
+          <li class="d-step" data-en="Analysed the data" data-ar="تحليل البيانات">Analysed the data</li>
+          <li class="d-step" data-en="Classified the lead" data-ar="تصنيف العميل">Classified the lead</li>
+          <li class="d-step" data-en="Routed it to the right next step" data-ar="توجيهه للخطوة المناسبة">Routed it to the right next step</li>
+        </ol>
+        <p class="d-item-out"><span class="d-out-tick" aria-hidden="true">✓</span><span data-en="Done automatically" data-ar="تم تلقائيًا">Done automatically</span></p>
+      </li>
+
+      <li class="d-item">
+        <span class="d-item-time"><bdi>05:00</bdi></span>
+        <span class="d-item-mark" aria-hidden="true"></span>
+        <p class="d-item-task"
+           data-en="The weekly sales report still needs building"
+           data-ar="تقرير المبيعات الأسبوعي لسه محتاج يتعمل">The weekly sales report still needs building</p>
+        <ol class="d-steps">
+          <li class="d-step" data-en="Gathered the data" data-ar="جمع البيانات">Gathered the data</li>
+          <li class="d-step" data-en="Analysed" data-ar="تحليل">Analysed</li>
+          <li class="d-step" data-en="Built the report" data-ar="تجهيز التقرير">Built the report</li>
+          <li class="d-step" data-en="Sent" data-ar="إرسال">Sent</li>
+        </ol>
+        <p class="d-item-out"><span class="d-out-tick" aria-hidden="true">✓</span><span data-en="Done automatically" data-ar="تم تلقائيًا">Done automatically</span></p>
+      </li>
+
+      <!-- The exception. It never reaches a tick: the system prepares it and
+           hands it to a person, which is the point of the whole section. -->
+      <li class="d-item is-human">
+        <span class="d-item-time"><bdi>06:03</bdi></span>
+        <span class="d-item-mark" aria-hidden="true"></span>
+        <p class="d-item-task"
+           data-en="A complaint that needs someone&rsquo;s decision"
+           data-ar="شكوى محتاجة قرار من حد">A complaint that needs someone&rsquo;s decision</p>
+        <ol class="d-steps">
+          <li class="d-step" data-en="Unusual case" data-ar="حالة غير معتادة">Unusual case</li>
+          <li class="d-step" data-en="Gathered the details and the context" data-ar="تجميع التفاصيل والسياق">Gathered the details and the context</li>
+        </ol>
+        <p class="d-item-out"><span data-en="Ready for the team" data-ar="جاهزة للفريق">Ready for the team</span></p>
+      </li>
+
+    </ol>
+
+    <!-- The hinge. Sits under the list it changes, so the eye reads the line
+         and then returns to the feed to watch it start working. -->
+    <p class="d-night-turn" id="nightTurn"
+       data-en="None of that has to wait until morning."
+       data-ar="مش كل ده لازم يستنى لحد الصبح.">None of that has to wait until morning.</p>
+
+    <div class="d-morning" id="nightMorning">
+      <div class="d-morning-copy">
+        <h3 data-en="In the morning, your team doesn&rsquo;t start from a pile."
+            data-ar="الصبح، فريقك مش بيبدأ من كومة شغل.">In the morning, your team doesn&rsquo;t start from a pile.</h3>
+        <p data-en="It starts with the one thing that actually needed them."
+           data-ar="بيبدأ من الحاجة اللي فعلًا محتاجة تدخله.">It starts with the one thing that actually needed them.</p>
       </div>
-      <div class="d-queue" id="queueRows" aria-hidden="true">
-        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="Customer asked where a shipment is" data-ar="عميل بيسأل: طلبي وصل لحد فين؟">Customer asked where a shipment is</span><span class="tag" data-en="Chat" data-ar="محادثات">Chat</span><span class="t"><bdi>23:41</bdi></span></div>
-        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="Supplier invoice read, 14 lines" data-ar="فاتورة مورد اتسجلت، 14 بند">Supplier invoice read, 14 lines</span><span class="tag" data-en="Documents" data-ar="مستندات">Documents</span><span class="t"><bdi>01:12</bdi></span></div>
-        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="New lead scored and written to the CRM" data-ar="عميل جديد اتسجل واتصنّف تلقائيًا">New lead scored and written to the CRM</span><span class="tag" data-en="Systems" data-ar="أنظمة">Systems</span><span class="t"><bdi>03:07</bdi></span></div>
-        <div class="d-q"><span class="tick">✓</span><span class="body" data-en="Weekly sales report built and sent" data-ar="تقرير المبيعات الأسبوعي اتعمل واتبعت">Weekly sales report built and sent</span><span class="tag" data-en="Reporting" data-ar="تقارير">Reporting</span><span class="t"><bdi>05:00</bdi></span></div>
-        <div class="d-q pending"><span class="tick">·</span><span class="body" data-en="A complaint — this one needs judgement" data-ar="شكوى — دي محتاجة قرار من حد">A complaint — this one needs judgement</span><span class="tag" data-en="For the team" data-ar="للفريق">For the team</span><span class="t"><bdi>06:03</bdi></span></div>
+
+      <div class="d-tally">
+        <div class="d-tally-b">
+          <span class="d-tally-n"><bdi>4</bdi></span>
+          <span class="d-tally-l" data-en="tasks handled automatically" data-ar="مهام اتعملت تلقائيًا">tasks handled automatically</span>
+        </div>
+        <div class="d-tally-b is-human">
+          <span class="d-tally-n"><bdi>1</bdi></span>
+          <span class="d-tally-l" data-en="case needing a decision" data-ar="حالة محتاجة قرار">case needing a decision</span>
+        </div>
       </div>
-      <p class="d-src" style="margin-top:13px;">
-        <span class="mk" aria-hidden="true">&rarr;</span>
-        <span data-en="Four routine items already done by 8am. The one that needed a decision was waiting for your team, with the full conversation attached." data-ar="4 مهام روتينية خلصت قبل الساعة 8. والحالة الوحيدة اللي احتاجت قرار من فريقك كانت جاهزة بكل تفاصيلها والمحادثة كاملة.">Four routine items already done by 8am. The one that needed a decision was waiting for your team, with the full conversation attached.</span>
-      </p>
+
+      <p class="d-morning-note"
+         data-en="Four routine tasks finished before 8am. The one case that needed a decision from your team was ready, with every detail and the full conversation attached."
+         data-ar="4 مهام روتينية خلصت قبل الساعة 8. والحالة الوحيدة اللي احتاجت قرار من فريقك كانت جاهزة بكل تفاصيلها والمحادثة كاملة.">Four routine tasks finished before 8am. The one case that needed a decision from your team was ready, with every detail and the full conversation attached.</p>
     </div>
 
-    <p class="d-pile-thesis" data-reveal
-       data-en="We don&rsquo;t sell chatbots. We look at where the work actually gets stuck, and build the thing that fits it."
-       data-ar="إحنا مش بنبيع Chatbots. بنشوف الشغل بيقف فين بالظبط، وبنبني الحاجة اللي تناسبه.">We don&rsquo;t sell chatbots. We look at where the work actually gets stuck, and build the thing that fits it.</p>
   </section>
 
 
