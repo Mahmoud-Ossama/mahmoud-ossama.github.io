@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="css/site.css?v=20260905">
+<link rel="stylesheet" href="css/site.css?v=20260906">
 
 <!-- Hero sculpture. three.js is vendored rather than pulled from a CDN: the
      hero is above the fold, and this replaces model-viewer, which shipped its
@@ -51,7 +51,7 @@
 <link rel="modulepreload" href="vendor/three/three.core.js">
 <link rel="modulepreload" href="js/machine-geometry.js?v=20260904">
 <script type="module" src="js/intelligence-machine.js?v=20260904"></script>
-<script defer src="js/site.js?v=20260905"></script>
+<script defer src="js/site.js?v=20260906"></script>
 </head>
 <body dir="ltr">
 
@@ -155,9 +155,9 @@
       <li class="d-item">
         <span class="d-item-time"><bdi>23:41</bdi></span>
         <span class="d-item-mark" aria-hidden="true"></span>
-        <p class="d-item-task"
+        <p class="d-item-task"><span class="d-task-text"
            data-en="A customer asks: where has my order got to?"
-           data-ar="عميل بيسأل: طلبي وصل لحد فين؟">A customer asks: where has my order got to?</p>
+           data-ar="عميل بيسأل: طلبي وصل لحد فين؟">A customer asks: where has my order got to?</span><i class="d-caret" aria-hidden="true"></i></p>
         <ol class="d-steps">
           <li class="d-step" data-en="Understood the request" data-ar="فهم الطلب">Understood the request</li>
           <li class="d-step" data-en="Fetched the shipment status" data-ar="جاب حالة الشحن">Fetched the shipment status</li>
@@ -169,9 +169,9 @@
       <li class="d-item">
         <span class="d-item-time"><bdi>01:12</bdi></span>
         <span class="d-item-mark" aria-hidden="true"></span>
-        <p class="d-item-task"
+        <p class="d-item-task"><span class="d-task-text"
            data-en="A supplier invoice arrived &mdash; 14 lines"
-           data-ar="فاتورة مورد وصلت — 14 بند">A supplier invoice arrived &mdash; 14 lines</p>
+           data-ar="فاتورة مورد وصلت — 14 بند">A supplier invoice arrived &mdash; 14 lines</span><i class="d-caret" aria-hidden="true"></i></p>
         <ol class="d-steps">
           <li class="d-step" data-en="Read the document" data-ar="قراءة المستند">Read the document</li>
           <li class="d-step" data-en="Extracted the data" data-ar="استخراج البيانات">Extracted the data</li>
@@ -183,9 +183,9 @@
       <li class="d-item">
         <span class="d-item-time"><bdi>03:07</bdi></span>
         <span class="d-item-mark" aria-hidden="true"></span>
-        <p class="d-item-task"
+        <p class="d-item-task"><span class="d-task-text"
            data-en="A new lead needs classifying and following up"
-           data-ar="عميل جديد محتاج يتصنف ويتابع">A new lead needs classifying and following up</p>
+           data-ar="عميل جديد محتاج يتصنف ويتابع">A new lead needs classifying and following up</span><i class="d-caret" aria-hidden="true"></i></p>
         <ol class="d-steps">
           <li class="d-step" data-en="Analysed the data" data-ar="تحليل البيانات">Analysed the data</li>
           <li class="d-step" data-en="Classified the lead" data-ar="تصنيف العميل">Classified the lead</li>
@@ -197,9 +197,9 @@
       <li class="d-item">
         <span class="d-item-time"><bdi>05:00</bdi></span>
         <span class="d-item-mark" aria-hidden="true"></span>
-        <p class="d-item-task"
+        <p class="d-item-task"><span class="d-task-text"
            data-en="The weekly sales report still needs building"
-           data-ar="تقرير المبيعات الأسبوعي لسه محتاج يتعمل">The weekly sales report still needs building</p>
+           data-ar="تقرير المبيعات الأسبوعي لسه محتاج يتعمل">The weekly sales report still needs building</span><i class="d-caret" aria-hidden="true"></i></p>
         <ol class="d-steps">
           <li class="d-step" data-en="Gathered the data" data-ar="جمع البيانات">Gathered the data</li>
           <li class="d-step" data-en="Analysed" data-ar="تحليل">Analysed</li>
@@ -214,9 +214,9 @@
       <li class="d-item is-human">
         <span class="d-item-time"><bdi>06:03</bdi></span>
         <span class="d-item-mark" aria-hidden="true"></span>
-        <p class="d-item-task"
+        <p class="d-item-task"><span class="d-task-text"
            data-en="A complaint that needs someone&rsquo;s decision"
-           data-ar="شكوى محتاجة قرار من حد">A complaint that needs someone&rsquo;s decision</p>
+           data-ar="شكوى محتاجة قرار من حد">A complaint that needs someone&rsquo;s decision</span><i class="d-caret" aria-hidden="true"></i></p>
         <ol class="d-steps">
           <li class="d-step" data-en="Unusual case" data-ar="حالة غير معتادة">Unusual case</li>
           <li class="d-step" data-en="Gathered the details and the context" data-ar="تجميع التفاصيل والسياق">Gathered the details and the context</li>
@@ -547,7 +547,10 @@
   <div class="shell pad">
     <section class="d-sec" id="about" aria-labelledby="aboutName">
       <div class="d-founder" data-reveal>
-        <div class="d-photo" aria-hidden="true">MO</div>
+        <div class="d-photo" aria-hidden="true">
+          <img class="d-about-photo" src="assets/about/mahmoud-osama.jpg?v=20260905"
+               width="720" height="720" loading="lazy" decoding="async" alt="">
+        </div>
         <div>
           <p class="nm" id="aboutName" data-en="Mahmoud Osama" data-ar="محمود أسامة">Mahmoud Osama</p>
           <p class="role" data-en="AI engineer · Mansoura, Egypt" data-ar="مهندس ذكاء اصطناعي · المنصورة، مصر">AI engineer · Mansoura, Egypt</p>

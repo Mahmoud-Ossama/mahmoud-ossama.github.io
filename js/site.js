@@ -258,14 +258,20 @@
   }
 
   /* ===========================================================
-     THE NIGHT SHIFT — the section's sequence
-     Five rows walk pending -> working -> done, except the last, which is
-     prepared for a person instead. One timeline, one observer.
+     THE NIGHT SHIFT — driven by the scroll, forward only
+     Progress is the feed's own travel up the viewport, so the story moves at
+     exactly the speed the visitor scrolls: flick past it and it is finished
+     by the time it is read, ease down it and each item arrives, types, works
+     and resolves in turn.
 
-     Nothing here changes layout: every row's steps and outcome are already
-     laid out at full size and only their opacity moves, so the list holds
-     its final height from the first frame and a replay cannot shift the
-     page. Timers are tracked so a replay can cancel a run in flight.
+     Progress only ever increases. Scrolling back up does not rewind and does
+     not replay, and once the last row has resolved the listeners are removed
+     for good — the section is then a finished, static piece of the page.
+
+     Typing writes a growing slice of one contiguous string rather than
+     wrapping characters in spans: Arabic is cursive, and per-character spans
+     would break the joining. A prefix of an Arabic string shapes correctly,
+     which is also how the script genuinely looks while being typed.
      =========================================================== */
   function nightShift(){
     var feed = document.getElementById("nightFeed");
@@ -276,36 +282,52 @@
     var items = [].slice.call(feed.querySelectorAll(".d-item"));
     if(!items.length) return;
 
-    var ARRIVE_FIRST = 350, ARRIVE_GAP = 560;
-    var TURN_PAUSE   = 620;
-    var WORK_LEAD    = 800, WORK_GAP = 780, STEP_GAP = 340, RESOLVE_PAD = 420;
+    var ARRIVE = [], TYPED = [], WORK = [], DONE = [];
+    for(var i=0;i<items.length;i++){
+      ARRIVE[i] = 0.02 + i * 0.075;   /* the item lands, pending */
+      TYPED[i]  = ARRIVE[i] + 0.055;  /* by here its text is fully typed */
+      WORK[i]   = 0.50 + i * 0.075;   /* it starts being handled */
+      DONE[i]   = WORK[i] + 0.06;     /* and is resolved */
+    }
+    var TURN_AT = 0.42, MORNING_AT = 0.90;
 
-    var timers = [];
-    function at(ms, fn){ timers.push(setTimeout(fn, ms)); }
-    function clearAll(){
-      for(var i=0;i<timers.length;i++){ clearTimeout(timers[i]); }
-      timers = [];
+    function isAr(){ return document.body.getAttribute("dir") === "rtl"; }
+    function srcOf(sp){ return sp.getAttribute(isAr() ? "data-ar" : "data-en") || ""; }
+
+    /* ---- typing ---- */
+    function fillType(it){
+      if(it._t){ clearTimeout(it._t); it._t = 0; }
+      it._typing = false;
+      it._typed = true;
+      var sp = it.querySelector(".d-task-text");
+      if(sp) sp.textContent = srcOf(sp);
+      it.classList.remove("is-typing");
+    }
+    function startType(it){
+      if(it._typed || it._typing) return;
+      var sp = it.querySelector(".d-task-text");
+      if(!sp){ it._typed = true; return; }
+      it._typing = true;
+      it.classList.add("is-typing");
+      sp.textContent = "";
+      var n = 0;
+      (function tick(){
+        /* re-read every tick, so switching language mid-type self-corrects */
+        var src = srcOf(sp);
+        n += 2;
+        if(n >= src.length){ fillType(it); return; }
+        sp.textContent = src.slice(0, n);
+        it._t = setTimeout(tick, 16);
+      })();
     }
 
-    /* Only the transient state classes are cleared; .is-human is authored in
-       the markup and identifies the exception row for good. */
-    function reset(){
-      clearAll();
-      for(var i=0;i<items.length;i++){
-        items[i].classList.remove("is-in","is-working","is-done","is-ready");
-        var st = items[i].querySelectorAll(".d-step");
-        for(var j=0;j<st.length;j++){ st[j].classList.remove("is-on"); }
-      }
-      turn.classList.remove("is-in");
-      morning.classList.remove("is-in");
-    }
-
-    /* The finished state, with no timeline at all. */
+    /* ---- the finished state, with no sequence at all ---- */
     function settle(){
-      clearAll();
       for(var i=0;i<items.length;i++){
         var it = items[i];
+        fillType(it);
         it.classList.add("is-in");
+        it.classList.remove("is-working");
         it.classList.add(it.classList.contains("is-human") ? "is-ready" : "is-done");
         var st = it.querySelectorAll(".d-step");
         for(var j=0;j<st.length;j++){ st[j].classList.add("is-on"); }
@@ -314,67 +336,80 @@
       morning.classList.add("is-in");
     }
 
-    function play(){
-      reset();
+    if(REDUCE){ settle(); return; }
 
-      /* 1 — the work arrives, one piece at a time, and sits there pending */
-      items.forEach(function(it, i){
-        at(ARRIVE_FIRST + i * ARRIVE_GAP, function(){ it.classList.add("is-in"); });
-      });
-      var accumulated = ARRIVE_FIRST + (items.length - 1) * ARRIVE_GAP + 500;
+    /* ---- progress: the feed's top travelling up the viewport ---- */
+    var pMax = 0;
+    function apply(){
+      var vh = window.innerHeight || 800;
+      var start = vh * 0.85, stop = vh * 0.06;
+      var p = (start - feed.getBoundingClientRect().top) / (start - stop);
+      if(p > pMax){ pMax = p > 1 ? 1 : p; }
+      if(pMax <= 0) return;
 
-      /* 2 — the turn */
-      var turnAt = accumulated + TURN_PAUSE;
-      at(turnAt, function(){ turn.classList.add("is-in"); });
+      for(var i=0;i<items.length;i++){
+        var it = items[i];
 
-      /* 3 — each row runs its own process, then resolves */
-      var last = turnAt + WORK_LEAD;
-      items.forEach(function(it, i){
-        var steps = [].slice.call(it.querySelectorAll(".d-step"));
-        var human = it.classList.contains("is-human");
-        var begin = turnAt + WORK_LEAD + i * WORK_GAP;
+        if(pMax >= ARRIVE[i] && !it.classList.contains("is-in")){
+          it.classList.add("is-in");
+          startType(it);
+        }
+        /* scrolled past faster than the caret could run: just show the line */
+        if(pMax >= TYPED[i] && !it._typed) fillType(it);
 
-        at(begin, function(){ it.classList.add("is-working"); });
-        steps.forEach(function(st, k){
-          at(begin + k * STEP_GAP, function(){ st.classList.add("is-on"); });
-        });
+        if(pMax >= WORK[i] && !it._worked){
+          it._worked = true;
+          it.classList.add("is-working");
+        }
 
-        var done = begin + steps.length * STEP_GAP + RESOLVE_PAD;
-        at(done, function(){
+        if(pMax >= WORK[i]){
+          var steps = it.querySelectorAll(".d-step");
+          var k = Math.ceil(((pMax - WORK[i]) / (DONE[i] - WORK[i])) * steps.length);
+          if(k > steps.length){ k = steps.length; }
+          for(var j=0;j<k;j++){ steps[j].classList.add("is-on"); }
+        }
+
+        if(pMax >= DONE[i] && !it._resolved){
+          it._resolved = true;
           it.classList.remove("is-working");
-          it.classList.add(human ? "is-ready" : "is-done");
-        });
-        if(done > last){ last = done; }
-      });
+          it.classList.add(it.classList.contains("is-human") ? "is-ready" : "is-done");
+        }
+      }
 
-      /* 4 — the morning */
-      at(last + 480, function(){ morning.classList.add("is-in"); });
+      /* both of these sit below the feed, so they also wait until they are
+         actually on screen — otherwise a tall feed reveals them unseen */
+      if(pMax >= TURN_AT && turn.getBoundingClientRect().top < vh * 0.96){
+        turn.classList.add("is-in");
+      }
+      if(pMax >= MORNING_AT && morning.getBoundingClientRect().top < vh * 0.92){
+        morning.classList.add("is-in");
+      }
+
+      if(finished()) detach();
     }
 
-    if(REDUCE || !("IntersectionObserver" in window)){ settle(); return; }
-
-    /* Plays on entry and re-arms once the section has fully left, so a
-       visitor who scrolls back sees the story again without a control. */
-    var running = false;
-    new IntersectionObserver(function(entries){
-      var e = entries[0];
-      if(e.isIntersecting && e.intersectionRatio >= 0.22){
-        if(running) return;
-        running = true;
-        play();
-      } else if(!e.isIntersecting){
-        running = false;
-        reset();
+    function finished(){
+      if(!morning.classList.contains("is-in")) return false;
+      for(var i=0;i<items.length;i++){
+        if(!items[i]._resolved || !items[i]._typed) return false;
       }
-    }, { threshold: [0, 0.22] }).observe(feed);
+      return true;
+    }
 
-    /* Observer callbacks are throttled in a background tab; if the section is
-       already in view on load, don't wait for a scroll that never comes. */
-    setTimeout(function(){
-      if(running) return;
-      var r = feed.getBoundingClientRect();
-      if(r.top < window.innerHeight * 0.85 && r.bottom > 0){ running = true; play(); }
-    }, 1400);
+    var ticking = false;
+    function onScroll(){
+      if(ticking) return;
+      ticking = true;
+      requestAnimationFrame(function(){ ticking = false; apply(); });
+    }
+    function detach(){
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    }
+
+    window.addEventListener("scroll", onScroll, { passive:true });
+    window.addEventListener("resize", onScroll, { passive:true });
+    apply();
   }
 
   function chartReveal(){
