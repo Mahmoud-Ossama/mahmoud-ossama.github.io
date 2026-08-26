@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="css/site.css?v=20260906">
+<link rel="stylesheet" href="css/site.css?v=20260908">
 
 <!-- Hero sculpture. three.js is vendored rather than pulled from a CDN: the
      hero is above the fold, and this replaces model-viewer, which shipped its
@@ -49,9 +49,9 @@
 </script>
 <link rel="modulepreload" href="vendor/three/three.module.js">
 <link rel="modulepreload" href="vendor/three/three.core.js">
-<link rel="modulepreload" href="js/machine-geometry.js?v=20260904">
-<script type="module" src="js/intelligence-machine.js?v=20260904"></script>
-<script defer src="js/site.js?v=20260906"></script>
+<link rel="modulepreload" href="js/machine-geometry.js?v=20260907">
+<script type="module" src="js/intelligence-machine.js?v=20260907"></script>
+<script defer src="js/site.js?v=20260908"></script>
 </head>
 <body dir="ltr">
 
@@ -108,13 +108,28 @@
         <div class="hero-stage" id="heroStage">
           <intelligence-machine
             id="heroMachine"
-            speed="0.85"
+            speed="1"
             role="img"
-            aria-label="An abstract machine, slowly moving. Work arrives at an intake module; capabilities gather around a central intelligence, lock onto it and light up; a finished outcome leaves the assembly; then the parts separate and regroup in a different arrangement for a different kind of job."></intelligence-machine>
+            aria-label="An abstract machine. Work arrives at an intake on the left and travels along a lit connector into a central core, which brightens as it takes the work in. The core then sends it out to one of three specialised parts, which visibly operates — pistons drive out, a lens barrel opens, or a decision element pushes forward — and a result leaves from that part. A different part handles the work each time round."></intelligence-machine>
+          <!-- One word per beat, anchored beside the part that is doing the
+               work. Only ever one is visible at a time, so they cannot
+               collide; positions come from projecting each module to the
+               stage box (input 19/67, analysis 35/29, prediction 68/35,
+               action 80/65, core 50/56). Light DOM, so the site's own
+               EN/AR swap reaches them. -->
+          <div class="hero-tags" id="heroTags" aria-hidden="true">
+            <span class="hero-tag at-in"         data-tag="in"             data-en="Work in"     data-ar="شغل داخل">Work in</span>
+            <span class="hero-tag at-core"       data-tag="core"           data-en="Understands" data-ar="بيفهم">Understands</span>
+            <span class="hero-tag at-action"     data-tag="do-action"      data-en="Acts"        data-ar="بينفّذ">Acts</span>
+            <span class="hero-tag at-analysis"   data-tag="do-analysis"    data-en="Analyses"    data-ar="بيحلّل">Analyses</span>
+            <span class="hero-tag at-prediction" data-tag="do-prediction"  data-en="Decides"     data-ar="بيقرر">Decides</span>
+            <span class="hero-tag at-action is-out"     data-tag="out-action"     data-en="Result" data-ar="نتيجة">Result</span>
+            <span class="hero-tag at-analysis is-out"   data-tag="out-analysis"   data-en="Result" data-ar="نتيجة">Result</span>
+            <span class="hero-tag at-prediction is-out" data-tag="out-prediction" data-en="Result" data-ar="نتيجة">Result</span>
+          </div>
           <!-- Watermark, not a spinner: shown only if WebGL is unavailable, so
                the failure reads as deliberate rather than as an empty column. -->
           <div class="hero-load" aria-hidden="true"><svg class="mk" viewBox="0 0 32 32" fill="none"><path class="mk-t" d="M28.64 12.6V8.7L16 1.4 3.36 8.7v3.9" stroke="currentColor" stroke-width="2.6"/><path class="mk-b" d="M28.64 19.4v3.9L16 30.6 3.36 23.3v-3.9" stroke="currentColor" stroke-width="2.6"/><path class="mk-n" d="M16 11.96 23 16 16 20.04 9 16Z"/></svg></div>
-          <p class="hero-cap" data-reveal aria-hidden="true"><i></i><span data-en="In &rarr; processed &rarr; out" data-ar="داخل ← معالجة ← خارج">In &rarr; processed &rarr; out</span></p>
         </div>
       </div>
     </div>

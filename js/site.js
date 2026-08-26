@@ -759,6 +759,29 @@
        leaving an empty column. */
     if(!machine || !("customElements" in window)){ failed(); return; }
 
+    /* One word per beat, beside the part doing the work. The component
+       publishes the beat as an attribute too, so a beat that fired before
+       this deferred script ran is not lost. */
+    (function tags(){
+      var box = document.getElementById("heroTags");
+      if(!box) return;
+      var all = box.querySelectorAll(".hero-tag");
+      function show(beat, lead){
+        var want = beat === "input" ? "in"
+                 : beat === "core" ? "core"
+                 : beat === "process" ? "do-" + lead
+                 : beat === "outcome" ? "out-" + lead
+                 : null;
+        for(var i=0;i<all.length;i++){
+          all[i].classList.toggle("is-on", all[i].getAttribute("data-tag") === want);
+        }
+      }
+      var now = machine.getAttribute("data-beat");
+      if(now){ var q = now.split(":"); show(q[0], q[1]); }
+      machine.addEventListener("machine-beat", function(e){ show(e.detail.beat, e.detail.lead); });
+    })();
+
+
     /* The element upgrades the moment its module evaluates, which can be
        before this deferred script runs — so it may already have drawn and
        announced. Read the sticky attribute first; only subscribe if the

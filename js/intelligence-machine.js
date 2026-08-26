@@ -16,57 +16,55 @@
  *   data-ready  / machine-ready  — the first valid frame has been drawn
  *   data-failed / machine-error  — WebGL unavailable; show the fallback
  *
- * Read the sculpture as the business model: work arrives at the input
- * module, capabilities dock around a central intelligence and link to it,
- * an outcome leaves from whichever module the job called for, and then the
- * assembly rearranges for a different kind of job. Three configurations
- * cycle, so the shape a visitor sees is not the shape they left.
+ * ── The choreography ──────────────────────────────────────────────────────
+ * The machine stays assembled. An earlier version spent most of its cycle
+ * pulling the modules apart and docking them again, which a visitor reads as
+ * the object assembling itself rather than as work being processed — and it
+ * left ~14s at a stretch where nothing entered or left. Positions are now
+ * fixed for good and the story is carried entirely by light and mechanism:
+ *
+ *   ready 1.6s → input 1.4s → core 1.2s → process 3.0s → outcome 1.6s
+ *   → settle 1.7s          (10.5s, and the first work lands at 1.6s)
+ *
+ * Work arrives at the intake on the left, a pulse runs inward along its link,
+ * the core lights, a pulse runs back out to ONE capability, that capability's
+ * own mechanism actuates, and an ember result leaves from it. The leading
+ * capability rotates every loop — pistons, then lens rings, then iris — so
+ * different work visibly takes a different route through the same machine.
  */
 
 import * as THREE from 'three';
-import { buildMachine, CONFIGS, CORE_RADIUS, layoutLink } from './machine-geometry.js?v=20260904';
+import { buildMachine, HOME, LEADS, CORE_RADIUS, layoutLink } from './machine-geometry.js?v=20260906';
 
-const PHASES = [
-  ['drift', 4.2],
-  ['arrive', 3.6],
-  ['dock', 4.8],
-  ['link', 2.6],
-  ['hold', 4.2],
-  ['release', 2.8],
-  ['rearrange', 4.8],
+const BEATS = [
+  ['ready', 1.6],
+  ['input', 1.4],
+  ['core', 1.2],
+  ['process', 3.0],
+  ['outcome', 1.6],
+  ['settle', 1.7],
 ];
-const CYCLE = PHASES.reduce((a, p) => a + p[1], 0);
+const CYCLE = BEATS.reduce((a, b) => a + b[1], 0);
 const TAU = Math.PI * 2;
-/* Framing. The original fit treated the sculpture as a sphere of radius 1.52,
-   which is what left it small with a band of dead space above and below: the
-   assembly is not a ball but a landscape volume, and across all three
-   configurations it never exceeds these half-extents (measured by projecting
-   every mesh's bounding box over a full 81s cycle, excluding the ambient
-   motes, which are meant to drift out of frame). FILL is how much of the
-   frame the sculpture may occupy on its binding axis. */
-const HALF_W = 1.95;
-const HALF_H = 1.64;
-const FILL = 0.92;
 
-/* Where the cycle starts on load. t=0 is 'drift', where the four modules
-   float unconnected and read as four separate objects rather than one
-   system. This lands instead in the 'hold' of the second configuration —
-   the three-module fan, links lit, core bright — so the first thing a
-   visitor sees is the assembly working. The first rearrangement is then
-   ~11s away, well inside a normal first visit. */
-const START_T = 43.0;
+/* Link i belongs to module LINK_ORDER[i]. Every module is linked, always. */
+const LINK_ORDER = ['input', 'analysis', 'prediction', 'action'];
+
+/* Framing: half-extents of the assembled pose in world units, and how much
+   of the frame the sculpture may occupy on its binding axis. Measured by
+   projecting every mesh's bounding box across a full cycle, motes excluded —
+   they are meant to drift out of frame. */
+const HALF_W = 1.88;
+const HALF_H = 1.52;
+const FILL = 0.92;
 
 const smooth = (x) => {
   const c = Math.min(1, Math.max(0, x));
   return c * c * (3 - 2 * c);
 };
+/* rises 0→1 over [a,b] then falls back to 0 over [b,c] */
+const hump = (p, a, b, c) => (p < b ? smooth((p - a) / (b - a)) : 1 - smooth((p - b) / (c - b)));
 const damp = (cur, target, lambda, dt) => cur + (target - cur) * (1 - Math.exp(-lambda * dt));
-const shortest = (d) => {
-  let x = d % TAU;
-  if (x > Math.PI) x -= TAU;
-  if (x < -Math.PI) x += TAU;
-  return x;
-};
 
 function studioEnv(renderer) {
   const c = document.createElement('canvas');
@@ -151,27 +149,44 @@ class IntelligenceMachine extends HTMLElement {
 
     const machine = buildMachine(THREE);
     this._machine = machine;
+    /* The assembled pose carries more mass above the core than below, so it
+       projected high in the frame with dead space underneath. Translating the
+       whole root is preferable to re-aiming the camera, which would skew the
+       perspective; rotation still happens about the core because the root's
+       own origin is the core. Measured: body ndc.y ran -0.56..+0.82. */
+    machine.root.position.y = -0.22;
     scene.add(machine.root);
 
+    /* Fixed pose, set once. Each module is modelled with its local +X facing
+       away from the core, so yaw and tilt follow from its position. */
     this._state = {};
     machine.moduleIds.forEach((id, i) => {
-      const idle = CONFIGS[0].idle[id];
-      this._state[id] = {
-        pos: new THREE.Vector3(Math.cos(idle.a) * idle.r, idle.y, Math.sin(idle.a) * idle.r),
-        yaw: 0, tilt: 0, act: 0.12, accent: 0, spin: 0, seed: i * 1.7 + 0.4,
-      };
+      const h = HOME[id].p;
+      const pos = new THREE.Vector3(h[0], h[1], h[2]);
+      const dir = pos.clone().normalize();
+      const mod = machine.modules[id];
+      mod.group.position.copy(pos);
+      mod.group.rotation.y = Math.atan2(-dir.z, dir.x);
+      mod.tilt.rotation.z = Math.asin(Math.max(-1, Math.min(1, dir.y))) * 0.30;
+      this._state[id] = { pos, dir, act: 0.1, accent: 0, mech: 0, spin: 0, seed: i * 1.7 + 0.4 };
     });
-    this._linkAmt = [0, 0, 0];
+
+    this._linkAmt = [0, 0, 0, 0];
     this._flow = 0;
-    this._coreLight = 0.25;
+    this._coreLight = 0.16;
+    this._gimbalBoost = 0;
     this._petrol = new THREE.Color(0x0d5a4e);
     this._ember = new THREE.Color(0xbe5410);
-    this._tmpA = new THREE.Vector3();
-    this._tmpB = new THREE.Vector3();
     this._ptr = { x: 0, y: 0, tx: 0, ty: 0 };
     this._camDir = new THREE.Vector3(0.19, 0.34, 1).normalize();
-    this._time = START_T;
+    this._time = 0;
     this._first = true;
+
+    /* the intake, and where work comes in from — off frame, upper left */
+    const inSt = this._state.input;
+    this._inFrom = new THREE.Vector3(-2.45, 0.62, 0.60);
+    this._inTo = inSt.pos.clone().add(inSt.dir.clone().multiplyScalar(0.30));
+    this._inCtrl = this._inFrom.clone().lerp(this._inTo, 0.5).add(new THREE.Vector3(0.1, 0.34, -0.15));
 
     this._resize = () => this._fit();
     const ro = new ResizeObserver(this._resize);
@@ -199,10 +214,11 @@ class IntelligenceMachine extends HTMLElement {
     document.addEventListener('visibilitychange', this._onVis);
 
     if (this._reduced) {
-      /* One settled frame of the same pose: _time is held still while the
-         dampers converge, so nothing animates but nothing is half-formed. */
+      /* one settled frame mid-process: links lit, core bright, the leading
+         capability actuated — the machine working, not the machine idle */
+      this._time = 6.0;
       this._step(0.016);
-      for (let i = 0; i < 90; i++) this._step(0.05);
+      for (let i = 0; i < 80; i++) this._step(0.05);
       renderer.render(scene, camera);
       this._announce();
       return;
@@ -238,233 +254,241 @@ class IntelligenceMachine extends HTMLElement {
     const vFov = (camera.fov * Math.PI) / 180;
     const hFov = 2 * Math.atan(Math.tan(vFov / 2) * aspect);
     /* tan, not sin: sin fits a sphere tangentially, tan fits a flat extent at
-       the origin plane, which is what a box half-extent actually is. Whichever
-       axis needs the camera further back wins. */
-    const dist = Math.max(
+       the origin plane, which is what a box half-extent actually is. */
+    this._dist = Math.max(
       HALF_H / (Math.tan(vFov / 2) * FILL),
       HALF_W / (Math.tan(hFov / 2) * FILL)
     );
-    this._dist = dist;
     camera.updateProjectionMatrix();
   }
 
-  _phase(t) {
-    const cycle = Math.floor(t / CYCLE);
-    let u = t - cycle * CYCLE;
-    /* Floor-mod, not %: a negative cycle must still land inside CONFIGS. */
-    const cfg = ((cycle % CONFIGS.length) + CONFIGS.length) % CONFIGS.length;
-    const next = ((cycle + 1) % CONFIGS.length + CONFIGS.length) % CONFIGS.length;
-    for (const [name, dur] of PHASES) {
-      if (u < dur) return { name, p: u / dur, cfg, next };
+  _beat(t) {
+    const loop = Math.floor(t / CYCLE);
+    let u = t - loop * CYCLE;
+    const lead = LEADS[((loop % LEADS.length) + LEADS.length) % LEADS.length];
+    for (const [name, dur] of BEATS) {
+      if (u < dur) return { name, p: u / dur, lead };
       u -= dur;
     }
-    return { name: 'rearrange', p: 1, cfg, next };
-  }
-
-  _idlePos(id, ph, t, out) {
-    const cfg = CONFIGS[ph.cfg].idle[id];
-    let a = cfg.a, r = cfg.r, y = cfg.y;
-    if (ph.name === 'rearrange') {
-      const nx = CONFIGS[ph.next].idle[id];
-      const k = smooth(ph.p);
-      a = cfg.a + shortest(nx.a - cfg.a) * k;
-      r = cfg.r + (nx.r - cfg.r) * k;
-      y = cfg.y + (nx.y - cfg.y) * k;
-    }
-    const s = this._state[id];
-    const ang = a + t * 0.052 + Math.sin(t * 0.11 + s.seed) * 0.06;
-    const bob = Math.sin(t * 0.29 + s.seed * 2.1) * 0.075;
-    return out.set(Math.cos(ang) * r, y + bob, Math.sin(ang) * r);
+    return { name: 'settle', p: 1, lead };
   }
 
   _step(dt) {
     const t = this._time;
-    const ph = this._phase(t);
-    const cfg = CONFIGS[ph.cfg];
+    const b = this._beat(t);
     const m = this._machine;
+
+    /* Announce the beat so the page can label it. Published as a sticky
+       attribute as well as an event, for the same reason readiness is: this
+       fires from the first frame, which can precede a deferred script. */
+    const key = b.name + ':' + b.lead;
+    if (key !== this._beatKey) {
+      this._beatKey = key;
+      this.setAttribute('data-beat', key);
+      this.dispatchEvent(new CustomEvent('machine-beat', { bubbles: true, detail: { beat: b.name, lead: b.lead } }));
+    }
+
     const snap = this._first;
+    const lam = snap ? 40 : 3.4;
 
-    const docking = ph.name === 'dock' || ph.name === 'link' || ph.name === 'hold' || ph.name === 'release';
-    const chain = cfg.chain;
+    const isIn = b.name === 'input';
+    const isCore = b.name === 'core';
+    const isProc = b.name === 'process';
+    const isOut = b.name === 'outcome';
 
-    const flowTarget = ph.name === 'arrive' ? 1 : ph.name === 'dock' ? 0.55 : 0;
-    this._flow = damp(this._flow, flowTarget, 1.6, dt);
+    /* work in flight, arriving at the intake */
+    this._flow = damp(this._flow, isIn ? 1 : 0, snap ? 40 : (isIn ? 4.2 : 2.6), dt);
+
+    /* the core: quiet, then lit from the moment work reaches it */
+    const coreT = isCore ? 0.35 + smooth(b.p) * 0.65
+      : isProc ? 1
+        : isOut ? 0.8
+          : b.name === 'settle' ? 1 - smooth(b.p) * 0.76
+            : isIn ? 0.24 + smooth(b.p) * 0.16
+              : 0.16;
+    this._coreLight = damp(this._coreLight, coreT, snap ? 40 : 2.6, dt);
+    /* the gimbals spin up while the core is thinking, then ease back */
+    const boostT = isCore ? smooth(b.p) : isProc ? 1 - smooth(b.p) * 0.55 : isOut ? 0.3 : 0;
+    this._gimbalBoost = damp(this._gimbalBoost, boostT, snap ? 40 : 2.2, dt);
 
     m.moduleIds.forEach((id) => {
       const s = this._state[id];
-      const idx = chain.indexOf(id);
-      const member = idx >= 0;
-      let dockAmt = 0;
-      if (member) {
-        if (ph.name === 'dock') dockAmt = smooth((ph.p - idx * 0.14) / 0.7);
-        else if (docking) dockAmt = 1;
-        else if (ph.name === 'rearrange') dockAmt = 1 - smooth((ph.p - idx * 0.10) / 0.62);
-      }
+      const isLead = id === b.lead;
 
-      const idle = this._idlePos(id, ph, t, this._tmpA);
-      let target = idle;
-      if (dockAmt > 0.001) {
-        const d = cfg.dock[id].p;
-        this._tmpB.set(d[0], d[1], d[2]);
-        this._tmpB.y += Math.sin(t * 0.34 + s.seed) * 0.022;
-        target = idle.lerp(this._tmpB, smooth(dockAmt));
-      }
-
-      const lambda = 1.5;
-      if (snap) s.pos.copy(target);
-      else {
-        s.pos.x = damp(s.pos.x, target.x, lambda, dt);
-        s.pos.y = damp(s.pos.y, target.y, lambda, dt);
-        s.pos.z = damp(s.pos.z, target.z, lambda, dt);
-      }
-
-      const dir = this._tmpB.copy(s.pos).normalize();
-      const yawT = Math.atan2(-dir.z, dir.x);
-      const tiltT = Math.asin(Math.max(-1, Math.min(1, dir.y))) * 0.5;
-      s.yaw = snap ? yawT : s.yaw + shortest(yawT - s.yaw) * (1 - Math.exp(-2.0 * dt));
-      s.tilt = snap ? tiltT : damp(s.tilt, tiltT, 2.0, dt);
-
-      // activation: idle hum, input lights on arrival, members light while docked
+      /* activation — how lit the module is */
       let actT = 0.10;
-      if (id === 'input' && (ph.name === 'arrive' || docking)) actT = ph.name === 'arrive' ? 0.25 + smooth(ph.p) * 0.7 : 0.9;
-      else if (member && docking) actT = ph.name === 'dock' ? 0.2 + smooth(ph.p) * 0.7 : 0.9;
-      else if (member && ph.name === 'rearrange') actT = 0.35 * (1 - smooth(ph.p));
-      s.act = damp(s.act, actT, snap ? 40 : 1.9, dt);
+      if (id === 'input') {
+        actT = isIn ? 0.15 + smooth(b.p) * 0.85
+          : isCore ? 0.95 - smooth(b.p) * 0.45
+            : isProc ? 0.40 - smooth(b.p) * 0.18
+              : isOut ? 0.20 : 0.10;
+      } else if (isLead) {
+        actT = isCore ? 0.14 + smooth(b.p) * 0.20
+          : isProc ? 0.30 + smooth((b.p - 0.22) / 0.35) * 0.70
+            : isOut ? 1 : 0.10;
+      } else {
+        /* the other capabilities acknowledge without taking over */
+        actT = isCore ? 0.14 + smooth(b.p) * 0.14
+          : isProc ? 0.30 : isOut ? 0.22 : 0.10;
+      }
+      s.act = damp(s.act, actT, lam, dt);
 
-      const isAccent = id === cfg.accent;
-      const accentT = isAccent && ph.name === 'hold' ? smooth((ph.p - 0.2) / 0.3) * (1 - smooth((ph.p - 0.72) / 0.28)) : 0;
-      s.accent = damp(s.accent, accentT, snap ? 40 : 2.2, dt);
+      /* the module's own mechanism — only the lead really works */
+      const mechT = isLead
+        ? (isProc ? smooth((b.p - 0.26) / 0.42) : isOut ? 1 - smooth((b.p - 0.5) / 0.5) * 0.35 : 0)
+        : 0;
+      s.mech = damp(s.mech, mechT, snap ? 40 : 2.8, dt);
+
+      /* ember only on the lead, only as the result forms and leaves */
+      const accT = isLead && isOut ? hump(b.p, 0, 0.3, 1) : 0;
+      s.accent = damp(s.accent, accT, snap ? 40 : 3.0, dt);
 
       const mod = m.modules[id];
-      mod.group.position.copy(s.pos);
-      mod.group.rotation.y = s.yaw;
-      mod.tilt.rotation.z = s.tilt;
-
-      const lit = 0.16 + s.act * 1.5;
-      mod.light.emissiveIntensity = lit;
+      mod.light.emissiveIntensity = 0.16 + s.act * 1.75;
       mod.light.color.copy(this._petrol).lerp(this._ember, s.accent);
       mod.light.emissive.copy(this._petrol).lerp(this._ember, s.accent * 0.9);
 
-      // module-specific internal life
+      /* a breath, so the assembly is alive at rest without drifting */
+      mod.group.position.copy(s.pos);
+      mod.group.position.y += Math.sin(t * 0.5 + s.seed * 2.1) * 0.016;
+      /* the capabilities lean a few degrees while the system works */
+      mod.tilt.rotation.x = Math.sin(t * 0.22 + s.seed) * 0.03 + (isLead ? 0.075 : 0.028) * s.act;
+
+      /* ------------------------------------------------ the mechanisms */
       if (id === 'input') {
-        const spread = 0.10 + s.act * 0.055;
+        /* plates spread apart as work lands on the stack */
+        const spread = 0.10 + s.act * 0.085;
         mod.parts.plates.forEach((pl, i) => {
           pl.position.y = (i - 1.5) * spread;
-          pl.position.x = 0.02 + Math.sin(t * 0.6 + i * 0.9) * 0.006 * s.act;
+          pl.position.x = 0.02 + Math.sin(t * 1.4 + i * 0.9) * 0.012 * s.act;
         });
-        mod.pivot.rotation.x = Math.sin(t * 0.18 + s.seed) * 0.06;
       } else if (id === 'analysis') {
-        s.spin += dt * (0.09 + s.act * 0.34);
-        mod.parts.rings.forEach((r, i) => { r.rotation.x = s.spin * (i % 2 ? -1 : 1) * (1 + i * 0.35); });
+        /* lens rings counter-rotate and the barrel telescopes: an inspection */
+        s.spin += dt * (0.10 + s.mech * 1.7);
+        mod.parts.rings.forEach((r, i) => {
+          if (r.userData.bx === undefined) r.userData.bx = r.position.x;
+          r.rotation.x = s.spin * (i % 2 ? -1 : 1) * (1 + i * 0.35);
+          r.position.x = r.userData.bx + s.mech * (i - 1) * 0.085;
+        });
       } else if (id === 'action') {
-        const ext = s.act * 0.075 + Math.sin(t * 0.9) * 0.008 * s.act;
-        mod.parts.pistons.forEach((p, i) => {
-          const base = i % 2 ? 0.235 : 0.10;
-          p.position.x = base + ext * (1 + (i % 2) * 0.6);
+        /* pistons drive out and hold: the machine acting on something */
+        const ext = s.mech * 0.17 + Math.sin(t * 1.6) * 0.006 * s.mech;
+        mod.parts.pistons.forEach((pn, i) => {
+          pn.position.x = (i % 2 ? 0.235 : 0.10) + ext * (1 + (i % 2) * 0.5);
         });
-        mod.pivot.rotation.x = Math.sin(t * 0.22 + s.seed) * 0.08;
       } else if (id === 'prediction') {
-        const open = 0.22 + s.act * 0.5 + s.accent * 0.35;
-        mod.parts.blades.forEach((b, i) => {
-          b.rotation.x = (i / 3) * TAU + s.spin * 0.2 + open * 0.9;
+        /* The blades sit at radius 0.215 inside a 0.30 ring, so scaling them
+           was invisible — this module was the one loop whose response could
+           not be seen. The decision bead now pushes out THROUGH the ring
+           while the blades sweep behind it: the call coming forward. */
+        s.spin += dt * (0.08 + s.mech * 2.4);
+        mod.parts.blades.forEach((bl, i) => {
+          bl.rotation.x = (i / 3) * TAU + s.spin;
+          bl.scale.setScalar(1 + s.mech * 0.22);
         });
-        s.spin += dt * (0.08 + s.act * 0.2);
-        mod.parts.bead.scale.setScalar(1 + s.accent * 0.10);
+        const push = s.mech * 0.18;
+        mod.parts.bead.position.x = 0.01 + push;
+        mod.parts.beadCore.position.x = 0.055 + push;
+        mod.parts.bead.scale.setScalar(1 + s.mech * 0.30 + s.accent * 0.16);
       }
     });
 
-    /* core */
-    const coreT = ph.name === 'link' || ph.name === 'hold' ? 1 : ph.name === 'dock' ? 0.55 : ph.name === 'arrive' ? 0.4 : 0.22;
-    this._coreLight = damp(this._coreLight, coreT, snap ? 40 : 1.7, dt);
-    m.coreGlow.emissiveIntensity = 0.22 + this._coreLight * 1.35 + Math.sin(t * 0.7) * 0.05 * this._coreLight;
-    m.gimbal1.rotation.z += dt * (0.055 + this._coreLight * 0.06);
-    m.gimbal2.rotation.y -= dt * (0.075 + this._coreLight * 0.09);
-    m.core.rotation.y += dt * 0.035;
+    /* ------------------------------------------------------------- core */
+    m.coreGlow.emissiveIntensity = 0.18 + this._coreLight * 2.1
+      + Math.sin(t * 1.9) * 0.07 * this._coreLight * (isProc ? 1 : 0.3);
+    m.gimbal1.rotation.z += dt * (0.05 + this._gimbalBoost * 0.55);
+    m.gimbal2.rotation.y -= dt * (0.07 + this._gimbalBoost * 0.75);
+    m.core.rotation.y += dt * 0.03;
 
-    /* links: module anchor → core surface */
+    /* ------------------------------------------------------------ links */
     m.root.updateMatrixWorld(true);
     m.links.forEach((link, i) => {
-      const id = chain[i];
-      if (!id) { this._linkAmt[i] = 0; link.group.visible = false; return; }
-      let amt = 0;
-      if (ph.name === 'link') amt = smooth((ph.p - i * 0.16) / 0.7);
-      else if (ph.name === 'hold') amt = 1;
-      else if (ph.name === 'release') amt = 1 - smooth(ph.p / 0.85);
-      this._linkAmt[i] = damp(this._linkAmt[i], amt, snap ? 40 : 2.4, dt);
-      const a = this._linkAmt[i];
-      link.group.visible = a > 0.01;
-      if (!link.group.visible) return;
+      const id = LINK_ORDER[i];
       const mod = m.modules[id];
       const pa = mod.group.localToWorld(mod.anchor.clone());
       m.root.worldToLocal(pa);
       const pb = pa.clone().normalize().multiplyScalar(CORE_RADIUS + 0.015);
       layoutLink(link, pa, pb);
-      link.mats[0].opacity = a;
-      link.mats[1].opacity = a * 0.92;
-      link.wire.scale.x = link.wire.scale.y = 0.6 + a * 0.4;
-      const pulseU = ((t / 2.0 + i * 0.33) % 1);
-      const u = i === 0 ? pulseU : 1 - pulseU;
-      link.pulse.position.lerpVectors(pa, pb, u);
-      const k = Math.sin(pulseU * Math.PI);
-      link.pulse.scale.setScalar(0.5 + k * 0.9);
-      link.pulse.visible = a > 0.35;
+      link.group.visible = true;
+
+      /* structure at rest, bright while carrying */
+      const carrying = (id === 'input' && isCore) || (id === b.lead && isProc && b.p < 0.42);
+      const amtT = carrying ? 1 : 0.30 + this._state[id].act * 0.30;
+      this._linkAmt[i] = damp(this._linkAmt[i], amtT, snap ? 40 : 3.2, dt);
+      const a = this._linkAmt[i];
+      link.mats[0].opacity = 0.30 + a * 0.70;
+      link.mats[1].opacity = 0.12 + a * 0.26;
+      /* The sleeve is authored at 0.034 radius, which rendered as a pale grey
+         tube thick enough to read as scaffolding. Thinned here rather than in
+         the geometry so the export keeps its original proportions: a slim
+         dark conduit with the live teal wire inside it. */
+      link.rod.scale.x = link.rod.scale.y = 0.62;
+      link.wire.scale.x = link.wire.scale.y = 0.62 + a * 0.38;
+
+      /* one pulse, travelling the way the work travels: inward from the
+         intake to the core, then outward from the core to the capability */
+      let pu = -1;
+      if (id === 'input' && isCore) pu = smooth(b.p);
+      else if (id === b.lead && isProc && b.p < 0.45) pu = 1 - smooth(b.p / 0.42);
+      link.pulse.visible = pu >= 0;
+      if (pu >= 0) {
+        link.pulse.position.lerpVectors(pa, pb, pu);
+        link.pulse.scale.setScalar(1.15 + Math.sin(pu * Math.PI) * 0.85);
+      }
     });
 
-    /* arriving signals */
-    const inputPos = this._state.input.pos;
-    const outward = this._tmpA.copy(inputPos).normalize();
-    const start = outward.clone().multiplyScalar(2.0).add(new THREE.Vector3(0, 0.34, 0.22));
-    const intake = inputPos.clone().add(outward.clone().multiplyScalar(0.28));
-    const ctrl = start.clone().lerp(intake, 0.55).add(new THREE.Vector3(0, 0.30, -0.18));
-    const flowU = (t * 0.30) % 1;
-    m.signals.forEach((s, i) => {
-      const u = (flowU + i / m.signals.length) % 1;
-      const vis = this._flow > 0.03;
-      s.visible = vis;
+    /* --------------------------------------------------------- work in */
+    const A = this._inFrom, C = this._inCtrl, B = this._inTo;
+    const flowU = (t * 0.62) % 1;
+    m.signals.forEach((sg, i) => {
+      if (i >= 5) { sg.visible = false; return; }   /* five beads, not twelve */
+      const vis = this._flow > 0.02;
+      sg.visible = vis;
       if (!vis) return;
+      const u = (flowU + i / 5) % 1;
       const mt = 1 - u;
-      const x = mt * mt * start.x + 2 * mt * u * ctrl.x + u * u * intake.x;
-      const y = mt * mt * start.y + 2 * mt * u * ctrl.y + u * u * intake.y;
-      const z = mt * mt * start.z + 2 * mt * u * ctrl.z + u * u * intake.z;
-      s.position.set(x, y, z);
-      const fade = Math.min(1, u * 5) * Math.min(1, (1 - u) * 6);
-      s.scale.setScalar(0.6 + fade * 0.7);
+      sg.position.set(
+        mt * mt * A.x + 2 * mt * u * C.x + u * u * B.x,
+        mt * mt * A.y + 2 * mt * u * C.y + u * u * B.y,
+        mt * mt * A.z + 2 * mt * u * C.z + u * u * B.z
+      );
+      const fade = Math.min(1, u * 4) * Math.min(1, (1 - u) * 5);
+      sg.scale.setScalar(1.5 + fade * 1.2);
     });
-    m.signalMat.opacity = this._flow * 0.9;
+    m.signalMat.opacity = this._flow * 0.95;
 
-    /* output signal from the accent module */
-    const accentState = this._state[cfg.accent];
-    let outAmt = 0;
-    if (ph.name === 'hold') outAmt = smooth((ph.p - 0.32) / 0.62);
-    if (outAmt > 0.001 && outAmt < 0.999) {
-      const dir = accentState.pos.clone().normalize();
-      const from = accentState.pos.clone().add(dir.clone().multiplyScalar(0.38));
+    /* -------------------------------------------------------- result out */
+    if (isOut) {
+      const ls = this._state[b.lead];
+      const u = smooth(b.p / 0.92);
       m.output.visible = true;
-      m.output.position.copy(from).add(dir.multiplyScalar(outAmt * 1.05));
-      m.output.position.y += Math.sin(outAmt * Math.PI) * 0.12;
-      m.outMat.opacity = Math.sin(Math.min(1, outAmt * 1.05) * Math.PI) * 0.95;
-      m.output.scale.setScalar(0.7 + (1 - outAmt) * 0.5);
+      m.output.position.copy(ls.pos).addScaledVector(ls.dir, 0.42 + u * 0.80);
+      m.output.position.y += Math.sin(u * Math.PI) * 0.10;
+      /* fades out well before the frame edge, so it reads as leaving rather
+         than as being cut off */
+      m.outMat.opacity = Math.min(1, u * 5) * (1 - smooth((u - 0.55) / 0.45)) * 0.98;
+      m.output.scale.setScalar(1.35 + u * 0.5);
     } else {
       m.output.visible = false;
     }
 
-    m.motes.rotation.y = t * 0.014;
-    m.motes.material.opacity = 0.16 + Math.sin(t * 0.2) * 0.05;
+    m.motes.rotation.y = t * 0.012;
+    m.motes.material.opacity = 0.15 + Math.sin(t * 0.2) * 0.04;
 
-    /* whole-sculpture drift: slow oscillating yaw, never a constant spin */
-    m.root.rotation.y = Math.sin(t * 0.045) * 0.42 + Math.sin(t * 0.017) * 0.18;
-    m.root.rotation.x = Math.sin(t * 0.031) * 0.035;
+    /* Whole-object drift, kept small on purpose. The story is the machine's
+       state changes; a big swing moved those relationships around the frame
+       and turned the piece back into a rotating object. */
+    m.root.rotation.y = Math.sin(t * 0.09) * 0.13;
+    m.root.rotation.x = Math.sin(t * 0.061) * 0.022;
 
-    /* camera */
+    /* ----------------------------------------------------------- camera */
     const p = this._ptr;
     p.x = damp(p.x, p.tx, 2.2, dt);
     p.y = damp(p.y, p.ty, 2.2, dt);
     const cam = this._camera;
     const dir = this._camDir.clone();
-    const yaw = -p.x * 0.075;
-    const pitch = p.y * 0.05;
-    dir.applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
-    dir.y += pitch;
+    dir.applyAxisAngle(new THREE.Vector3(0, 1, 0), -p.x * 0.06);
+    dir.y += p.y * 0.04;
     dir.normalize().multiplyScalar(this._dist);
     cam.position.copy(dir);
     cam.lookAt(0, -0.02, 0);
@@ -478,9 +502,7 @@ class IntelligenceMachine extends HTMLElement {
       this._raf = requestAnimationFrame(tick);
       /* Clamped at zero as well as at the top: the timestamp handed to a rAF
          callback is the frame's start time, which can predate the
-         performance.now() captured when the loop was scheduled. That made the
-         first dt negative, drove _time below zero, and JS's sign-preserving %
-         then indexed CONFIGS[-1]. */
+         performance.now() captured when the loop was scheduled. */
       const dt = Math.max(0, Math.min(0.05, (now - last) / 1000));
       last = now;
       if (!this._visible || this._hidden || this.hasAttribute('paused')) return;

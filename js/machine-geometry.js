@@ -16,54 +16,26 @@
 
 export const CORE_RADIUS = 0.50;
 
-export const CONFIGS = [
-  {
-    // input → intelligence → action  (opposed horizontal spine)
-    chain: ['input', 'action'],
-    accent: 'action',
-    dock: {
-      input: { p: [-1.12, 0.08, 0.14] },
-      action: { p: [1.06, 0.00, -0.12] },
-    },
-    idle: {
-      input: { a: 2.42, r: 1.34, y: 0.34 },
-      analysis: { a: 4.05, r: 1.42, y: -0.52 },
-      action: { a: 0.34, r: 1.38, y: 0.14 },
-      prediction: { a: 5.30, r: 1.30, y: 0.58 },
-    },
-  },
-  {
-    // input → analysis → intelligence → prediction  (triangular fan)
-    chain: ['input', 'analysis', 'prediction'],
-    accent: 'prediction',
-    dock: {
-      input: { p: [-1.06, -0.44, 0.16] },
-      analysis: { p: [0.04, 1.10, -0.08] },
-      prediction: { p: [1.04, -0.40, -0.10] },
-    },
-    idle: {
-      input: { a: 3.35, r: 1.30, y: -0.36 },
-      analysis: { a: 1.15, r: 1.40, y: 0.60 },
-      action: { a: 5.05, r: 1.44, y: -0.18 },
-      prediction: { a: 0.05, r: 1.32, y: 0.42 },
-    },
-  },
-  {
-    // input → intelligence → decision  (rising diagonal)
-    chain: ['input', 'prediction'],
-    accent: 'prediction',
-    dock: {
-      input: { p: [-0.94, 0.68, 0.12] },
-      prediction: { p: [0.82, -0.80, -0.08] },
-    },
-    idle: {
-      input: { a: 1.60, r: 1.36, y: 0.54 },
-      analysis: { a: 3.10, r: 1.30, y: -0.46 },
-      action: { a: 4.55, r: 1.44, y: 0.36 },
-      prediction: { a: 6.05, r: 1.34, y: -0.22 },
-    },
-  },
-];
+/**
+ * The assembled rest pose. The machine no longer drifts apart and rebuilds
+ * itself — a visitor read that as the object assembling, not as work being
+ * processed. Every module holds one position for good; the story is told by
+ * signals, link pulses, core light and each module's own mechanism.
+ *
+ * Laid out so the flow is legible on screen: work arrives at the intake on
+ * the left, the core sits at the origin, and the three capabilities stand
+ * clear of each other so it is obvious which one is responding.
+ */
+export const HOME = {
+  input:      { p: [-1.26, -0.40,  0.22] },   /* lower-left  — intake */
+  analysis:   { p: [-0.66,  0.84, -0.24] },   /* upper-left  — lens rings */
+  prediction: { p: [ 0.70,  0.80,  0.20] },   /* upper-right — iris */
+  action:     { p: [ 1.24, -0.36, -0.16] },   /* lower-right — pistons */
+};
+
+/** The capability that leads each loop, in order. Cycles so a repeat viewer
+ *  sees a different mechanism respond to a different piece of work. */
+export const LEADS = ['action', 'analysis', 'prediction'];
 
 function roundedRect(THREE, w, h, r) {
   const x = -w / 2, y = -h / 2;
@@ -326,6 +298,7 @@ export function buildMachine(three) {
     const beadCore = mesh(new THREE.SphereGeometry(0.062, 36, 24), m.light, 'decision_bead_light', p);
     beadCore.position.x = 0.055;
     m.parts.bead = bead;
+    m.parts.beadCore = beadCore;
     const stem = mesh(new THREE.CylinderGeometry(0.055, 0.075, 0.16, 32), mat.graphite, 'decision_stem', p);
     stem.rotation.z = Math.PI / 2;
     stem.position.x = -0.20;
@@ -334,8 +307,10 @@ export function buildMachine(three) {
 
   /* --------------------------------------------------------------- links */
 
+  /* One per module, and permanent: the machine is always connected, so the
+     link is structure rather than something that appears while docking. */
   const links = [];
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 4; i++) {
     const lm = new THREE.MeshStandardMaterial({
       color: 0x0d5a4e, roughness: 0.3, metalness: 0.1,
       emissive: 0x0d5a4e, emissiveIntensity: 0.5, transparent: true, opacity: 0,
