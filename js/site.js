@@ -840,10 +840,10 @@
   };
 
   var COPY = {
-    outLab: { en:"Extra capacity at your current team size", ar:"طاقة إضافية بنفس حجم فريقك الحالي" },
-    capSub: { en:"more %U a month, before anyone new is needed",
+    outLab: { en:"Extra capacity without adding to your team", ar:"طاقة إضافية بنفس حجم فريقك الحالي" },
+    capSub: { en:"additional %U per month before you need to hire another person",
               ar:"%U زيادة في الشهر، قبل ما تحتاج حد جديد" },
-    k1: { en:"Your growth plan needs", ar:"خطة النمو بتاعتك محتاجة" },
+    k1: { en:"Additional workload from your growth plan", ar:"خطة النمو بتاعتك محتاجة" },
     k2: { en:"Staff hours you don't have to add", ar:"ساعات شغل مش هتضطر تضيفها" },
     k3: { en:"Cost of handling that growth manually", ar:"تكلفة استيعاب النمو ده يدويًا" },
     fits: { en:"%N — covered", ar:"%N — مغطاة" },
@@ -851,10 +851,10 @@
     hrs:  { en:"%N h / month", ar:"%N ساعة / شهر" },
     hrsP: { en:"%N h / month (≈ %P people)", ar:"%N ساعة / شهر (≈ %P أفراد)" },
     egp:  { en:"%N EGP / year", ar:"%N جنيه / سنة" },
-    svc:  { en:"On top of that: customers get an answer outside working hours, and a first response in seconds at any volume.",
+    svc:  { en:"Customers can receive an immediate first response outside working hours, while your team only handles the cases that need them.",
             ar:"وكمان: العملاء بياخدوا رد بره مواعيد الشغل، وأول رد في ثواني مهما كان الحجم." },
     badge: { en:"extra capacity", ar:"طاقة إضافية" },
-    tail: { en:" Both figures sit at the cautious end on purpose, and both are editable on the full calculator.",
+    tail: { en:" We use conservative assumptions on purpose, and both are editable on the full calculator.",
             ar:" الافتراضين دول عند أقل تقدير عن قصد، وتقدر تعدّلهم في الحاسبة الكاملة." }
   };
 

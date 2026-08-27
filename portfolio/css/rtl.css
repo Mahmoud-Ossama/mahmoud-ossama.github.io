@@ -1,0 +1,105 @@
+/* ============================
+   RTL & Arabic Support
+   ============================ */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;500;600;700;800&display=swap');
+
+body.rtl {
+    direction: rtl;
+    text-align: right;
+    font-family: 'Noto Kufi Arabic', var(--font-sans);
+}
+
+/* Nav */
+body.rtl .nav-links { flex-direction: row-reverse; }
+body.rtl .menu-btn { order: -1; }
+body.rtl .dark-mode-toggle { margin-right: 0; margin-left: 16px; }
+
+/* Hero */
+body.rtl .hero-content { text-align: right; }
+body.rtl .btn-group { justify-content: flex-start; }
+body.rtl .social-icons { justify-content: flex-start; }
+body.rtl .btn i.fa-arrow-right { transform: scaleX(-1); }
+body.rtl .hero-blog-glow { right: auto; left: -40px; }
+body.rtl .hero-blog-card { text-align: right; }
+body.rtl .hero-blog-link i { transform: scaleX(-1); }
+body.rtl .hero-blog-all { flex-direction: row-reverse; }
+
+/* About */
+body.rtl .about-content { direction: rtl; }
+body.rtl .about-text { text-align: right; }
+body.rtl .info-item { flex-direction: row-reverse; text-align: right; }
+body.rtl .info-item > div { text-align: right; }
+
+/* Experience */
+body.rtl .experience-timeline { padding-left: 0; padding-right: 40px; }
+body.rtl .experience-timeline::before { left: auto; right: 0; }
+body.rtl .timeline-marker { left: auto; right: -46px; }
+body.rtl .timeline-header { flex-direction: row-reverse; text-align: right; }
+body.rtl .timeline-details li { padding-left: 0; padding-right: 20px; text-align: right; }
+body.rtl .timeline-details li::before { left: auto; right: 0; }
+body.rtl .timeline-company { text-align: right; }
+body.rtl .timeline-type { margin-left: 0; margin-right: 8px; }
+
+/* Education */
+body.rtl .education-header { flex-direction: row-reverse; }
+body.rtl .education-item { text-align: right; }
+body.rtl .certification-tags span { flex-direction: row-reverse; }
+
+/* Skills */
+body.rtl .skills-tabs { direction: rtl; }
+
+/* Projects */
+body.rtl .project-info { text-align: right; }
+body.rtl .project-problem { border-left: none; border-right: 3px solid var(--primary); }
+body.rtl .project-tags { justify-content: flex-start; }
+body.rtl .project-link-btn { flex-direction: row-reverse; }
+
+/* Contact */
+body.rtl .contact-content { direction: rtl; }
+body.rtl .contact-info { text-align: right; }
+body.rtl .contact-item { flex-direction: row-reverse; text-align: right; }
+body.rtl .contact-item > div { text-align: right; }
+body.rtl .social-links { justify-content: flex-start; }
+body.rtl .contact-form { text-align: right; }
+body.rtl .input-group input,
+body.rtl .input-group textarea { text-align: right; }
+body.rtl .contact-form .btn { flex-direction: row-reverse; }
+
+/* Footer */
+body.rtl .footer { text-align: center; }
+
+/* Language Toggle Button */
+.lang-toggle {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 700;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 10px;
+    background: var(--light);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    transition: var(--transition);
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+}
+
+.lang-toggle:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+/* Mobile RTL fixes */
+@media screen and (max-width: 768px) {
+    body.rtl .experience-timeline { padding-left: 0; padding-right: 28px; }
+    body.rtl .timeline-marker { right: -34px; left: auto; }
+}
+
+@media screen and (max-width: 480px) {
+    body.rtl .experience-timeline { padding-right: 28px; }
+    body.rtl .timeline-marker { right: -34px; }
+}

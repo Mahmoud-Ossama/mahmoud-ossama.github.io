@@ -3,14 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mahmoud Osama | AI & Cybersecurity Student</title>
+    <title>Mahmoud Osama | AI Engineer & Backend Developer</title>
+    <meta name="description" content="Backend-focused AI engineer specializing in Python, FastAPI, Django, ML pipelines, LLM automation, and security applications.">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/rtl.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- EmailJS SDK -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="js/i18n.js"></script>
 </head>
-<body>
+<body class="dark-mode">
+    <canvas id="global-bg-canvas"></canvas>
+    
     <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
@@ -18,15 +23,30 @@
                 <a href="#home">MO<span>.</span></a>
             </div>
             <ul class="nav-links">
-                <li><a href="#home" class="active">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#home" class="active" data-i18n="nav_home">Home</a></li>
+                <li><a href="#about" data-i18n="nav_about">About</a></li>
+                <li><a href="#experience" data-i18n="nav_experience">Experience</a></li>
+                <li><a href="#skills" data-i18n="nav_skills">Skills</a></li>
+                <li><a href="#projects" data-i18n="nav_projects">Projects</a></li>
+                <li><a href="blog.html" data-i18n="nav_blog">Blog</a></li>
+                <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
             </ul>
-            <div class="dark-mode-toggle">
-                <i class="fas fa-moon"></i>
-                <i class="fas fa-sun"></i>
+            <button class="lang-toggle" id="langToggle" onclick="toggleLanguage()" aria-label="Toggle language">AR</button>
+            <div class="dark-mode-toggle" aria-label="Toggle dark mode">
+                <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+                </svg>
+                <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="4"></circle>
+                    <path d="M12 2v2"></path>
+                    <path d="M12 20v2"></path>
+                    <path d="m4.93 4.93 1.41 1.41"></path>
+                    <path d="m17.66 17.66 1.41 1.41"></path>
+                    <path d="M2 12h2"></path>
+                    <path d="M20 12h2"></path>
+                    <path d="m6.34 17.66-1.41 1.41"></path>
+                    <path d="m19.07 4.93-1.41 1.41"></path>
+                </svg>
             </div>
             <div class="menu-btn">
                 <div class="menu-btn__burger"></div>
@@ -36,108 +56,178 @@
 
     <!-- Hero Section -->
     <header id="home" class="hero">
+        <!-- Full-screen 3D background image (waves) -->
+        <div class="hero-bg-image"></div>
+        <!-- Dark gradient overlay for text readability -->
+        <div class="hero-overlay"></div>
         <div class="container">
-            <div class="hero-content">
-                <h1>Hi, I'm <span>Mahmoud Osama</span></h1>
-                <div class="text-animate">
-                    <h3>I Build 
-                        <span class="text-rotate">
-                            AI Solutions, 
-                            Secure Systems, 
-                            Intelligent Models
-                        </span>
-                    </h3>
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <p class="hero-greeting" data-i18n="hero_greeting">Hello, I'm</p>
+                    <h1>Mahmoud Osama</h1>
+                    <div class="text-animate">
+                        <h2><span class="text-rotate"></span><span class="cursor">|</span></h2>
+                    </div>
+                    <p class="hero-description" data-i18n="hero_description">Backend-focused AI engineer building production systems with Python, FastAPI, and Django. I ship ML pipelines, LLM-powered applications, and security tools end-to-end.</p>
+                    <div class="btn-group">
+                        <a href="#projects" class="btn btn-primary" data-i18n-html="hero_btn_work">Work Showcase <i class="fas fa-arrow-right"></i></a>
+                        <a href="#contact" class="btn btn-outline" data-i18n="hero_btn_contact">Reach Out</a>
+                    </div>
+                    <div class="social-icons">
+                        <a href="https://github.com/Mahmoud-Ossama" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/mahmoud-osama-ai/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="mailto:mahmoud@osama.engineer" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
                 </div>
-                <p>Turning complex problems into elegant solutions through AI and cybersecurity expertise.</p>
-                <div class="btn-group">
-                    <a href="#projects" class="btn btn-primary">View My Work</a>
-                    <a href="#contact" class="btn btn-outline">Contact Me</a>
-                </div>
-                <div class="social-icons">
-                    <a href="https://github.com/Mahmoud-Ossama"><i class="fab fa-github"></i></a>
-                    <a href="https://www.linkedin.com/in/mahmoud-osama-ai/"><i class="fab fa-linkedin"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
+                <!-- CSS Animated 3D PC -->
+                <div class="hero-pc-container">
+                    <img src="images/3d_pc_transparent.png" alt="3D Workstation setup" class="hero-pc-image" />
                 </div>
             </div>
         </div>
         <div class="scroll-indicator">
-            <a href="#about">
-                <div class="mouse"></div>
-            </a>
+            <a href="#about"><div class="mouse"></div></a>
         </div>
     </header>
+
+    <!-- Latest Blog Section -->
+    <section id="latest-blog" class="section latest-blog-section">
+        <div class="container">
+            <div class="latest-blog-container">
+                <a href="blogs/Tech_Job_Market_Egypt.html" class="hero-blog-card">
+                    <div class="hero-blog-glow"></div>
+                    <div class="hero-blog-header">
+                        <span class="hero-blog-badge"><i class="fas fa-pen-nib"></i> <span data-i18n="blog_latest">Latest</span></span>
+                        <span class="hero-blog-lang">AR</span>
+                    </div>
+                    <h3 data-i18n="blog_latest_title">Tech Job Market in Egypt 2026</h3>
+                    <p data-i18n="blog_latest_excerpt">Software Engineering vs AI Engineering — a data-driven comparison of career paths and salaries.</p>
+                    <span class="hero-blog-link"><span data-i18n="blog_read_article">Read article</span> <i class="fas fa-arrow-right"></i></span>
+                </a>
+                <a href="blog.html" class="hero-blog-all">
+                    <i class="fas fa-book-open"></i> <span data-i18n="blog_cta">Read My Blog</span>
+                </a>
+            </div>
+        </div>
+    </section>
 
     <!-- About Section -->
     <section id="about" class="about section">
         <div class="container">
-            <div class="section-header">
-                <h2>About Me</h2>
+            <div class="section-header scroll-reveal">
+                <span class="section-tag" data-i18n="about_tag">About</span>
+                <h2 data-i18n="about_title">Who I Am</h2>
                 <div class="section-line"></div>
             </div>
-            <div class="about-content">
+            <div class="about-content scroll-reveal">
                 <div class="about-img">
-                    <img src="images/profile.png" alt="Mahmoud Osama">
+                    <img src="images/just_working.png" alt="Mahmoud Osama - AI Engineer">
                 </div>
                 <div class="about-text">
-                    <h3>AI Agent Developer & ML Engineer</h3>
-                    <p>Innovative AI developer specializing in intelligent agent systems and machine learning solutions with a background in cybersecurity. Passionate about creating conversational AI, autonomous agents, and LLM-powered applications that solve real-world problems. Combines creative thinking with technical expertise to build the next generation of intelligent software.</p>
+                    <h3 data-i18n="about_subtitle">AI Engineer &amp; Backend Developer</h3>
+                    <p data-i18n="about_p1">Backend-focused AI engineer working primarily with Python, FastAPI, and Django. My experience spans ML pipelines, LLM automation, and security applications&mdash;phishing detection and red teaming in particular.</p>
+                    <p data-i18n="about_p2">With a freelance background, I've shipped production systems end-to-end: from client requirements through architecture decisions to deployment. I build AI applications that solve real problems, integrate models into REST APIs, and handle real-time inference and system automation.</p>
                     <div class="about-info">
                         <div class="info-item">
-                            <h4>Education</h4>
-                            <p>BSc in AI/Cybersecurity</p>
+                            <div class="info-icon"><i class="fas fa-graduation-cap"></i></div>
+                            <div>
+                                <h4 data-i18n="about_edu_label">Education</h4>
+                                <p data-i18n="about_edu_val">BSc in AI &amp; Cybersecurity</p>
+                            </div>
                         </div>
                         <div class="info-item">
-                            <h4>Projects</h4>
-                            <p>10+ Completed</p>
+                            <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div>
+                                <h4 data-i18n="about_loc_label">Location</h4>
+                                <p data-i18n="about_loc_val">Mansoura, Egypt</p>
+                            </div>
                         </div>
                         <div class="info-item">
-                            <h4>Location</h4>
-                            <p>Egypt, Mansoura</p>
+                            <div class="info-icon"><i class="fas fa-globe"></i></div>
+                            <div>
+                                <h4 data-i18n="about_avail_label">Availability</h4>
+                                <p data-i18n="about_avail_val">Open to Remote</p>
+                            </div>
                         </div>
                     </div>
-                    <a href="#" class="btn btn-primary">Download CV</a>
+                    <a href="#" class="btn btn-primary" data-i18n-html="about_cv"><i class="fas fa-download"></i> Download CV</a>
                 </div>
             </div>
-            
-            <!-- Education Section -->
-            <div class="education-content">
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="experience section">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <span class="section-tag" data-i18n="exp_tag">Career</span>
+                <h2 data-i18n="exp_title">Experience</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="experience-timeline">
+                <div class="timeline-item scroll-reveal" data-delay="0.1">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div>
+                                <h3 data-i18n="exp1_role">AI Trainer &mdash; Master Coding Specialist</h3>
+                                <p class="timeline-company"><span data-i18n="exp1_company">Invisible Technologies</span> <span class="timeline-type" data-i18n="exp1_type">Contract</span></p>
+                            </div>
+                            <span class="timeline-date" data-i18n="exp1_date">Dec 2025 &mdash; Present</span>
+                        </div>
+                        <ul class="timeline-details">
+                            <li data-i18n="exp1_d1">Review and debug Python code to train AI models on algorithmic correctness</li>
+                            <li data-i18n="exp1_d2">Build datasets and test cases that improve model performance</li>
+                            <li data-i18n="exp1_d3">Support training workflows in Arabic and English</li>
+                            <li data-i18n="exp1_d4">Provide technical expertise on backend development and scripting challenges</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item scroll-reveal" data-delay="0.2">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <div>
+                                <h3 data-i18n="exp2_role">AI Engineer</h3>
+                                <p class="timeline-company"><span data-i18n="exp2_company">Self-Employed / Freelance</span> <span class="timeline-type" data-i18n="exp2_type">Remote</span></p>
+                            </div>
+                            <span class="timeline-date" data-i18n="exp2_date">Jan 2022 &mdash; Present</span>
+                        </div>
+                        <ul class="timeline-details">
+                            <li data-i18n="exp2_d1">Build and deploy AI applications for automation and security use cases using Python, FastAPI, Django</li>
+                            <li data-i18n="exp2_d2">Developed ML pipelines for phishing detection and behavior-based risk scoring</li>
+                            <li data-i18n="exp2_d3">Integrate models into REST APIs &mdash; handle real-time inference and system automation</li>
+                            <li data-i18n="exp2_d4">Work directly with clients on requirements, architecture decisions, and delivery timelines</li>
+                            <li data-i18n="exp2_d5">Debug models, optimize performance, and test for accuracy before production deployment</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Education -->
+            <div class="education-content scroll-reveal" data-delay="0.3">
                 <div class="section-sub-header">
-                    <h3>Education</h3>
+                    <h3><i class="fas fa-graduation-cap"></i> <span data-i18n="edu_header">Education</span></h3>
                 </div>
                 <div class="education-item">
                     <div class="education-header">
                         <div>
-                            <h4>Bachelor of Science in Artificial Intelligence / Cyber Security</h4>
-                            <p class="education-place">Delta University For Science And Technology | New Mansoura, Egypt</p>
-                            <p class="education-date">Expected Graduation: June 2026 | GPA: 3.3/4.0</p>
+                            <h4 data-i18n="edu_degree">Bachelor of Science in Artificial Intelligence &amp; Cybersecurity</h4>
+                            <p class="education-place" data-i18n="edu_place">Delta University for Science and Technology &mdash; Mansoura, Egypt</p>
+                            <p class="education-date" data-i18n="edu_date">Oct 2022 &mdash; Jul 2026 &nbsp;|&nbsp; GPA: 3.2 / 4.0</p>
                         </div>
                         <button class="toggle-btn" aria-label="Toggle education details">
                             <i class="fas fa-chevron-down"></i>
                         </button>
                     </div>
                     <div class="education-details">
-                        <div class="coursework">
-                            <h5>Relevant Coursework:</h5>
-                            <div class="coursework-tags">
-                                <span>Artificial Intelligence</span>
-                                <span>Artificial Neural Networks</span>
-                                <span>Natural Language Processing</span>
-                                <span>Machine Learning</span>
-                                <span>Computer Vision</span>
-                                <span>Computational Neuroscience</span>
-                                <span>Cloud Architecture</span>
-                                <span>Database Management Systems</span>
-                                <span>Computer Networks</span>
-                                <span>Data Mining</span>
-                            </div>
-                        </div>
                         <div class="certifications">
-                            <h5>Certifications & Additional Education:</h5>
+                            <h5 data-i18n="edu_certs">Certifications</h5>
                             <div class="certification-tags">
-                                <span>Machine Learning for Production (MLOps)</span>
-                                <span>Mathematics for Machine Learning</span>
-                                <span>Algebra and Differential Calculus for Data Science</span>
-                                <span>HCIA-Cloud Computing V5.5</span>
+                                <span><i class="fas fa-certificate"></i> <span data-i18n="cert1">NVIDIA Deep Learning Institute (DLI) &mdash; ITI</span></span>
+                                <span><i class="fas fa-certificate"></i> <span data-i18n="cert2">Building LLM Applications with Prompt Engineering</span></span>
+                                <span><i class="fas fa-certificate"></i> <span data-i18n="cert3">Building Agentic AI &mdash; Andrew Ng</span></span>
+                                <span><i class="fas fa-certificate"></i> <span data-i18n="cert4">25+ Technical Courses &mdash; Coursera</span></span>
                             </div>
                         </div>
                     </div>
@@ -149,149 +239,89 @@
     <!-- Skills Section -->
     <section id="skills" class="skills section">
         <div class="container">
-            <div class="section-header">
-                <h2>My Skills</h2>
+            <div class="section-header scroll-reveal">
+                <span class="section-tag" data-i18n="skills_tag">Expertise</span>
+                <h2 data-i18n="skills_title">Technical Skills</h2>
                 <div class="section-line"></div>
             </div>
-            <div class="skill-categories">
-                <div class="category-selector">
-                    <button class="skill-tab active" data-target="ai-agents">AI Agents</button>
-                    <button class="skill-tab" data-target="ai-ml">ML & Data</button>
-                    <button class="skill-tab" data-target="development">Development</button>
-                    <button class="skill-tab" data-target="cybersecurity">Cybersecurity</button>
-                </div>
-                
-                <div class="skill-content active" id="ai-agents">
-                    <div class="skills-container">
-                        <div class="skill-item">
-                            <i class="fas fa-robot"></i>
-                            <h3>LLM Integration</h3>
-                            <div class="skill-level">
-                                <div class="skill-bar" style="width: 90%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-comments"></i>
-                            <h3>Conversational AI</h3>
-                            <div class="skill-level">
-                                <div class="skill-bar" style="width: 88%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-cogs"></i>
-                            <h3>Agent Frameworks</h3>
-                            <div class="skill-level">
-                                <div class="skill-bar" style="width: 85%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-microchip"></i>
-                            <h3>Prompt Engineering</h3>
-                            <div class="skill-level">
-                                <div class="skill-bar" style="width: 92%"></div>
-                            </div>
-                        </div>
+            <!-- Skills Tabs Removed for cleaner category layout -->
+            <div class="slider-wrapper">
+                <button class="slider-btn prev-btn" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+                <div class="skills-category-grid slider-container">
+                <!-- Backend & Languages -->
+                <div class="skill-category-card scroll-reveal" data-delay="0.1">
+                    <div class="skill-category-header">
+                        <i class="fas fa-server"></i>
+                        <h3 data-i18n="tab_backend">Backend & Languages</h3>
                     </div>
+                    <ul class="skill-list">
+                        <li><i class="fab fa-python"></i> Python</li>
+                        <li><i class="fab fa-js-square"></i> JavaScript</li>
+                        <li><i class="fas fa-bolt"></i> FastAPI</li>
+                        <li><i class="fas fa-cubes"></i> Django</li>
+                        <li><i class="fas fa-flask"></i> Flask</li>
+                        <li><i class="fas fa-plug"></i> REST APIs</li>
+                    </ul>
                 </div>
-                
-                <div class="skill-content" id="ai-ml">
-                    <div class="skills-container">
-                        <div class="skill-item">
-                            <i class="fas fa-brain"></i>
-                            <h3>Machine Learning</h3>
-                            <div class="skill-level">
-                                <div class="skill-bar" style="width: 85%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-project-diagram"></i>
-                            <h3>NLP</h3>
-                            <div class="skill-level">
-                                <div class="skill-bar" style="width: 80%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-chart-line"></i>
-                            <h3>Data Analysis</h3>
-                            <div class="skill-level">
-                                <div class="skill-bar" style="width: 82%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-laptop-code"></i>
-                            <h3>PyTorch/Keras</h3>
-                            <div class="skill-level">
-                                <div class="skill-bar" style="width: 78%"></div>
-                            </div>
-                        </div>
+
+                <!-- Machine Learning -->
+                <div class="skill-category-card scroll-reveal" data-delay="0.2">
+                    <div class="skill-category-header">
+                        <i class="fas fa-brain"></i>
+                        <h3 data-i18n="tab_ml">Machine Learning</h3>
                     </div>
+                    <ul class="skill-list">
+                        <li><i class="fas fa-chart-line"></i> scikit-learn</li>
+                        <li><i class="fas fa-network-wired"></i> TensorFlow</li>
+                        <li><i class="fas fa-fire"></i> PyTorch</li>
+                        <li><i class="fas fa-cogs"></i> <span data-i18n="sk_feature_eng">Feature Engineering</span></li>
+                        <li><i class="fas fa-graduation-cap"></i> <span data-i18n="sk_model_training">Model Training</span></li>
+                    </ul>
                 </div>
-                
-                <div class="skill-content" id="development">
-                    <div class="skills-container">
-                        <div class="skill-item">
-                            <i class="fab fa-python"></i>
-                            <h3>Python</h3>
-                            <div class="skill-level">
-                                <div class="skill-bar" style="width: 90%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-database"></i>
-                            <h3>SQL/MongoDB</h3>
-                            <div class="skill-level">
-                                <div class="skill-bar" style="width: 75%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-code"></i>
-                            <h3>Django/Flask</h3>
-                            <div class="skill-level">
-                                <div class="skill-bar" style="width: 82%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fab fa-java"></i>
-                            <h3>Java/C#/C++</h3>
-                            <div class="skill-level">
-                                <div class="skill-bar" style="width: 70%"></div>
-                            </div>
-                        </div>
+
+                <!-- LLMs & Agents -->
+                <div class="skill-category-card scroll-reveal" data-delay="0.3">
+                    <div class="skill-category-header">
+                        <i class="fas fa-robot"></i>
+                        <h3 data-i18n="tab_llm">LLMs & Agents</h3>
                     </div>
+                    <ul class="skill-list">
+                        <li><i class="fas fa-link"></i> LangChain</li>
+                        <li><i class="fas fa-microchip"></i> OpenAI API</li>
+                        <li><i class="fas fa-server"></i> Ollama</li>
+                        <li><i class="fas fa-project-diagram"></i> <span data-i18n="sk_agent_workflows">Agent Workflows</span></li>
+                        <li><i class="fas fa-tools"></i> <span data-i18n="sk_tool_calling">Tool Calling</span></li>
+                        <li><i class="fas fa-users-cog"></i> <span data-i18n="sk_multi_agent">Multi-Agent Systems</span></li>
+                    </ul>
                 </div>
-                
-                <div class="skill-content" id="cybersecurity">
-                    <div class="skills-container">
-                        <div class="skill-item">
-                            <i class="fas fa-shield-alt"></i>
-                            <h3>Security Analysis</h3>
-                            <div class="skill-level">
-                                <div class="skill-bar" style="width: 75%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-lock"></i>
-                            <h3>Threat Detection</h3>
-                            <div class="skill-level">
-                                <div class="skill-bar" style="width: 70%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-unlock"></i>
-                            <h3>Vulnerability Assessment</h3>
-                            <div class="skill-level">
-                                <div class="skill-bar" style="width: 65%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <i class="fas fa-network-wired"></i>
-                            <h3>Network Security</h3>
-                            <div class="skill-level">
-                                <div class="skill-bar" style="width: 60%"></div>
-                            </div>
-                        </div>
+
+                <!-- Databases & DevOps -->
+                <div class="skill-category-card scroll-reveal" data-delay="0.4">
+                    <div class="skill-category-header">
+                        <i class="fas fa-database"></i>
+                        <h3 data-i18n="tab_db">Databases & DevOps</h3>
                     </div>
+                    <ul class="skill-list">
+                        <li><i class="fas fa-database"></i> PostgreSQL / MySQL</li>
+                        <li><i class="fab fa-docker"></i> Docker</li>
+                        <li><i class="fab fa-git-alt"></i> Git & GitHub</li>
+                        <li><i class="fas fa-sync-alt"></i> CI/CD Pipelines</li>
+                    </ul>
                 </div>
+
+                <!-- Security -->
+                <div class="skill-category-card scroll-reveal" data-delay="0.5">
+                    <div class="skill-category-header">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3 data-i18n="tab_security">Security</h3>
+                    </div>
+                    <ul class="skill-list">
+                        <li><i class="fas fa-fish"></i> <span data-i18n="sk_phishing">Phishing Detection</span></li>
+                        <li><i class="fas fa-user-secret"></i> <span data-i18n="sk_red_team">Red Teaming Automation</span></li>
+                        <li><i class="fas fa-shield-alt"></i> <span data-i18n="sk_sec_ml">Security-Focused ML</span></li>
+                    </ul>
+                </div>
+                <button class="slider-btn next-btn" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
             </div>
         </div>
     </section>
@@ -299,99 +329,199 @@
     <!-- Projects Section -->
     <section id="projects" class="projects section">
         <div class="container">
-            <div class="section-header">
-                <h2>My Projects</h2>
+            <div class="section-header scroll-reveal">
+                <span class="section-tag" data-i18n="proj_tag">Portfolio</span>
+                <h2 data-i18n="proj_title">Featured Projects</h2>
                 <div class="section-line"></div>
             </div>
-            <div class="project-filters">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="ai-agent">AI Agents</button>
-                <button class="filter-btn" data-filter="ai">Machine Learning</button>
-                <button class="filter-btn" data-filter="security">Security</button>
-            </div>
-            <div class="projects-container">
-                <!-- Project 1 -->
-                <div class="project-card" data-category="ai-agent">
+            <div class="slider-wrapper">
+                <button class="slider-btn prev-btn" aria-label="Previous"><i class="fas fa-chevron-left"></i></button>
+                <div class="projects-container slider-container">
+                <!-- Project 1: Red Teaming Agent -->
+                <div class="project-card scroll-reveal" data-category="security" data-delay="0.1">
                     <div class="project-img">
-                        <img src="images/project1.png" alt="AI Financial Advisor Agent">
+                        <img src="images/project_red_teaming.png" alt="AI Red Teaming Agent">
                         <div class="project-overlay">
-                            <a href="#" class="project-link"><i class="fas fa-link"></i></a>
-                            <a href="https://github.com/Mahmoud-Ossama" class="project-github"><i class="fab fa-github"></i></a>
+                            <a href="https://github.com/Mahmoud-Ossama/RedTeaming_Agent_v1" target="_blank" rel="noopener noreferrer" class="project-github"><i class="fab fa-github"></i></a>
                         </div>
                     </div>
                     <div class="project-info">
-                        <h3>AI Financial Advisor Agent</h3>
-                        <p>A sophisticated LLM-powered agent with RAG capabilities that delivers personalized financial insights, performs complex calculations, and maintains context throughout multi-turn conversations.</p>
+                        <h3 data-i18n="p1_title">AI Red Teaming Agent</h3>
+                        <p class="project-problem"><strong data-i18n="problem_label">Problem:</strong> <span data-i18n="p1_problem">Organizations need continuous, automated security testing to identify vulnerabilities before real attackers do.</span></p>
+                        <p class="project-solution" data-i18n="p1_solution">Automated agent that simulates phishing campaigns and cyberattacks for security testing. Runs continuous threat simulations to test system defenses. Helped reduce successful phishing attempts by 25% over three months during evaluation.</p>
                         <div class="project-tags">
-                            <span>LangChain</span>
-                            <span>RAG</span>
-                            <span>OpenAI API</span>
+                            <span>Python</span>
+                            <span>LLMs</span>
+                            <span>Security Automation</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/Mahmoud-Ossama/RedTeaming_Agent_v1" target="_blank" rel="noopener noreferrer" class="project-link-btn" data-i18n-html="proj_view_gh"><i class="fab fa-github"></i> View on GitHub</a>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Project 3 -->
-                <div class="project-card" data-category="ai-agent">
+                <!-- Project 2: WhatsApp Clinic Agent -->
+                <div class="project-card scroll-reveal" data-category="ai-agent" data-delay="0.2">
                     <div class="project-img">
-                        <img src="images/project3.png" alt="WhatsApp Clinic Agent">
+                        <img src="images/project_whatsapp.png" alt="WhatsApp Clinic AI Agent">
                         <div class="project-overlay">
-                            <a href="#" class="project-link"><i class="fas fa-link"></i></a>
-                            <a href="https://github.com/Mahmoud-Ossama" class="project-github"><i class="fab fa-github"></i></a>
+                            <a href="https://github.com/Mahmoud-Ossama/WhatsApp-Clinic-AI-Agent" target="_blank" rel="noopener noreferrer" class="project-github"><i class="fab fa-github"></i></a>
                         </div>
                     </div>
                     <div class="project-info">
-                        <h3>WhatsApp Clinic Agent</h3>
-                        <p>An intelligent healthcare agent that manages patient interactions, uses NLP to understand symptoms, and integrates with medical databases to provide doctors with comprehensive patient insights.</p>
+                        <h3 data-i18n="p2_title">WhatsApp Clinic AI Agent</h3>
+                        <p class="project-problem"><strong data-i18n="problem_label">Problem:</strong> <span data-i18n="p2_problem">Clinics struggle with patient communication overhead&mdash;manual updates, missed appointments, and fragmented records.</span></p>
+                        <p class="project-solution" data-i18n="p2_solution">Patient communication system using NLP for automated medical messaging. Integrates with the WhatsApp API for real-time updates and two-way engagement. Backend pulls patient data and displays it on physician dashboards showing appointment status and medical history.</p>
                         <div class="project-tags">
                             <span>NLP</span>
                             <span>WhatsApp API</span>
-                            <span>Agent System</span>
+                            <span>Backend Systems</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/Mahmoud-Ossama/WhatsApp-Clinic-AI-Agent" target="_blank" rel="noopener noreferrer" class="project-link-btn" data-i18n-html="proj_view_gh"><i class="fab fa-github"></i> View on GitHub</a>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Project 2 -->
-                <div class="project-card" data-category="security">
+                <!-- Project 3: Phishing URL Detection -->
+                <div class="project-card scroll-reveal" data-category="security" data-delay="0.3">
                     <div class="project-img">
-                        <img src="images/project2.png" alt="Phishing URL Detection System">
+                        <img src="images/project_phishing.png" alt="ML Phishing URL Detection System">
                         <div class="project-overlay">
-                            <a href="#" class="project-link"><i class="fas fa-link"></i></a>
-                            <a href="https://github.com/Mahmoud-Ossama" class="project-github"><i class="fab fa-github"></i></a>
+                            <a href="https://github.com/Mahmoud-Ossama/Phishing-URL-Detection" target="_blank" rel="noopener noreferrer" class="project-github"><i class="fab fa-github"></i></a>
                         </div>
                     </div>
                     <div class="project-info">
-                        <h3>Phishing URL Detection System</h3>
-                        <p>A machine learning system to identify potential phishing attempts with high accuracy using URL characteristics and structural components analysis.</p>
+                        <h3 data-i18n="p3_title">ML Phishing URL Detection System</h3>
+                        <p class="project-problem"><strong data-i18n="problem_label">Problem:</strong> <span data-i18n="p3_problem">Phishing URLs are increasingly sophisticated, requiring automated detection that goes beyond simple blacklists.</span></p>
+                        <p class="project-solution" data-i18n="p3_solution">ML system that detects phishing URLs by extracting features from URL structure, domains, and IP metadata. Trained classifiers to flag malicious links with minimal false positives. Deployed as a backend service for automated threat blocking.</p>
                         <div class="project-tags">
-                            <span>Cybersecurity</span>
+                            <span>Python</span>
                             <span>Machine Learning</span>
-                            <span>Feature Extraction</span>
+                            <span>Security</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/Mahmoud-Ossama/Phishing-URL-Detection" target="_blank" rel="noopener noreferrer" class="project-link-btn"><i class="fab fa-github"></i> View on GitHub</a>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Project 4 -->
-                <div class="project-card" data-category="ai">
+                <!-- Project 4: UBA Multi ML Models -->
+                <div class="project-card scroll-reveal" data-category="security" data-delay="0.4">
                     <div class="project-img">
-                        <img src="images/project4.png" alt="Cardiomegaly X-ray Classifier">
+                        <img src="images/project_uba.png" alt="User Behavior Analytics with Multi-Model Threat Detection">
                         <div class="project-overlay">
-                            <a href="#" class="project-link"><i class="fas fa-link"></i></a>
-                            <a href="https://github.com/Mahmoud-Ossama" class="project-github"><i class="fab fa-github"></i></a>
+                            <a href="https://github.com/Mahmoud-Ossama/UBA_Multi_ML_Models" target="_blank" rel="noopener noreferrer" class="project-github"><i class="fab fa-github"></i></a>
                         </div>
                     </div>
                     <div class="project-info">
-                        <h3>Cardiomegaly X-ray Classifier</h3>
-                        <p>A Flask web application that employs deep learning to detect cardiomegaly in chest X-rays with an intuitive UI displaying confidence scores and analysis results.</p>
+                        <h3 data-i18n="p4_title">User Behavior Analytics Engine</h3>
+                        <p class="project-problem"><strong data-i18n="problem_label">Problem:</strong> <span data-i18n="p4_problem">Insider threats and compromised accounts go undetected by rule-based systems that can't adapt to evolving attack patterns.</span></p>
+                        <p class="project-solution" data-i18n="p4_solution">Multi-model ML system for real-time user behavior analytics and threat detection. Combines anomaly detection, classification, and clustering models to profile normal behavior and flag deviations. Built with a web-based dashboard for security teams to monitor risk scores and investigate alerts.</p>
                         <div class="project-tags">
-                            <span>Flask</span>
-                            <span>Computer Vision</span>
-                            <span>Medical AI</span>
+                            <span>Python</span>
+                            <span>Machine Learning</span>
+                            <span>Threat Detection</span>
+                            <span>JavaScript</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/Mahmoud-Ossama/UBA_Multi_ML_Models" target="_blank" rel="noopener noreferrer" class="project-link-btn"><i class="fab fa-github"></i> View on GitHub</a>
                         </div>
                     </div>
                 </div>
+                <!-- Project 5: Vulnerability Detection Code Agent -->
+                <div class="project-card scroll-reveal" data-category="ai-agent" data-delay="0.5">
+                    <div class="project-img">
+                        <img src="images/project_vulns_agent.png" alt="AI Code Vulnerability Detection Agent">
+                        <div class="project-overlay">
+                            <a href="https://github.com/Mahmoud-Ossama/VulnScan" target="_blank" rel="noopener noreferrer" class="project-github"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3 data-i18n="p5_title">AI Code Vulnerability Scanner</h3>
+                        <p class="project-problem"><strong data-i18n="problem_label">Problem:</strong> <span data-i18n="p5_problem">Manual code reviews miss critical vulnerabilities, and traditional static analysis tools produce excessive false positives without actionable context.</span></p>
+                        <p class="project-solution" data-i18n="p5_solution">LLM-powered agent that automatically scans codebases for security vulnerabilities including SQL injection, XSS, and directory traversal. Uses AI reasoning to analyze code context, reduce false positives, and provide developer-friendly remediation suggestions with severity scoring.</p>
+                        <div class="project-tags">
+                            <span>Python</span>
+                            <span>LLMs</span>
+                            <span>DevSecOps</span>
+                            <span>Static Analysis</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/Mahmoud-Ossama/VulnScan" target="_blank" rel="noopener noreferrer" class="project-link-btn"><i class="fab fa-github"></i> View on GitHub</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Project 6: Traction Control Simulator -->
+                <div class="project-card scroll-reveal" data-category="engineering" data-delay="0.1">
+                    <div class="project-img">
+                        <img src="images/project_traction.png" alt="Traction Control System Simulator">
+                        <div class="project-overlay">
+                            <a href="https://github.com/Mahmoud-Ossama/Traction-Control-Simulator" target="_blank" rel="noopener noreferrer" class="project-github"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3 data-i18n="p6_title">Traction Control Simulator</h3>
+                        <p class="project-problem"><strong data-i18n="problem_label">Problem:</strong> <span data-i18n="p6_problem">Developing and testing vehicle traction control algorithms requires expensive hardware setups and real-world driving conditions that are hard to replicate consistently.</span></p>
+                        <p class="project-solution" data-i18n="p6_solution">Physics-based simulation of vehicle traction control systems using Python. Models tire slip ratios, road surface friction, wheel speed dynamics, and torque distribution. Enables rapid prototyping and testing of control algorithms for automotive safety systems in a virtual environment.</p>
+                        <div class="project-tags">
+                            <span>Python</span>
+                            <span>Control Systems</span>
+                            <span>Simulation</span>
+                            <span>Automotive</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/Mahmoud-Ossama/Traction-Control-Simulator" target="_blank" rel="noopener noreferrer" class="project-link-btn"><i class="fab fa-github"></i> View on GitHub</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Project 7: X-ray Cardiomegaly Analysis -->
+                <div class="project-card scroll-reveal" data-category="healthcare-ai" data-delay="0.2">
+                    <div class="project-img">
+                        <img src="images/project_xray.png" alt="X-ray Cardiomegaly Detection System">
+                        <div class="project-overlay">
+                            <a href="https://github.com/Mahmoud-Ossama/X-ray-Cardiomegaly-Analysis" target="_blank" rel="noopener noreferrer" class="project-github"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3 data-i18n="p7_title">Medical AI: X-ray Cardiomegaly Detection</h3>
+                        <p class="project-problem"><strong data-i18n="problem_label">Problem:</strong> <span data-i18n="p7_problem">Radiologists face high workloads reviewing chest X-rays, and early signs of cardiomegaly (enlarged heart) can be missed in time-pressured clinical settings.</span></p>
+                        <p class="project-solution" data-i18n="p7_solution">Deep learning system that analyzes chest X-ray images to detect signs of cardiomegaly. Uses convolutional neural networks to compute cardiothoracic ratios and classify abnormalities. Includes a web interface for clinicians to upload images and view diagnostic results with confidence scores and heatmap visualizations.</p>
+                        <div class="project-tags">
+                            <span>Python</span>
+                            <span>Deep Learning</span>
+                            <span>Computer Vision</span>
+                            <span>Healthcare AI</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/Mahmoud-Ossama/X-ray-Cardiomegaly-Analysis" target="_blank" rel="noopener noreferrer" class="project-link-btn"><i class="fab fa-github"></i> View on GitHub</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Project 8: ML-Based Vulnerability Detection & Risk Assessment -->
+                <div class="project-card scroll-reveal" data-category="security" data-delay="0.3">
+                    <div class="project-img">
+                        <img src="images/project_ml_vuln.png" alt="ML-Based Vulnerability Detection and Risk Assessment">
+                        <div class="project-overlay">
+                            <a href="https://github.com/Mahmoud-Ossama/ML-Vulnerability-Detection-Risk-Assessment" target="_blank" rel="noopener noreferrer" class="project-github"><i class="fab fa-github"></i></a>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3 data-i18n="p8_title">ML Vulnerability Detection &amp; Risk Assessment</h3>
+                        <p class="project-problem"><strong data-i18n="problem_label">Problem:</strong> <span data-i18n="p8_problem">Enterprise systems accumulate thousands of potential vulnerabilities, and security teams lack automated tools to prioritize which threats pose the highest real-world risk.</span></p>
+                        <p class="project-solution" data-i18n="p8_solution">Machine learning pipeline that classifies software vulnerabilities and scores them using risk assessment models. Extracts features from CVE data, code patterns, and deployment context to predict exploitability and impact. Outputs actionable risk reports with prioritized remediation paths for security operations teams.</p>
+                        <div class="project-tags">
+                            <span>Python</span>
+                            <span>Machine Learning</span>
+                            <span>Risk Assessment</span>
+                            <span>Security</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/Mahmoud-Ossama/ML-Vulnerability-Detection-Risk-Assessment" target="_blank" rel="noopener noreferrer" class="project-link-btn"><i class="fab fa-github"></i> View on GitHub</a>
+                        </div>
+                    </div>
+                </div>
+                <button class="slider-btn next-btn" aria-label="Next"><i class="fas fa-chevron-right"></i></button>
             </div>
             <div class="projects-more">
-                <a href="https://github.com/Mahmoud-Ossama?tab=repositories" class="btn btn-outline">View More Projects</a>
+                <a href="https://github.com/Mahmoud-Ossama?tab=repositories" target="_blank" rel="noopener noreferrer" class="btn btn-outline" data-i18n-html="proj_view_all">View All Repositories <i class="fas fa-external-link-alt"></i></a>
             </div>
         </div>
     </section>
@@ -399,67 +529,66 @@
     <!-- Contact Section -->
     <section id="contact" class="contact section">
         <div class="container">
-            <div class="section-header">
-                <h2>Get In Touch</h2>
+            <div class="section-header scroll-reveal">
+                <span class="section-tag" data-i18n="contact_tag">Contact</span>
+                <h2 data-i18n="contact_title">Reach Out</h2>
                 <div class="section-line"></div>
             </div>
             <div class="contact-content">
-                <div class="contact-info">
-                    <h3>Let's talk about your AI project</h3>
-                    <p>Whether you need an intelligent AI agent, a machine learning solution, or a secure system, I'm here to help turn your ideas into reality using the latest AI technologies.</p>
+                <div class="contact-info scroll-reveal" data-delay="0.1">
+                    <h3 data-i18n="contact_subtitle">Let's Turn Ideas Into Reality</h3>
+                    <p data-i18n="contact_desc">I'm open to freelance work, contract roles, and remote positions. If you need an AI engineer who can take a project from requirements to production, let's talk.</p>
                     <div class="contact-details">
                         <div class="contact-item">
                             <i class="fas fa-envelope"></i>
                             <div>
-                                <h4>Email</h4>
-                                <p>vip.m.osama@gmail.com</p>
+                                <h4 data-i18n="contact_email_label">Email</h4>
+                                <p><a href="mailto:mahmoud@osama.engineer">mahmoud@osama.engineer</a></p>
                             </div>
                         </div>
                         <div class="contact-item">
                             <i class="fas fa-phone"></i>
                             <div>
-                                <h4>Phone</h4>
-                                <p>+201003169833</p>
+                                <h4 data-i18n="contact_phone_label">Phone</h4>
+                                <p>+20 100 316 9833</p>
                             </div>
                         </div>
                         <div class="contact-item">
                             <i class="fas fa-map-marker-alt"></i>
                             <div>
-                                <h4>Location</h4>
-                                <p>Egypt Mansoura | Available for Remote Work Worldwide</p>
+                                <h4 data-i18n="contact_loc_label">Location</h4>
+                                <p data-i18n="contact_loc_val">Mansoura, Egypt &mdash; Open to Remote</p>
                             </div>
                         </div>
                     </div>
                     <div class="social-links">
-                        <a href="https://github.com/Mahmoud-Ossama"><i class="fab fa-github"></i></a>
-                        <a href="https://www.linkedin.com/in/mahmoud-osama-ai/"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-medium"></i></a>
+                        <a href="https://github.com/Mahmoud-Ossama" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/mahmoud-osama-ai/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                        <a href="mailto:mahmoud@osama.engineer" aria-label="Email"><i class="fas fa-envelope"></i></a>
                     </div>
                 </div>
-                <div class="contact-form">
+                <div class="contact-form scroll-reveal" data-delay="0.2">
                     <form id="contactForm">
-                        <div class="input-group">
-                            <input type="text" name="name" id="name" placeholder="Your Name" required>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <input type="text" name="name" id="name" placeholder="Your Name" data-i18n-ph="ph_name" required>
+                            </div>
+                            <div class="input-group">
+                                <input type="email" name="email" id="email" placeholder="Your Email" data-i18n-ph="ph_email" required>
+                            </div>
                         </div>
                         <div class="input-group">
-                            <input type="email" name="email" id="email" placeholder="Your Email" required>
+                            <input type="text" name="subject" id="subject" placeholder="Subject" data-i18n-ph="ph_subject" required>
                         </div>
                         <div class="input-group">
-                            <input type="text" name="subject" id="subject" placeholder="Subject" required>
-                        </div>
-                        <div class="input-group">
-                            <textarea name="message" id="message" placeholder="Your Message" required></textarea>
+                            <textarea name="message" id="message" placeholder="Your Message" data-i18n-ph="ph_message" required></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">
-                            <span>Send Message</span>
+                            <span data-i18n="contact_send">Send Message</span>
                             <i class="fas fa-paper-plane"></i>
                         </button>
                         <div id="form-status" class="form-status"></div>
                     </form>
-                    <div class="direct-email">
-                        <p>Or email me directly: <a href="mailto:vip.m.osama@gmail.com">vip.m.osama@gmail.com</a></p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -469,7 +598,10 @@
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
-                <p>&copy; 2025 Mahmoud Osama. All Rights Reserved.</p>
+                <div class="footer-logo">
+                    <a href="#home">MO<span>.</span></a>
+                </div>
+                <p data-i18n="footer_copy">&copy; 2026 Mahmoud Osama. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
@@ -479,7 +611,14 @@
         <i class="fas fa-arrow-up"></i>
     </div>
 
+    <!-- 3D Robot Container -->
+    <div id="robot3d-container"></div>
+
     <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/canvas-bg.js"></script>
+    <script src="js/robot3d.js"></script>
 </body>
 </html>
